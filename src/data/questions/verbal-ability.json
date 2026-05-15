@@ -1,0 +1,905 @@
+{
+  "category": "Verbal Ability",
+  "questions": [
+    {
+      "id": "VA_GR_001",
+      "subcategory": "Grammar",
+      "difficulty": "easy",
+      "question": "Choose the grammatically correct sentence.",
+      "options": [
+        "She don't like coffee.",
+        "She doesn't likes coffee.",
+        "She doesn't like coffee.",
+        "She not like coffee."
+      ],
+      "correctAnswer": "She doesn't like coffee.",
+      "explanation": "With a singular third-person subject ('She'), use 'doesn't' + base form of the verb ('like'). 'Doesn't likes' is incorrect because 'does' already carries the tense.",
+      "source": "Purdue OWL — Subject-Verb Agreement",
+      "tags": ["grammar", "subject-verb agreement"]
+    },
+    {
+      "id": "VA_GR_002",
+      "subcategory": "Grammar",
+      "difficulty": "easy",
+      "question": "Which sentence uses the correct verb tense?",
+      "options": [
+        "I have seen that movie yesterday.",
+        "I saw that movie yesterday.",
+        "I had saw that movie yesterday.",
+        "I seen that movie yesterday."
+      ],
+      "correctAnswer": "I saw that movie yesterday.",
+      "explanation": "'Yesterday' indicates a completed past action, so simple past tense ('saw') is correct. 'Have seen' (present perfect) does not work with a specific past time reference.",
+      "source": "Purdue OWL — Verb Tenses",
+      "tags": ["grammar", "verb tenses"]
+    },
+    {
+      "id": "VA_GR_003",
+      "subcategory": "Grammar",
+      "difficulty": "easy",
+      "question": "Identify the error in this sentence: \"The group of students are going on a field trip.\"",
+      "options": [
+        "The group",
+        "of students",
+        "are going",
+        "on a field trip"
+      ],
+      "correctAnswer": "are going",
+      "explanation": "'Group' is a collective noun and takes a singular verb. The correct form is 'The group of students is going on a field trip.' The phrase 'of students' is a prepositional phrase, not the subject.",
+      "source": "Purdue OWL — Collective Nouns",
+      "tags": ["grammar", "collective nouns", "subject-verb agreement"]
+    },
+    {
+      "id": "VA_GR_004",
+      "subcategory": "Grammar",
+      "difficulty": "easy",
+      "question": "Which pronoun correctly completes the sentence? \"Between you and ___, this is the best option.\"",
+      "options": [
+        "I",
+        "me",
+        "myself",
+        "we"
+      ],
+      "correctAnswer": "me",
+      "explanation": "'Between' is a preposition and takes the objective case. 'Between you and me' is correct. 'Between you and I' is a common error.",
+      "source": "Purdue OWL — Pronoun Case",
+      "tags": ["grammar", "pronouns", "prepositions"]
+    },
+    {
+      "id": "VA_GR_005",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Which sentence is grammatically correct?",
+      "options": [
+        "Neither the teacher nor the students was present.",
+        "Neither the teacher nor the students were present.",
+        "Neither the teacher nor the students is present.",
+        "Neither the teacher nor the students has been present."
+      ],
+      "correctAnswer": "Neither the teacher nor the students were present.",
+      "explanation": "With 'neither...nor', the verb agrees with the noun closest to it. 'Students' is plural, so use 'were.' This is the proximity rule for correlative conjunctions.",
+      "source": "Purdue OWL — Correlative Conjunctions",
+      "tags": ["grammar", "neither-nor", "subject-verb agreement"]
+    },
+    {
+      "id": "VA_GR_006",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Choose the sentence with the correct modifier placement.",
+      "options": [
+        "She almost drove the car for six hours.",
+        "She drove almost the car for six hours.",
+        "She drove the car for almost six hours.",
+        "Almost she drove the car for six hours."
+      ],
+      "correctAnswer": "She drove the car for almost six hours.",
+      "explanation": "'Almost' should modify 'six hours,' not 'drove' or 'the car.' The modifier must be placed next to the word it modifies to avoid ambiguity.",
+      "source": "Purdue OWL — Dangling and Misplaced Modifiers",
+      "tags": ["grammar", "modifiers"]
+    },
+    {
+      "id": "VA_GR_007",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Which sentence uses the semicolon correctly?",
+      "options": [
+        "I love reading; and writing.",
+        "I love reading; writing is my passion.",
+        "I love; reading and writing.",
+        "I love reading, writing; is my passion."
+      ],
+      "correctAnswer": "I love reading; writing is my passion.",
+      "explanation": "A semicolon connects two independent clauses (complete sentences). 'I love reading' and 'Writing is my passion' are both independent clauses. A semicolon should not separate a dependent clause.",
+      "source": "Purdue OWL — Punctuation",
+      "tags": ["grammar", "punctuation", "semicolons"]
+    },
+    {
+      "id": "VA_GR_008",
+      "subcategory": "Grammar",
+      "difficulty": "hard",
+      "question": "Which sentence demonstrates correct parallel structure?",
+      "options": [
+        "She likes swimming, to run, and biking.",
+        "She likes swimming, running, and biking.",
+        "She likes to swim, running, and to bike.",
+        "She likes swimming, to run, and to bike."
+      ],
+      "correctAnswer": "She likes swimming, running, and biking.",
+      "explanation": "Parallel structure requires all items in a series to use the same grammatical form. 'Swimming, running, and biking' are all gerunds (-ing forms), making the structure parallel.",
+      "source": "Purdue OWL — Parallel Structure",
+      "tags": ["grammar", "parallelism"]
+    },
+    {
+      "id": "VA_GR_009",
+      "subcategory": "Grammar",
+      "difficulty": "hard",
+      "question": "Identify the error: \"The data shows that the new policy is effective.\"",
+      "options": [
+        "The data",
+        "shows",
+        "that",
+        "is effective"
+      ],
+      "correctAnswer": "shows",
+      "explanation": "'Data' is the plural of 'datum' and traditionally takes a plural verb: 'The data show.' However, in modern usage, 'data' is increasingly treated as singular in informal contexts. In formal/exam English, the plural form is expected.",
+      "source": "Purdue OWL — Count and Noncount Nouns",
+      "tags": ["grammar", "subject-verb agreement", "formal usage"]
+    },
+    {
+      "id": "VA_GR_010",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Choose the correct sentence.",
+      "options": [
+        "Who did you give the book to?",
+        "Whom did you give the book to?",
+        "To who did you give the book?",
+        "Whom did you give the book?"
+      ],
+      "correctAnswer": "Whom did you give the book to?",
+      "explanation": "'Whom' is the objective case and should be used as the object of the verb or preposition. Here, 'whom' is the indirect object of 'give.' In formal English, 'To whom did you give the book?' is also correct.",
+      "source": "Purdue OWL — Who vs. Whom",
+      "tags": ["grammar", "pronouns", "who-whom"]
+    },
+    {
+      "id": "VA_GR_011",
+      "subcategory": "Grammar",
+      "difficulty": "easy",
+      "question": "Which word correctly completes the sentence? \"There ___ many reasons to study.\"",
+      "options": [
+        "is",
+        "are",
+        "was",
+        "has"
+      ],
+      "correctAnswer": "are",
+      "explanation": "'Reasons' is plural, so the plural verb 'are' is required. 'There is' would be used with a singular subject: 'There is a reason to study.'",
+      "source": "Purdue OWL — Subject-Verb Agreement",
+      "tags": ["grammar", "there is/there are"]
+    },
+    {
+      "id": "VA_GR_012",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Which sentence is written in the passive voice?",
+      "options": [
+        "The committee approved the proposal.",
+        "The proposal was approved by the committee.",
+        "The committee will approve the proposal.",
+        "The committee has approved the proposal."
+      ],
+      "correctAnswer": "The proposal was approved by the committee.",
+      "explanation": "In passive voice, the subject receives the action. The active equivalent is 'The committee approved the proposal.' Passive voice uses a form of 'to be' + past participle.",
+      "source": "Purdue OWL — Active and Passive Voice",
+      "tags": ["grammar", "voice"]
+    },
+    {
+      "id": "VA_GR_013",
+      "subcategory": "Grammar",
+      "difficulty": "hard",
+      "question": "Identify the sentence with the correct use of the subjunctive mood.",
+      "options": [
+        "I wish I was taller.",
+        "I wish I were taller.",
+        "I wish I am taller.",
+        "I wish I be taller."
+      ],
+      "correctAnswer": "I wish I were taller.",
+      "explanation": "The subjunctive mood expresses wishes, hypotheticals, or conditions contrary to fact. 'Were' is used for all persons in subjunctive constructions: 'I wish I were,' 'If I were you.' This is a commonly tested grammar point.",
+      "source": "Purdue OWL — Subjunctive Mood",
+      "tags": ["grammar", "subjunctive"]
+    },
+    {
+      "id": "VA_GR_014",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Which sentence is correct?",
+      "options": [
+        "Each of the students have submitted their homework.",
+        "Each of the students has submitted their homework.",
+        "Each of the students have submitted his or her homework.",
+        "Each of the students has submitted his or her homework."
+      ],
+      "correctAnswer": "Each of the students has submitted his or her homework.",
+      "explanation": "'Each' is singular and takes a singular verb ('has'). The pronoun should also be singular and agree in gender. 'His or her' is the traditional formal choice; 'their' as singular is increasingly accepted but less formal.",
+      "source": "Purdue OWL — Indefinite Pronouns",
+      "tags": ["grammar", "each", "pronoun agreement"]
+    },
+    {
+      "id": "VA_GR_015",
+      "subcategory": "Grammar",
+      "difficulty": "easy",
+      "question": "Choose the correctly punctuated sentence.",
+      "options": [
+        "Its a beautiful day.",
+        "It's a beautiful day.",
+        "Its' a beautiful day.",
+        "It is' a beautiful day."
+      ],
+      "correctAnswer": "It's a beautiful day.",
+      "explanation": "'It's' (with apostrophe) is the contraction of 'it is.' 'Its' (no apostrophe) is the possessive form. This is one of the most commonly confused punctuation rules in English.",
+      "source": "Purdue OWL — Apostrophes",
+      "tags": ["grammar", "its vs it's", "apostrophes"]
+    },
+    {
+      "id": "VA_GR_016",
+      "subcategory": "Grammar",
+      "difficulty": "hard",
+      "question": "Which sentence uses the correct verb form after 'than'?",
+      "options": [
+        "She runs faster than me.",
+        "She runs faster than I.",
+        "She runs faster than I run.",
+        "She runs faster than me run."
+      ],
+      "correctAnswer": "She runs faster than I.",
+      "explanation": "In formal English, 'than' is a conjunction and should be followed by the subject pronoun 'I' (as in 'than I do/run'). 'Than me' is common in informal speech but considered incorrect in formal writing and exams.",
+      "source": "Purdue OWL — Comparative Structures",
+      "tags": ["grammar", "comparisons", "pronouns"]
+    },
+    {
+      "id": "VA_GR_017",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Identify the sentence with correct article usage.",
+      "options": [
+        "She is an honest person.",
+        "She is a honest person.",
+        "She is the honest person.",
+        "She is honest person."
+      ],
+      "correctAnswer": "She is an honest person.",
+      "explanation": "Use 'an' before words that begin with a vowel sound. Although 'honest' starts with 'h,' the 'h' is silent, so the word begins with a vowel sound. 'An honest' is correct.",
+      "source": "Purdue OWL — Articles",
+      "tags": ["grammar", "articles", "a vs an"]
+    },
+    {
+      "id": "VA_GR_018",
+      "subcategory": "Grammar",
+      "difficulty": "easy",
+      "question": "Which uses the correct plural form?",
+      "options": [
+        "The childs are playing outside.",
+        "The childrens are playing outside.",
+        "The children are playing outside.",
+        "The child are playing outside."
+      ],
+      "correctAnswer": "The children are playing outside.",
+      "explanation": "'Child' has an irregular plural: 'children.' There is no form 'childrens' or 'childs.' Other common irregular plurals include: man/men, woman/women, mouse/mice.",
+      "source": "Purdue OWL — Irregular Plurals",
+      "tags": ["grammar", "plurals"]
+    },
+    {
+      "id": "VA_GR_019",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Which sentence uses the comma correctly?",
+      "options": [
+        "I went to the store, and bought milk.",
+        "I went to the store and bought milk.",
+        "I went to the store and, bought milk.",
+        "I went, to the store and bought milk."
+      ],
+      "correctAnswer": "I went to the store and bought milk.",
+      "explanation": "No comma is needed before 'and' when it connects a compound predicate (two verbs sharing the same subject: 'I went...and bought'). A comma is needed only when 'and' joins two independent clauses.",
+      "source": "Purdue OWL — Commas",
+      "tags": ["grammar", "commas", "compound predicates"]
+    },
+    {
+      "id": "VA_GR_020",
+      "subcategory": "Grammar",
+      "difficulty": "hard",
+      "question": "Which demonstrates correct subject-verb agreement?",
+      "options": [
+        "The number of applicants are increasing.",
+        "A number of applicants is increasing.",
+        "The number of applicants is increasing.",
+        "A number of applicants are increasing."
+      ],
+      "correctAnswer": "The number of applicants is increasing.",
+      "explanation": "'The number' is always singular ('The number is increasing'). 'A number' is always plural ('A number of applicants are waiting'). This is a commonly tested distinction in formal grammar exams.",
+      "source": "Purdue OWL — Quantity Expressions",
+      "tags": ["grammar", "the number vs a number"]
+    },
+    {
+      "id": "VA_GR_021",
+      "subcategory": "Grammar",
+      "difficulty": "easy",
+      "question": "Choose the correct form: \"The meeting will start ___ 3:00 PM.\"",
+      "options": [
+        "in",
+        "on",
+        "at",
+        "by"
+      ],
+      "correctAnswer": "at",
+      "explanation": "'At' is used for specific times: at 3:00 PM, at noon, at midnight. 'In' is for months/years/seasons. 'On' is for days and dates. This is a fundamental preposition usage rule.",
+      "source": "Purdue OWL — Prepositions of Time",
+      "tags": ["grammar", "prepositions"]
+    },
+    {
+      "id": "VA_GR_022",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Identify the correctly structured sentence.",
+      "options": [
+        "Having finished the exam, the room was left by the students.",
+        "Having finished the exam, the students left the room.",
+        "Having finished the exam, leaving the room happened.",
+        "The students having finished the exam, the room was left."
+      ],
+      "correctAnswer": "Having finished the exam, the students left the room.",
+      "explanation": "A participial phrase at the beginning of a sentence must modify the subject. 'Having finished the exam' correctly modifies 'the students.' The first option is a dangling modifier (the room didn't finish the exam).",
+      "source": "Purdue OWL — Participial Phrases",
+      "tags": ["grammar", "participial phrases", "dangling modifiers"]
+    },
+    {
+      "id": "VA_GR_023",
+      "subcategory": "Grammar",
+      "difficulty": "hard",
+      "question": "Choose the correct sentence.",
+      "options": [
+        "If I was you, I would accept the offer.",
+        "If I were you, I would accept the offer.",
+        "If I am you, I would accept the offer.",
+        "If I will be you, I would accept the offer."
+      ],
+      "correctAnswer": "If I were you, I would accept the offer.",
+      "explanation": "This is a second conditional (unreal/hypothetical situation). Use 'were' for all persons in the if-clause. 'Was' is common in informal speech but incorrect in formal English and standard exams.",
+      "source": "Purdue OWL — Conditionals",
+      "tags": ["grammar", "conditionals", "subjunctive"]
+    },
+    {
+      "id": "VA_GR_024",
+      "subcategory": "Grammar",
+      "difficulty": "medium",
+      "question": "Which sentence avoids the comma splice error?",
+      "options": [
+        "I love to read, I go to the library every week.",
+        "I love to read I go to the library every week.",
+        "I love to read; I go to the library every week.",
+        "I love to read, and, I go to the library every week."
+      ],
+      "correctAnswer": "I love to read; I go to the library every week.",
+      "explanation": "A comma splice joins two independent clauses with only a comma. Fixes include: using a semicolon, adding a conjunction ('I love to read, so I go...'), or splitting into two sentences.",
+      "source": "Purdue OWL — Comma Splices",
+      "tags": ["grammar", "comma splice", "run-on sentences"]
+    },
+    {
+      "id": "VA_GR_025",
+      "subcategory": "Grammar",
+      "difficulty": "easy",
+      "question": "Which is correct?",
+      "options": [
+        "Me and my friend went to the park.",
+        "My friend and I went to the park.",
+        "I and my friend went to the park.",
+        "My friend and me went to the park."
+      ],
+      "correctAnswer": "My friend and I went to the park.",
+      "explanation": "Use 'I' as the subject of a sentence. 'Me' is an object pronoun. Also, as a matter of courtesy, mention the other person first ('My friend and I,' not 'I and my friend').",
+      "source": "Purdue OWL — Pronoun Case",
+      "tags": ["grammar", "pronouns", "I vs me"]
+    },
+    {
+      "id": "VA_VB_001",
+      "subcategory": "Vocabulary",
+      "difficulty": "easy",
+      "question": "Choose the word that is most similar in meaning to 'benevolent'.",
+      "options": ["Malevolent", "Kind", "Hostile", "Indifferent"],
+      "correctAnswer": "Kind",
+      "explanation": "'Benevolent' means well-meaning, generous, and kindly. 'Kind' is the closest synonym. 'Malevolent' means evil or harmful — the opposite. 'Hostile' means unfriendly, and 'Indifferent' means unconcerned.",
+      "source": "Merriam-Webster — Synonyms",
+      "tags": ["vocabulary", "synonyms"]
+    },
+    {
+      "id": "VA_VB_002",
+      "subcategory": "Vocabulary",
+      "difficulty": "easy",
+      "question": "Choose the word that is most nearly opposite in meaning to 'abundant'.",
+      "options": ["Plentiful", "Scarce", "Ample", "Copious"],
+      "correctAnswer": "Scarce",
+      "explanation": "'Abundant' means existing in large quantities. 'Scarce' means in short supply — the direct antonym. 'Plentiful,' 'Ample,' and 'Copious' are all synonyms of abundant.",
+      "source": "Merriam-Webster — Antonyms",
+      "tags": ["vocabulary", "antonyms"]
+    },
+    {
+      "id": "VA_VB_003",
+      "subcategory": "Vocabulary",
+      "difficulty": "medium",
+      "question": "The word 'ephemeral' most nearly means:",
+      "options": ["Permanent", "Temporary", "Eternal", "Sturdy"],
+      "correctAnswer": "Temporary",
+      "explanation": "'Ephemeral' means lasting for a very short time; transitory. 'Temporary' is the closest synonym. 'Permanent' and 'Eternal' are antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_VB_004",
+      "subcategory": "Vocabulary",
+      "difficulty": "medium",
+      "question": "Choose the synonym of 'ubiquitous'.",
+      "options": ["Rare", "Everywhere", "Hidden", "Unique"],
+      "correctAnswer": "Everywhere",
+      "explanation": "'Ubiquitous' means present, appearing, or found everywhere. Something ubiquitous is omnipresent. 'Rare' and 'Unique' are near-antonyms.",
+      "source": "Merriam-Webster — Synonyms",
+      "tags": ["vocabulary", "synonyms"]
+    },
+    {
+      "id": "VA_VB_005",
+      "subcategory": "Vocabulary",
+      "difficulty": "easy",
+      "question": "What does 'meticulous' mean?",
+      "options": ["Careless", "Showing great attention to detail", "Quick", "Generous"],
+      "correctAnswer": "Showing great attention to detail",
+      "explanation": "'Meticulous' means very careful and precise, showing great attention to detail. A meticulous person takes extreme care with their work.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_VB_006",
+      "subcategory": "Vocabulary",
+      "difficulty": "hard",
+      "question": "Which word means 'to make a situation worse'?",
+      "options": ["Ameliorate", "Exacerbate", "Alleviate", "Mitigate"],
+      "correctAnswer": "Exacerbate",
+      "explanation": "'Exacerbate' means to make a problem, situation, or feeling worse. 'Ameliorate,' 'Alleviate,' and 'Mitigate' all mean to make something better or less severe — they are antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings", "hard words"]
+    },
+    {
+      "id": "VA_VB_007",
+      "subcategory": "Vocabulary",
+      "difficulty": "medium",
+      "question": "Choose the antonym of 'generous'.",
+      "options": ["Kind", "Stingy", "Giving", "Helpful"],
+      "correctAnswer": "Stingy",
+      "explanation": "'Generous' means willing to give more than expected. 'Stingy' means unwilling to give or share — the direct opposite. 'Kind,' 'Giving,' and 'Helpful' are related to being generous.",
+      "source": "Merriam-Webster — Antonyms",
+      "tags": ["vocabulary", "antonyms"]
+    },
+    {
+      "id": "VA_VB_008",
+      "subcategory": "Vocabulary",
+      "difficulty": "medium",
+      "question": "The word 'pragmatic' most nearly means:",
+      "options": ["Idealistic", "Practical", "Dreamy", "Theoretical"],
+      "correctAnswer": "Practical",
+      "explanation": "'Pragmatic' means dealing with things sensibly and realistically, based on practical rather than theoretical considerations. A pragmatic person focuses on what works.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_VB_009",
+      "subcategory": "Vocabulary",
+      "difficulty": "hard",
+      "question": "Which word means 'to calm or pacify'?",
+      "options": ["Provoke", "Appease", "Aggravate", "Incite"],
+      "correctAnswer": "Appease",
+      "explanation": "'Appease' means to calm, satisfy, or pacify someone by giving in to their demands. 'Provoke,' 'Aggravate,' and 'Incite' all mean to stir up or worsen a situation — antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_VB_010",
+      "subcategory": "Vocabulary",
+      "difficulty": "easy",
+      "question": "Choose the synonym of 'verbose'.",
+      "options": ["Quiet", "Wordy", "Concise", "Silent"],
+      "correctAnswer": "Wordy",
+      "explanation": "'Verbose' means using or expressed in more words than are needed. 'Wordy' is the direct synonym. 'Concise' means brief and to the point — the opposite.",
+      "source": "Merriam-Webster — Synonyms",
+      "tags": ["vocabulary", "synonyms"]
+    },
+    {
+      "id": "VA_VB_011",
+      "subcategory": "Vocabulary",
+      "difficulty": "medium",
+      "question": "What is the meaning of 'resilient'?",
+      "options": ["Weak", "Fragile", "Able to recover quickly", "Slow"],
+      "correctAnswer": "Able to recover quickly",
+      "explanation": "'Resilient' means able to withstand or recover quickly from difficult conditions. A resilient person bounces back from setbacks. 'Fragile' and 'Weak' are antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_VB_012",
+      "subcategory": "Vocabulary",
+      "difficulty": "hard",
+      "question": "Which word means 'present but not visible or active'?",
+      "options": ["Obvious", "Latent", "Manifest", "Apparent"],
+      "correctAnswer": "Latent",
+      "explanation": "'Latent' means existing but not yet developed, manifest, or active. A latent talent is one that hasn't been discovered yet. 'Manifest,' 'Obvious,' and 'Apparent' mean clearly visible — antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_VB_013",
+      "subcategory": "Vocabulary",
+      "difficulty": "easy",
+      "question": "Choose the antonym of 'temporary'.",
+      "options": ["Brief", "Permanent", "Short", "Passing"],
+      "correctAnswer": "Permanent",
+      "explanation": "'Temporary' means lasting for a limited time. 'Permanent' means lasting indefinitely — the direct antonym. 'Brief,' 'Short,' and 'Passing' are synonyms.",
+      "source": "Merriam-Webster — Antonyms",
+      "tags": ["vocabulary", "antonyms"]
+    },
+    {
+      "id": "VA_VB_014",
+      "subcategory": "Vocabulary",
+      "difficulty": "medium",
+      "question": "The word 'candid' most nearly means:",
+      "options": ["Deceptive", "Honest and straightforward", "Secretive", "Confused"],
+      "correctAnswer": "Honest and straightforward",
+      "explanation": "'Candid' means truthful and straightforward; frank. A candid person speaks openly and honestly. 'Deceptive' and 'Secretive' are antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_VB_015",
+      "subcategory": "Vocabulary",
+      "difficulty": "hard",
+      "question": "Which word means 'to deliberately destroy or obstruct'?",
+      "options": ["Facilitate", "Sabotage", "Assist", "Promote"],
+      "correctAnswer": "Sabotage",
+      "explanation": "'Sabotage' means to deliberately destroy, damage, or obstruct something. 'Facilitate,' 'Assist,' and 'Promote' all mean to help or support — antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_VB_016",
+      "subcategory": "Vocabulary",
+      "difficulty": "medium",
+      "question": "Choose the synonym of 'diligent'.",
+      "options": ["Lazy", "Hardworking", "Careless", "Slow"],
+      "correctAnswer": "Hardworking",
+      "explanation": "'Diligent' means having or showing careful and persistent effort. 'Hardworking' is the closest synonym. 'Lazy' and 'Careless' are antonyms.",
+      "source": "Merriam-Webster — Synonyms",
+      "tags": ["vocabulary", "synonyms"]
+    },
+    {
+      "id": "VA_VB_017",
+      "subcategory": "Vocabulary",
+      "difficulty": "easy",
+      "question": "What does 'ambiguous' mean?",
+      "options": ["Clear", "Precise", "Open to more than one interpretation", "Simple"],
+      "correctAnswer": "Open to more than one interpretation",
+      "explanation": "'Ambiguous' means having more than one possible meaning or interpretation. Ambiguous statements can be understood in multiple ways. 'Clear' and 'Precise' are antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_VB_018",
+      "subcategory": "Vocabulary",
+      "difficulty": "medium",
+      "question": "Choose the antonym of 'loathe'.",
+      "options": ["Hate", "Despise", "Adore", "Detest"],
+      "correctAnswer": "Adore",
+      "explanation": "'Loathe' means to feel intense dislike or disgust. 'Adore' means to love deeply — the antonym. 'Hate,' 'Despise,' and 'Detest' are synonyms.",
+      "source": "Merriam-Webster — Antonyms",
+      "tags": ["vocabulary", "antonyms"]
+    },
+    {
+      "id": "VA_VB_019",
+      "subcategory": "Vocabulary",
+      "difficulty": "hard",
+      "question": "Which word means 'excessively flattering or ingratiating'?",
+      "options": ["Sincere", "Obsequious", "Genuine", "Honest"],
+      "correctAnswer": "Obsequious",
+      "explanation": "'Obsequious' means excessively attentive or submissive, often to gain favor. It describes someone who flatters too much. 'Sincere,' 'Genuine,' and 'Honest' are near-antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings", "advanced"]
+    },
+    {
+      "id": "VA_VB_020",
+      "subcategory": "Vocabulary",
+      "difficulty": "medium",
+      "question": "The word 'concise' most nearly means:",
+      "options": ["Lengthy", "Brief and to the point", "Confusing", "Repetitive"],
+      "correctAnswer": "Brief and to the point",
+      "explanation": "'Concise' means giving a lot of information clearly and in few words. A concise explanation is short but complete. 'Lengthy' and 'Repetitive' are near-antonyms.",
+      "source": "Merriam-Webster — Word Meanings",
+      "tags": ["vocabulary", "word meanings"]
+    },
+    {
+      "id": "VA_RC_001",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "medium",
+      "question": "Read the passage and answer: 'The Philippine Civil Service was established to ensure that government positions are awarded based on merit rather than political connections. The system aims to professionalize the civil service and improve the delivery of public services.' What is the main purpose of the Civil Service system?",
+      "options": [
+        "To give jobs to politicians",
+        "To award positions based on merit",
+        "To reduce government salaries",
+        "To eliminate all government jobs"
+      ],
+      "correctAnswer": "To award positions based on merit",
+      "explanation": "The passage explicitly states that the Civil Service was established 'to ensure that government positions are awarded based on merit.' This is the main idea of the passage.",
+      "source": "CSC Official Information — Reading Comprehension",
+      "tags": ["reading comprehension", "main idea"]
+    },
+    {
+      "id": "VA_RC_002",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "medium",
+      "question": "Based on the passage: 'Climate change affects the Philippines through stronger typhoons, rising sea levels, and increased temperatures. These changes threaten agriculture, infrastructure, and coastal communities.' What is the primary concern raised in this passage?",
+      "options": [
+        "Tourism decline",
+        "Impact of climate change on the Philippines",
+        "Government response to disasters",
+        "International trade issues"
+      ],
+      "correctAnswer": "Impact of climate change on the Philippines",
+      "explanation": "The passage focuses on how climate change specifically affects the Philippines through typhoons, sea levels, and temperatures, and what those impacts threaten. This is the main topic.",
+      "source": "General Knowledge — Reading Comprehension",
+      "tags": ["reading comprehension", "main idea"]
+    },
+    {
+      "id": "VA_RC_003",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "hard",
+      "question": "From the passage: 'Although the policy was well-intentioned, its implementation faced significant challenges due to lack of funding, insufficient training of personnel, and resistance from local officials.' What can be inferred about the policy?",
+      "options": [
+        "The policy was a complete failure",
+        "The policy had good intentions but poor execution",
+        "The policy was intentionally sabotaged",
+        "The policy was immediately successful"
+      ],
+      "correctAnswer": "The policy had good intentions but poor execution",
+      "explanation": "The passage says the policy was 'well-intentioned' but faced 'significant challenges.' This implies the policy had good goals but struggled in implementation. This is an inference — reading between the lines.",
+      "source": "Reading Comprehension — Inference",
+      "tags": ["reading comprehension", "inference"]
+    },
+    {
+      "id": "VA_RC_004",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "easy",
+      "question": "Read the sentence: 'The diligent student reviewed her notes every evening, completed all assignments on time, and actively participated in class discussions.' Which word best describes the student?",
+      "options": ["Lazy", "Hardworking", "Distracted", "Uninterested"],
+      "correctAnswer": "Hardworking",
+      "explanation": "The word 'diligent' directly means hardworking, and the actions described (reviewing notes, completing assignments, participating) all support this characterization.",
+      "source": "Reading Comprehension — Context Clues",
+      "tags": ["reading comprehension", "context clues"]
+    },
+    {
+      "id": "VA_RC_005",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "medium",
+      "question": "Paragraph: 'The Philippines has over 7,000 islands, each with unique ecosystems. However, many of these islands face environmental threats from overfishing, deforestation, and pollution. Conservation efforts are underway but require more support.' What is the tone of this paragraph?",
+      "options": ["Celebratory", "Concerned but hopeful", "Angry", "Indifferent"],
+      "correctAnswer": "Concerned but hopeful",
+      "explanation": "The paragraph acknowledges threats ('environmental threats') but also notes that 'conservation efforts are underway.' This conveys concern about the situation with some hope for improvement.",
+      "source": "Reading Comprehension — Tone",
+      "tags": ["reading comprehension", "tone"]
+    },
+    {
+      "id": "VA_RC_006",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "medium",
+      "question": "Which sentence best summarizes this passage? 'Studies show that regular exercise improves mental health by reducing anxiety and depression. Physical activity releases endorphins, which are natural mood elevators. Even 30 minutes of walking daily can make a significant difference.'",
+      "options": [
+        "Exercise is only for physical health",
+        "Regular physical activity positively affects mental health",
+        "Walking is the only effective exercise",
+        "Endorphins cause anxiety"
+      ],
+      "correctAnswer": "Regular physical activity positively affects mental health",
+      "explanation": "The passage's main point is that exercise improves mental health. It supports this by explaining endorphins and giving the example of walking. The other options misrepresent the passage.",
+      "source": "Reading Comprehension — Summarizing",
+      "tags": ["reading comprehension", "summarizing"]
+    },
+    {
+      "id": "VA_RC_007",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "hard",
+      "question": "From the passage: 'The government's decision to invest in renewable energy was met with both praise and criticism. Supporters argued it was necessary for long-term sustainability, while critics pointed to the high initial costs.' What is the structure of this passage?",
+      "options": [
+        "Cause and effect",
+        "Problem and solution",
+        "Compare and contrast",
+        "Chronological order"
+      ],
+      "correctAnswer": "Compare and contrast",
+      "explanation": "The passage presents two opposing viewpoints: supporters (praise) and critics (criticism). This is a classic compare-and-contrast structure showing both sides of an issue.",
+      "source": "Reading Comprehension — Text Structure",
+      "tags": ["reading comprehension", "text structure"]
+    },
+    {
+      "id": "VA_RC_008",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "easy",
+      "question": "Which statement is a fact rather than an opinion?",
+      "options": [
+        "The Philippines is the best country in Asia.",
+        "Manila is the capital of the Philippines.",
+        "Filipino food is the most delicious.",
+        "Everyone should visit Palawan."
+      ],
+      "correctAnswer": "Manila is the capital of the Philippines.",
+      "explanation": "A fact can be proven true or false. 'Manila is the capital of the Philippines' is a verifiable fact. The other statements are opinions — they express personal beliefs or preferences.",
+      "source": "Reading Comprehension — Fact vs Opinion",
+      "tags": ["reading comprehension", "fact vs opinion"]
+    },
+    {
+      "id": "VA_RC_009",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "medium",
+      "question": "In the sentence: 'Despite the heavy rain, the dedicated volunteers continued their relief operations without complaint.' What does the word 'despite' indicate?",
+      "options": [
+        "Because of",
+        "In addition to",
+        "In spite of",
+        "As a result of"
+      ],
+      "correctAnswer": "In spite of",
+      "explanation": "'Despite' is a preposition meaning 'in spite of' or 'regardless of.' It shows contrast: the volunteers continued even though there was heavy rain. This is a transition word indicating concession.",
+      "source": "Reading Comprehension — Transition Words",
+      "tags": ["reading comprehension", "transition words"]
+    },
+    {
+      "id": "VA_RC_010",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "hard",
+      "question": "Read: 'If the Philippines is to become a knowledge-based economy, its educational system must prioritize critical thinking over rote memorization. Current curricula emphasize recall of facts rather than application of concepts.' What does the author recommend?",
+      "options": [
+        "More memorization in schools",
+        "Shifting focus from memorization to critical thinking",
+        "Eliminating all exams",
+        "Reducing education funding"
+      ],
+      "correctAnswer": "Shifting focus from memorization to critical thinking",
+      "explanation": "The author states that the system 'must prioritize critical thinking over rote memorization.' This is a direct recommendation. The word 'must' signals what the author believes should happen.",
+      "source": "Reading Comprehension — Author's Purpose",
+      "tags": ["reading comprehension", "author's purpose"]
+    },
+    {
+      "id": "VA_SC_001",
+      "subcategory": "Sentence Completion",
+      "difficulty": "medium",
+      "question": "Choose the word that best completes the sentence: \"The speaker's arguments were so ___ that even her opponents were convinced.\"",
+      "options": ["Weak", "Compelling", "Boring", "Confusing"],
+      "correctAnswer": "Compelling",
+      "explanation": "'Compelling' means convincing or persuasive. If even opponents were convinced, the arguments must have been very persuasive. 'Weak,' 'Boring,' and 'Confusing' would not convince opponents.",
+      "source": "Sentence Completion — Context Clues",
+      "tags": ["sentence completion", "context clues"]
+    },
+    {
+      "id": "VA_SC_002",
+      "subcategory": "Idioms",
+      "difficulty": "easy",
+      "question": "What does the idiom 'to burn the midnight oil' mean?",
+      "options": [
+        "To waste resources",
+        "To work late into the night",
+        "To start a fire",
+        "To be careless"
+      ],
+      "correctAnswer": "To work late into the night",
+      "explanation": "'To burn the midnight oil' means to work or study late into the night. The idiom originates from the time when oil lamps were used for light, and staying up late meant burning oil.",
+      "source": "Common English Idioms",
+      "tags": ["idioms"]
+    },
+    {
+      "id": "VA_SC_003",
+      "subcategory": "Idioms",
+      "difficulty": "medium",
+      "question": "The phrase 'a blessing in disguise' refers to:",
+      "options": [
+        "An obvious good fortune",
+        "Something that seems bad but turns out to be good",
+        "A religious ceremony",
+        "A hidden treasure"
+      ],
+      "correctAnswer": "Something that seems bad but turns out to be good",
+      "explanation": "'A blessing in disguise' is something that initially appears negative or unlucky but ultimately results in something positive. It's a very common idiom in both casual and formal contexts.",
+      "source": "Common English Idioms",
+      "tags": ["idioms"]
+    },
+    {
+      "id": "VA_SC_004",
+      "subcategory": "Sentence Completion",
+      "difficulty": "hard",
+      "question": "Complete the sentence: \"The committee's decision was ___ upon receiving new evidence that contradicted the earlier testimony.\"",
+      "options": ["Upheld", "Reversed", "Ignored", "Delayed"],
+      "correctAnswer": "Reversed",
+      "explanation": "If new evidence contradicted the earlier testimony, the committee would likely change or 'reverse' its decision. 'Upheld' means to maintain the same decision, which contradicts the logic of new opposing evidence.",
+      "source": "Sentence Completion — Logical Reasoning",
+      "tags": ["sentence completion", "logic"]
+    },
+    {
+      "id": "VA_SC_005",
+      "subcategory": "Idioms",
+      "difficulty": "medium",
+      "question": "What does 'to beat around the bush' mean?",
+      "options": [
+        "To be direct and honest",
+        "To avoid talking about the main topic",
+        "To walk in the forest",
+        "To exercise vigorously"
+      ],
+      "correctAnswer": "To avoid talking about the main topic",
+      "explanation": "'To beat around the bush' means to avoid addressing the main point or to talk indirectly about something. Someone who beats around the bush doesn't get straight to the point.",
+      "source": "Common English Idioms",
+      "tags": ["idioms"]
+    },
+    {
+      "id": "VA_RC_011",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "hard",
+      "question": "Paragraph organization: (1) The Philippines is one of the world's most disaster-prone countries. (2) Typhoons, earthquakes, and volcanic eruptions frequently affect the archipelago. (3) The government has established disaster preparedness programs. (4) These include early warning systems and evacuation protocols. What is the correct sequence?",
+      "options": ["1-2-3-4", "2-1-4-3", "3-4-1-2", "4-3-2-1"],
+      "correctAnswer": "1-2-3-4",
+      "explanation": "The logical sequence is: general statement (1), supporting details/examples (2), government response (3), specific measures (4). This follows a general-to-specific organizational pattern.",
+      "source": "Paragraph Organization — CSE Format",
+      "tags": ["reading comprehension", "paragraph organization"]
+    },
+    {
+      "id": "VA_SC_006",
+      "subcategory": "Sentence Completion",
+      "difficulty": "medium",
+      "question": "Complete: \"Despite his ___ preparation, he still felt nervous before the examination.\"",
+      "options": ["Thorough", "Inadequate", "Hasty", "Nonexistent"],
+      "correctAnswer": "Thorough",
+      "explanation": "'Despite' signals a contrast. If he was still nervous, it's surprising because he prepared thoroughly. 'Inadequate' and 'Hasty' would make nervousness expected — no contrast.",
+      "source": "Sentence Completion — Context Clues",
+      "tags": ["sentence completion"]
+    },
+    {
+      "id": "VA_SC_007",
+      "subcategory": "Idioms",
+      "difficulty": "hard",
+      "question": "The idiom 'to leave no stone unturned' means:",
+      "options": [
+        "To be lazy",
+        "To make every possible effort",
+        "To destroy everything",
+        "To leave without permission"
+      ],
+      "correctAnswer": "To make every possible effort",
+      "explanation": "'To leave no stone unturned' means to search thoroughly or make every possible effort to achieve something. It implies exhaustive effort, turning over every stone to find what you're looking for.",
+      "source": "Common English Idioms",
+      "tags": ["idioms"]
+    },
+    {
+      "id": "VA_SC_008",
+      "subcategory": "Sentence Completion",
+      "difficulty": "easy",
+      "question": "Choose the correct word: \"The teacher asked the students to ___ the instructions carefully before starting the exam.\"",
+      "options": ["Read", "Reading", "Reads", "Have read"],
+      "correctAnswer": "Read",
+      "explanation": "'Asked the students to' is followed by the base form of the verb. 'To read' is correct. This is the infinitive form after 'ask someone to do something.'",
+      "source": "Sentence Completion — Verb Forms",
+      "tags": ["sentence completion", "grammar"]
+    },
+    {
+      "id": "VA_RC_012",
+      "subcategory": "Reading Comprehension",
+      "difficulty": "easy",
+      "question": "Which sentence does NOT belong in this paragraph? (1) Reading improves vocabulary. (2) It also enhances critical thinking skills. (3) Many people enjoy watching movies instead. (4) Furthermore, reading reduces stress.",
+      "options": ["Sentence 1", "Sentence 2", "Sentence 3", "Sentence 4"],
+      "correctAnswer": "Sentence 3",
+      "explanation": "The paragraph is about the benefits of reading. Sentence 3 shifts to a different topic (watching movies) and doesn't support the main idea. This tests the ability to identify irrelevant sentences.",
+      "source": "Paragraph Organization — Unity",
+      "tags": ["reading comprehension", "paragraph unity"]
+    }
+  ]
+}

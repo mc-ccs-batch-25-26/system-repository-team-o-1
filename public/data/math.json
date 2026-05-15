@@ -1,0 +1,607 @@
+{
+    "title": "LET Math Major",
+    "questions": [
+      {
+        "id": 1,
+        "question": "In the progression 18, -12, 8, ..., which term is 512/729?",
+        "options": [
+          "the 8th",
+          "the 6th",
+          "the 9th",
+          "the 7th"
+        ],
+        "correctAnswer": "the 8th",
+        "explanation": "To find the term, identify the pattern in the progression and solve for the term that equals 512/729."
+      },
+      {
+        "id": 2,
+        "question": "Which are the next three terms in the progression 1, 4, 16, ..., 8 terms?",
+        "options": [
+          "64, 256, 1024",
+          "67, 259, 1027",
+          "66, 258, 1026",
+          "65, 257, 1025"
+        ],
+        "correctAnswer": "64, 256, 1024",
+        "explanation": "This is a geometric progression with a common ratio of 4. Multiply each term by 4 to find the next terms."
+      },
+      {
+        "id": 3,
+        "question": "Which are the next three terms in the progression 1/125, -1/25, 1/5, ..., 7 terms?",
+        "options": [
+          "-2, 6, -26",
+          "-3, 7, -27",
+          "-4, 8, -28",
+          "-1, 5, -25"
+        ],
+        "correctAnswer": "-2, 6, -26",
+        "explanation": "Identify the common ratio and apply it to find the subsequent terms."
+      },
+      {
+        "id": 4,
+        "question": "Which is the equivalent common fraction of the repeating decimal 3.242424...?",
+        "options": [
+          "107/33",
+          "110/33",
+          "109/33",
+          "108/33"
+        ],
+        "correctAnswer": "107/33",
+        "explanation": "To convert the repeating decimal to a fraction, set it equal to x, multiply by 100 to shift decimals, subtract the original, and solve for x."
+      },
+      {
+        "id": 5,
+        "question": "Benjamin received grades: 93, 88, 80, 86, and 89. What is the average grade?",
+        "options": [
+          "86",
+          "87",
+          "86 1/5",
+          "88"
+        ],
+        "correctAnswer": "87",
+        "explanation": "Calculate the average by summing the grades and dividing by the number of grades."
+      },
+      {
+        "id": 6,
+        "question": "The Miranda Family paid ₱365.00 for a 250-pound side of beef, but 75 pounds were discarded as waste. What was the cost per pound for the packaged beef?",
+        "options": [
+          "₱2.08 per pound",
+          "₱2.50 per pound",
+          "₱2.06 per pound",
+          "₱2.30 per pound"
+        ],
+        "correctAnswer": "₱2.08 per pound",
+        "explanation": "Subtract the waste from the total weight, then divide the cost by the remaining weight."
+      },
+      {
+        "id": 7,
+        "question": "If a baseball player hits 10 home runs in the first 45 games, at the same rate how many home runs can he expect to hit during the 162-game season?",
+        "options": [
+          "38",
+          "42",
+          "36",
+          "40"
+        ],
+        "correctAnswer": "36",
+        "explanation": "Set up a proportion to find the number of home runs for 162 games."
+      },
+      {
+        "id": 8,
+        "question": "Nena chose a crocheted throw pillow at ₱24.95, and Tomas purchased a rural landscape painting for ₱135.00. How much did they actually spend if they paid 7% sales tax on their purchases?",
+        "options": [
+          "₱171.15",
+          "₱139.25",
+          "₱159.95",
+          "₱148.75"
+        ],
+        "correctAnswer": "₱171.15",
+        "explanation": "Calculate the total cost by adding the sales tax to the sum of the purchases."
+      },
+      {
+        "id": 9,
+        "question": "You buy a new refrigerator for ₱12,800.00 and make a down payment of ₱2,500.00. If you finance the remainder at 8% annually for three years, how much will you actually pay for the refrigerator?",
+        "options": [
+          "₱12,190.00",
+          "₱10,300.00",
+          "₱12,772.00",
+          "₱15,272.00"
+        ],
+        "correctAnswer": "₱12,772.00",
+        "explanation": "Calculate the interest on the financed amount and add it to the down payment and original price."
+      },
+      {
+        "id": 10,
+        "question": "To pass her English Test, Lucille must get 75% of the items correct. Out of 80 questions, how many must she correctly answer?",
+        "options": [
+          "55",
+          "60",
+          "65",
+          "70"
+        ],
+        "correctAnswer": "60",
+        "explanation": "Calculate 75% of 80 to find the number of correct answers needed."
+      },
+      {
+        "id": 11,
+        "question": "Employees at Shaira'sMusicmart get a 20% discount on all purchases. If Theresa buys three tapes at ₱7.49 each, how much will she have to pay after her employee discount?",
+        "options": [
+          "₱16.98",
+          "₱19.98",
+          "₱18.98",
+          "₱17.98"
+        ],
+        "correctAnswer": "₱17.98",
+        "explanation": "Calculate the total cost of the tapes, apply the 20% discount, and determine the final amount."
+      },
+      {
+        "id": 12,
+        "question": "How many ways can a committee of 4 people be selected from a group of 7 people?",
+        "options": [
+          "35",
+          "70",
+          "140",
+          "210"
+        ],
+        "correctAnswer": "35",
+        "explanation": "Use the combination formula C(n, k) to find the number of ways."
+      },
+      {
+        "id": 13,
+        "question": "In how many ways can you arrange three mathematics books (Algebra, Geometry, Trigonometry) in order on a shelf?",
+        "options": [
+          "6",
+          "8",
+          "12",
+          "24"
+        ],
+        "correctAnswer": "6",
+        "explanation": "Calculate the number of permutations of 3 items."
+      },
+      {
+        "id": 14,
+        "question": "One package is 100 pounds, and the other is 150 pounds. The weight of the second package is how many times that of the first?",
+        "options": [
+          "1% times heavier",
+          "1.5 times as heavy",
+          "10 pounds heavier",
+          "20 pounds heavier"
+        ],
+        "correctAnswer": "1.5 times as heavy",
+        "explanation": "Divide the weight of the second package by the weight of the first."
+      },
+      {
+        "id": 15,
+        "question": "How many gallons of water will fill a fish tank that is 18 inches by 12 inches by 48 inches? (There are 231 cubic inches per gallon). Round your answer to the nearest gallon.",
+        "options": [
+          "45 gallons",
+          "40 gallons",
+          "47 gallons",
+          "38 gallons"
+        ],
+        "correctAnswer": "45 gallons",
+        "explanation": "Calculate the volume of the tank in cubic inches and divide by 231."
+      },
+      {
+        "id": 16,
+        "question": "What are the next four numbers in this sequence 8, 5, 4, 9, 17, __, __, __, __?",
+        "options": [
+          "4, 3, 2, 1",
+          "5, 4, 3, 2",
+          "6, 3, 2, 0",
+          "3, 2, 1, 0"
+        ],
+        "correctAnswer": "4, 3, 2, 1",
+        "explanation": "Identify the pattern in the sequence to find the next numbers."
+      },
+      {
+        "id": 17,
+        "question": "What day follows the day before yesterday if 2 days from now will be Sunday?",
+        "options": [
+          "Tuesday",
+          "Saturday",
+          "Wednesday",
+          "Thursday"
+        ],
+        "correctAnswer": "Tuesday",
+        "explanation": "Determine the current day based on the given information and identify the day after the day before yesterday."
+      },
+      {
+        "id": 18,
+        "question": "How much larger is the supplement of a 57 degree angle than the complement of a 75 degree angle?",
+        "options": [
+          "108 degrees",
+          "18 degrees",
+          "105 degrees",
+          "123 degrees"
+        ],
+        "correctAnswer": "18 degrees",
+        "explanation": "Calculate the supplement of 57 degrees and the complement of 75 degrees, then find the difference."
+      },
+      {
+        "id": 19,
+        "question": "The hypotenuse of a right triangle is 25 feet. If one leg is 24 feet, what is the length of the other leg?",
+        "options": [
+          "5 ft",
+          "5 ft",
+          "20 ft",
+          "7 ft"
+        ],
+        "correctAnswer": "20 ft",
+        "explanation": "Use the Pythagorean theorem to find the length of the other leg."
+      },
+      {
+        "id": 20,
+        "question": "Which is the length of the hypotenuse of a right triangle with legs 5 inches and 12 inches?",
+        "options": [
+          "17in.",
+          "13 in.",
+          "11in.",
+          "20 in."
+        ],
+        "correctAnswer": "13 in.",
+        "explanation": "Use the Pythagorean theorem to find the length of the hypotenuse."
+      },
+      {
+        "id": 21,
+        "question": "A tenant is awarded a house and lot package worth ₱180,000.00. She has to pay for the package for 20 years at 9% per annum. How much will the house and lot cost after 20 years?",
+        "options": [
+          "₱604,000",
+          "₱504,000",
+          "₱704,000",
+          "₱500,000"
+        ],
+        "correctAnswer": "₱604,000",
+        "explanation": "Calculate the future value of the package using the compound interest formula."
+      },
+      {
+        "id": 22,
+        "question": "What is the exponential function of Y = f(x)?",
+        "options": [
+          "y = 2x - 1",
+          "y = 5x^2",
+          "y = x - 1",
+          "y = x^-5"
+        ],
+        "correctAnswer": "y = x^-5",
+        "explanation": "Identify the function that represents an exponential relationship."
+      },
+      {
+        "id": 23,
+        "question": "Julio's son is graduating. He sent his son three packages of 8%, 10%, and 2% kg. What is the total of the packages sent?",
+        "options": [
+          "20% kg",
+          "21 kg",
+          "18% kg",
+          "23 2/2 kg"
+        ],
+        "correctAnswer": "21 kg",
+        "explanation": "Add the weights of the packages to find the total."
+      },
+      {
+        "id": 24,
+        "question": "The weather report recorded a temperature of 29°C in the morning and 33.5°C at two o'clock in the afternoon. How many degrees higher was the afternoon temperature?",
+        "options": [
+          "4.5°C",
+          "5.8°C",
+          "6.3°C",
+          "5.5°C"
+        ],
+        "correctAnswer": "4.5°C",
+        "explanation": "Calculate the difference between the afternoon and morning temperatures."
+      },
+      {
+        "id": 25,
+        "question": "Write the ratio in the lowest term two hours to 30 minutes.",
+        "options": [
+          "2:15",
+          "2:4",
+          "2:30",
+          "4:1"
+        ],
+        "correctAnswer": "4:1",
+        "explanation": "Convert hours to minutes and simplify the ratio."
+      },
+      {
+        "id": 26,
+        "question": "Give the value of a if the statement is 4ab = 20 and b = 5.",
+        "options": [
+          "3",
+          "1",
+          "2",
+          "4"
+        ],
+        "correctAnswer": "1",
+        "explanation": "Solve for a by substituting the value of b into the equation."
+      },
+      {
+        "id": 27,
+        "question": "What is the sum of √9 and √4?",
+        "options": [
+          "3",
+          "5",
+          "2",
+          "4"
+        ],
+        "correctAnswer": "5",
+        "explanation": "Calculate the square roots and sum them."
+      },
+      {
+        "id": 28,
+        "question": "What is the value of N in: 18 2/16 + 26% = N?",
+        "options": [
+          "44 3/8",
+          "44%",
+          "44%",
+          "43 4/16"
+        ],
+        "correctAnswer": "44 3/8",
+        "explanation": "Convert the percentage to a fraction, add it to the mixed number, and simplify."
+      },
+      {
+        "id": 29,
+        "question": "Which expresses the polynomial in the following?",
+        "options": [
+          "x - x + 9 - 3x + 10x",
+          "2x + 4x - 3",
+          "xy – x – 6",
+          "x - 4x + 2x - x + 2"
+        ],
+        "correctAnswer": "xy – x – 6",
+        "explanation": "Identify the expression that is a polynomial."
+      },
+      {
+        "id": 30,
+        "question": "The meat sent by air cargo is 1,340 pounds. The weight was computed into kilogram determine the kilogram of the cargo.",
+        "options": [
+          "0090 kg",
+          "609.09 kg",
+          "61 kg",
+          "00.908 kg"
+        ],
+        "correctAnswer": "609.09 kg",
+        "explanation": "Convert the weight from pounds to kilograms using the conversion factor 1 pound = 0.453592 kg."
+      },
+     
+          {
+            "id": 31,
+            "question": "How do you determine the total length of the clothing materials if there are 7 2/10 meters and 15 4/5 meters available?",
+            "options": [
+              "18% m",
+              "23 m",
+              "18 m",
+              "18% m"
+            ],
+            "correctAnswer": "23 m",
+            "explanation": "Convert the mixed numbers to improper fractions, add them, and simplify to find the total length."
+          },
+          {
+            "id": 32,
+            "question": "Eight men can paint a 3-unit army school building in 3 days. How many more units will 12 men paint of this building?",
+            "options": [
+              "%",
+              "1%",
+              "2",
+              "1"
+            ],
+            "correctAnswer": "1",
+            "explanation": "Determine the rate at which 8 men paint and then calculate the additional units 12 men can paint."
+          },
+          {
+            "id": 33,
+            "question": "Only 682 examinees passed in a Pharmacists Licensure Examination out of 2550 examinees. What is the passing percentage?",
+            "options": [
+              "26.5%",
+              "26%",
+              "26.7%",
+              "26.8%"
+            ],
+            "correctAnswer": "26.7%",
+            "explanation": "Calculate the percentage by dividing the number of passing examinees by the total number of examinees and multiplying by 100."
+          },
+          {
+            "id": 34,
+            "question": "Convert this confiscated 8,000 grams of dangerous drugs into kilograms.",
+            "options": [
+              "8 kg",
+              "800 kg",
+              "80 kg",
+              "0.8 kg"
+            ],
+            "correctAnswer": "8 kg",
+            "explanation": "Divide the number of grams by 1,000 to convert to kilograms."
+          },
+          {
+            "id": 35,
+            "question": "A rice field is divided into four sections. Each section is 25 meters by 38 meters. Get the perimeter of each section.",
+            "options": [
+              "152 m",
+              "126 m",
+              "156 m",
+              "146 m"
+            ],
+            "correctAnswer": "126 m",
+            "explanation": "Calculate the perimeter of a rectangle using the formula 2(length + width)."
+          },
+          {
+            "id": 36,
+            "question": "Hacienda Rosita was to be decided among 22 tenants. Each tenant will be rewarded 6 hectares each. What was the area of Hacienda Rosita?",
+            "options": [
+              "152 hectares",
+              "132 hectares",
+              "122 hectares",
+              "142 hectares"
+            ],
+            "correctAnswer": "132 hectares",
+            "explanation": "Multiply the number of tenants by the number of hectares each receives to find the total area."
+          },
+          {
+            "id": 37,
+            "question": "The host had only 8% gallons of ice cream to serve. Upon arrival of the guest she served 3% gallons. How many gallons are left for the late corners?",
+            "options": [
+              "5% gallons",
+              "4% gallons",
+              "4 gallons",
+              "4 1/8 gallons"
+            ],
+            "correctAnswer": "4% gallons",
+            "explanation": "Subtract the served amount from the initial amount to find the remaining gallons."
+          },
+          {
+            "id": 38,
+            "question": "What is the product of (3L + 20)(4 - 30)?",
+            "options": [
+              "-598",
+              "598",
+              "59.8",
+              "5.98"
+            ],
+            "correctAnswer": "-598",
+            "explanation": "Expand the expression and calculate the product."
+          },
+          {
+            "id": 39,
+            "question": "The first prize of ₱40,000,000 was shared by 16 winners. How much will each claim?",
+            "options": [
+              "₱2,500,000.00",
+              "₱2,800,000.00",
+              "₱3,000,000.00",
+              "₱2,700,000.00"
+            ],
+            "correctAnswer": "₱2,500,000.00",
+            "explanation": "Divide the total prize by the number of winners to find each person's share."
+          },
+          {
+            "id": 40,
+            "question": "The harvest of corn is ₱8.00 per kilogram. The whole harvest total worth is ₱10,000.00. How many kilograms was the corn harvest?",
+            "options": [
+              "1,050 kg",
+              "1,250 kg",
+              "2,000 kg",
+              "2,250 kg"
+            ],
+            "correctAnswer": "1,250 kg",
+            "explanation": "Divide the total worth by the price per kilogram to find the total harvest."
+          },
+          {
+            "id": 41,
+            "question": "Find the profit of Weng's water refilling business with revenue of ₱56,000,000 and costs of ₱42,000,000.",
+            "options": [
+              "₱14,000,000",
+              "₱140,000",
+              "₱1,400,000",
+              "₱14,000"
+            ],
+            "correctAnswer": "₱14,000,000",
+            "explanation": "Subtract the costs from the revenue to find the profit."
+          },
+          {
+            "id": 42,
+            "question": "Norma's food stall has costs of ₱2,900. Her total food sales are ₱11,600. What percent of her food sales do the food costs represent?",
+            "options": [
+              "20%",
+              "25%",
+              "27%",
+              "30%"
+            ],
+            "correctAnswer": "25%",
+            "explanation": "Divide the costs by the total food sales and multiply by 100 to find the percentage."
+          },
+          {
+            "id": 43,
+            "question": "Marvin needs 250 cookies for a buffet. He will make oatmeal raisin, macaroons, and chocolate chunk cookies. He wants 25% of the cookies to be oatmeal raisin and 15% of the cookies to be macaroons. How many chocolate chunk cookies must Marvin bake?",
+            "options": [
+              "150",
+              "125",
+              "140",
+              "100"
+            ],
+            "correctAnswer": "150",
+            "explanation": "Calculate the number of oatmeal raisin and macaroons, subtract from the total, and find the remaining chocolate chunk cookies."
+          },
+          {
+            "id": 44,
+            "question": "If a shirt is marked down 25%, what will the purchase price be?",
+            "options": [
+              "₱25",
+              "75% of its original price",
+              "50% off",
+              "₱75"
+            ],
+            "correctAnswer": "75% of its original price",
+            "explanation": "Calculate the remaining percentage after the discount to find the purchase price."
+          },
+          {
+            "id": 45,
+            "question": "A customer places a special order through 480 Furniture Store. The list price in the manufacturer's catalog is ₱1,600. 480 Furniture receives a 35% trade discount. What is the net price for the furniture order?",
+            "options": [
+              "₱560",
+              "₱1,535",
+              "₱1,565",
+              "₱1,040"
+            ],
+            "correctAnswer": "₱1,040",
+            "explanation": "Subtract the trade discount from the list price to find the net price."
+          },
+          {
+            "id": 46,
+            "question": "Ron's Manufacturing offers discounts on most of its products. What is the trade discount rate on an item with a list price of ₱16.79 and a net price of ₱2.42?",
+            "options": [
+              "22%",
+              "26%",
+              "54%",
+              "74%"
+            ],
+            "correctAnswer": "74%",
+            "explanation": "Calculate the discount rate by finding the difference between the list price and the net price, then dividing by the list price."
+          },
+          {
+            "id": 47,
+            "question": "What type of financial statement summarizes the information concerning the cash inflows and outflows during a particular period?",
+            "options": [
+              "Balance sheet",
+              "Statement of cash flows",
+              "Income statement",
+              "Statement of retained earnings"
+            ],
+            "correctAnswer": "Statement of cash flows",
+            "explanation": "The statement of cash flows tracks the movement of cash in and out of the business."
+          },
+          {
+            "id": 48,
+            "question": "Closing entries are made:",
+            "options": [
+              "so that financial statements can be made",
+              "in order to terminate the business as an operating entity",
+              "in order to transfer net income/loss and owner's drawings to the owner's capital account",
+              "so that all assets, liabilities, and owner's capital accounts will have zero balances when the next accounting period starts"
+            ],
+            "correctAnswer": "in order to transfer net income/loss and owner's drawings to the owner's capital account",
+            "explanation": "Closing entries are used to update the owner's capital account at the end of an accounting period."
+          },
+          {
+            "id": 49,
+            "question": "Suppliers who allow businesses to receive goods and services before paying for them are known as:",
+            "options": [
+              "Finance companies",
+              "Leasing companies",
+              "Trade creditors",
+              "Trade debtors"
+            ],
+            "correctAnswer": "Trade creditors",
+            "explanation": "Trade creditors are suppliers who provide goods or services on credit."
+          },
+          {
+            "id": 50,
+            "question": "Which of the following is an example of external finance?",
+            "options": [
+              "Disposal by a business of surplus assets",
+              "Bank loan",
+              "Day-to-day cash from sales to customers",
+              "Money loaned from trade suppliers through extended credit"
+            ],
+            "correctAnswer": "Bank loan",
+            "explanation": "A bank loan is a form of external finance as it involves funds from an external source."
+          }
+        ]
+      }
+ 

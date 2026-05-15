@@ -1,0 +1,1823 @@
+{
+  "title": "LET General Education Reviewer",
+  "questions": [
+    {
+      "id": 1,
+      "question": "The indigenous people of the Cordillera Mountain Range of Northern Luzon are the ?",
+      "options": [
+        "Igorots",
+        "Aetas",
+        "Mangyans",
+        "Humanism"
+      ],
+      "correctAnswer": "Igorots",
+      "explanation": "The indigenous people of the Cordillera Mountain Range of Northern Luzon are the Igorots."
+    },
+    {
+      "id": 2,
+      "question": "What is the primary purpose of formative assessment?",
+      "options": [
+        "To grade students",
+        "To monitor student learning and provide feedback",
+        "To rank students",
+        "To evaluate teachers"
+      ],
+      "correctAnswer": "To monitor student learning and provide feedback",
+      "explanation": "Formative assessment is used to monitor learning progress and provide ongoing feedback."
+    },
+    {
+      "id": 3,
+      "question": "Which among the following is NOT a prime number?",
+      "options": [
+        "71",
+        "61",
+        "31",
+        "51"
+      ],
+      "correctAnswer": "51",
+      "explanation": "51 is not a prime number because it is divisible by 1, 51, and 71."
+    },
+    {
+      "id": 4,
+      "question": "Which of the following is a characteristic of a democratic classroom?",
+      "options": [
+        "Teacher makes all decisions",
+        "Students participate in decision-making",
+        "Strict adherence to rules without question",
+        "Limited student interaction"
+      ],
+      "correctAnswer": "Students participate in decision-making",
+      "explanation": "In a democratic classroom, students are involved in the decision-making process, which promotes ownership of learning and civic responsibility."
+    },
+    {
+      "id": 5,
+      "question": "The theory that emphasizes the importance of social interaction in cognitive development is associated with:",
+      "options": [
+        "Jean Piaget",
+        "B.F. Skinner",
+        "Lev Vygotsky",
+        "John Dewey"
+      ],
+      "correctAnswer": "Lev Vygotsky",
+      "explanation": "Lev Vygotsky's sociocultural theory emphasizes the fundamental role of social interaction in the development of cognition."
+    },
+    {
+      "id": 6,
+      "question": "Which of the following best describes the concept of 'Zone of Proximal Development'?",
+      "options": [
+        "The area where students feel most comfortable learning",
+        "The distance between actual development and potential development with guidance",
+        "The maximum cognitive capacity of a student",
+        "The physical area in a classroom conducive to learning"
+      ],
+      "correctAnswer": "The distance between actual development and potential development with guidance",
+      "explanation": "The Zone of Proximal Development (ZPD) is the difference between what a learner can do without help and what they can achieve with guidance from a more knowledgeable person."
+    },
+    {
+      "id": 7,
+      "question": "Which Philippine ethnic group is known for their epic 'Darangen'?",
+      "options": [
+        "Tagalog",
+        "Ilocano",
+        "Maranao",
+        "Cebuano"
+      ],
+      "correctAnswer": "Maranao",
+      "explanation": "The Darangen is a Maranao epic that celebrates the exploits of heroes, particularly those of the Maranao people from Mindanao."
+    },
+    {
+      "id": 8,
+      "question": "The 'Spoliarium' is a famous painting by which Filipino artist?",
+      "options": [
+        "Fernando Amorsolo",
+        "Juan Luna",
+        "Félix Resurrección Hidalgo",
+        "Botong Francisco"
+      ],
+      "correctAnswer": "Juan Luna",
+      "explanation": "The Spoliarium is Juan Luna's most famous and largest painting, which won the gold medal in the Madrid Exposition of 1884."
+    },
+    {
+      "id": 9,
+      "question": "Which of the following is NOT one of Gardner's multiple intelligences?",
+      "options": [
+        "Linguistic intelligence",
+        "Spatial intelligence",
+        "Creative intelligence",
+        "Musical intelligence"
+      ],
+      "correctAnswer": "Creative intelligence",
+      "explanation": "Creative intelligence is not one of Gardner's multiple intelligences. His theory includes linguistic, logical-mathematical, spatial, musical, bodily-kinesthetic, interpersonal, intrapersonal, naturalist, and existential intelligences."
+    },
+    {
+      "id": 10,
+      "question": "The Philippine national hero who wrote 'Noli Me Tangere' and 'El Filibusterismo' is:",
+      "options": [
+        "Andres Bonifacio",
+        "Jose Rizal",
+        "Emilio Aguinaldo",
+        "Apolinario Mabini"
+      ],
+      "correctAnswer": "Jose Rizal",
+      "explanation": "Jose Rizal wrote these two novels which exposed the abuses of Spanish colonial rule in the Philippines."
+    },
+    {
+      "id": 11,
+      "question": "Which of the following is a constructivist approach to teaching?",
+      "options": [
+        "Direct instruction with minimal student input",
+        "Rote memorization of facts",
+        "Problem-based learning where students construct knowledge",
+        "Teacher-centered lectures"
+      ],
+      "correctAnswer": "Problem-based learning where students construct knowledge",
+      "explanation": "Constructivism emphasizes that students actively construct their own knowledge through experience and reflection, which is exemplified in problem-based learning approaches."
+    },
+    {
+      "id": 12,
+      "question": "The Treaty of Paris in 1898 resulted in:",
+      "options": [
+        "Spain ceding the Philippines to the United States",
+        "The Philippines gaining independence from Spain",
+        "Japan occupying the Philippines",
+        "The formation of ASEAN"
+      ],
+      "correctAnswer": "Spain ceding the Philippines to the United States",
+      "explanation": "The Treaty of Paris ended the Spanish-American War, with Spain ceding the Philippines to the United States for $20 million."
+    },
+    {
+      "id": 13,
+      "question": "Which of the following is the largest lake in the Philippines?",
+      "options": [
+        "Taal Lake",
+        "Laguna de Bay",
+        "Lake Lanao",
+        "Lake Sebu"
+      ],
+      "correctAnswer": "Laguna de Bay",
+      "explanation": "Laguna de Bay is the largest lake in the Philippines and the third largest freshwater lake in Southeast Asia."
+    },
+    {
+      "id": 14,
+      "question": "Bloom's Taxonomy arranges cognitive skills in which order?",
+      "options": [
+        "Remembering, Understanding, Applying, Analyzing, Evaluating, Creating",
+        "Creating, Evaluating, Analyzing, Applying, Understanding, Remembering",
+        "Understanding, Remembering, Analyzing, Creating, Applying, Evaluating",
+        "Applying, Remembering, Understanding, Analyzing, Creating, Evaluating"
+      ],
+      "correctAnswer": "Remembering, Understanding, Applying, Analyzing, Evaluating, Creating",
+      "explanation": "Bloom's revised taxonomy arranges cognitive processes from lower-order thinking skills (remembering) to higher-order thinking skills (creating)."
+    },
+    {
+      "id": 15,
+      "question": "Which of the following is NOT a principle of Universal Design for Learning (UDL)?",
+      "options": [
+        "Multiple means of engagement",
+        "Multiple means of representation",
+        "Multiple means of action and expression",
+        "Multiple means of assessment standardization"
+      ],
+      "correctAnswer": "Multiple means of assessment standardization",
+      "explanation": "UDL principles include multiple means of engagement, representation, and action/expression, but not assessment standardization, which contradicts UDL's emphasis on flexibility."
+    },
+    {
+      "id": 16,
+      "question": "The Philippine archipelago consists of approximately how many islands?",
+      "options": [
+        "1,000",
+        "3,000",
+        "7,000",
+        "10,000"
+      ],
+      "correctAnswer": "7,000",
+      "explanation": "The Philippines is an archipelago composed of about 7,641 islands, though this number may vary slightly depending on the source and definition of an island."
+    },
+    {
+      "id": 17,
+      "question": "Which of the following best describes metacognition?",
+      "options": [
+        "The ability to memorize large amounts of information",
+        "Awareness and understanding of one's own thought processes",
+        "The process of learning through physical activities",
+        "The ability to solve mathematical problems quickly"
+      ],
+      "correctAnswer": "Awareness and understanding of one's own thought processes",
+      "explanation": "Metacognition refers to higher-order thinking that involves active control over cognitive processes engaged in learning, including planning, monitoring, and evaluating one's understanding and performance."
+    },
+    {
+      "id": 18,
+      "question": "The Katipunan was founded by:",
+      "options": [
+        "Jose Rizal",
+        "Andres Bonifacio",
+        "Emilio Aguinaldo",
+        "Apolinario Mabini"
+      ],
+      "correctAnswer": "Andres Bonifacio",
+      "explanation": "The Katipunan (Kataas-taasang, Kagalang-galangang Katipunan ng mga Anak ng Bayan) was a Philippine revolutionary society founded by Andres Bonifacio in 1892."
+    },
+    {
+      "id": 19,
+      "question": "Which of the following is a characteristic of authentic assessment?",
+      "options": [
+        "Multiple-choice tests only",
+        "Tasks that mirror real-world challenges",
+        "Standardized testing procedures",
+        "Focus on memorization of facts"
+      ],
+      "correctAnswer": "Tasks that mirror real-world challenges",
+      "explanation": "Authentic assessment involves evaluating student learning through tasks that replicate real-world challenges, requiring application of knowledge and skills in context."
+    },
+    {
+      "id": 20,
+      "question": "The Philippine national language is:",
+      "options": [
+        "English",
+        "Spanish",
+        "Filipino",
+        "Tagalog"
+      ],
+      "correctAnswer": "Filipino",
+      "explanation": "Filipino is the national language of the Philippines, based primarily on Tagalog with elements from other Philippine languages."
+    },
+    {
+      "id": 21,
+      "question": "Which of the following is NOT one of the 21st century skills?",
+      "options": [
+        "Critical thinking",
+        "Collaboration",
+        "Memorization",
+        "Communication"
+      ],
+      "correctAnswer": "Memorization",
+      "explanation": "The 21st century skills focus on the 4Cs: critical thinking, creativity, collaboration, and communication. Memorization alone is considered a lower-order skill rather than a 21st century skill."
+    },
+    {
+      "id": 22,
+      "question": "The longest river in the Philippines is:",
+      "options": [
+        "Pasig River",
+        "Cagayan River",
+        "Agusan River",
+        "Pampanga River"
+      ],
+      "correctAnswer": "Cagayan River",
+      "explanation": "The Cagayan River, also known as the Rio Grande de Cagayan, is the longest and largest river in the Philippines, located in northern Luzon."
+    },
+    {
+      "id": 23,
+      "question": "Which learning theory is associated with Ivan Pavlov?",
+      "options": [
+        "Social Learning Theory",
+        "Classical Conditioning",
+        "Operant Conditioning",
+        "Constructivism"
+      ],
+      "correctAnswer": "Classical Conditioning",
+      "explanation": "Ivan Pavlov is known for his experiments with dogs that led to the development of classical conditioning, where a neutral stimulus becomes associated with a natural response."
+    },
+    {
+      "id": 24,
+      "question": "The Philippine Revolution against Spain began in:",
+      "options": [
+        "1872",
+        "1896",
+        "1898",
+        "1901"
+      ],
+      "correctAnswer": "1896",
+      "explanation": "The Philippine Revolution against Spanish colonial rule officially began in August 1896 with the 'Cry of Pugad Lawin' led by Andres Bonifacio."
+    },
+    {
+      "id": 25,
+      "question": "Which of the following is an example of a formative assessment?",
+      "options": [
+        "Final exam",
+        "Standardized test",
+        "Exit ticket",
+        "End-of-year project"
+      ],
+      "correctAnswer": "Exit ticket",
+      "explanation": "An exit ticket is a formative assessment tool used to quickly check for understanding at the end of a lesson, providing immediate feedback to guide instruction."
+    },
+    {
+      "id": 26,
+      "question": "The highest mountain in the Philippines is:",
+      "options": [
+        "Mount Apo",
+        "Mount Pulag",
+        "Mount Mayon",
+        "Mount Pinatubo"
+      ],
+      "correctAnswer": "Mount Apo",
+      "explanation": "Mount Apo, located in Mindanao, is the highest mountain in the Philippines with an elevation of 2,954 meters (9,692 feet) above sea level."
+    },
+    {
+      "id": 27,
+      "question": "Which of the following best describes differentiated instruction?",
+      "options": [
+        "Teaching all students the same way",
+        "Adapting teaching approaches to address diverse learning needs",
+        "Separating students by ability level",
+        "Using technology for all instruction"
+      ],
+      "correctAnswer": "Adapting teaching approaches to address diverse learning needs",
+      "explanation": "Differentiated instruction involves tailoring instruction to meet individual needs by adjusting content, process, product, or learning environment based on student readiness, interest, and learning profile."
+    },
+    {
+      "id": 28,
+      "question": "The EDSA People Power Revolution occurred in:",
+      "options": [
+        "1972",
+        "1983",
+        "1986",
+        "1992"
+      ],
+      "correctAnswer": "1986",
+      "explanation": "The EDSA People Power Revolution, a series of popular demonstrations in the Philippines, occurred in February 1986 and led to the end of the 20-year rule of President Ferdinand Marcos."
+    },
+    {
+      "id": 29,
+      "question": "Which of the following is a characteristic of a growth mindset?",
+      "options": [
+        "Believing intelligence is fixed",
+        "Avoiding challenges to prevent failure",
+        "Seeing effort as a path to mastery",
+        "Ignoring useful feedback"
+      ],
+      "correctAnswer": "Seeing effort as a path to mastery",
+      "explanation": "A growth mindset, as described by Carol Dweck, involves believing that abilities can be developed through dedication and hard work, with effort being a path to mastery."
+    },
+    {
+      "id": 30,
+      "question": "The Philippine national flower is:",
+      "options": [
+        "Sampaguita",
+        "Orchid",
+        "Ilang-ilang",
+        "Rose"
+      ],
+      "correctAnswer": "Sampaguita",
+      "explanation": "The Sampaguita (Jasminum sambac) is the national flower of the Philippines, known for its sweet fragrance and cultural significance."
+    },
+    {
+      "id": 31,
+      "question": "Which of the following is NOT a component of effective classroom management?",
+      "options": [
+        "Establishing clear rules and procedures",
+        "Building positive relationships with students",
+        "Maintaining an authoritarian approach at all times",
+        "Organizing the physical space effectively"
+      ],
+      "correctAnswer": "Maintaining an authoritarian approach at all times",
+      "explanation": "Effective classroom management involves balance, not strict authoritarianism. Research shows that positive relationships, clear expectations, and student involvement in establishing norms are more effective than purely authoritarian approaches."
+    },
+    {
+      "id": 32,
+      "question": "The Philippines gained independence from the United States on:",
+      "options": [
+        "June 12, 1898",
+        "July 4, 1946",
+        "February 25, 1986",
+        "December 30, 1896"
+      ],
+      "correctAnswer": "July 4, 1946",
+      "explanation": "The Philippines gained independence from the United States on July 4, 1946, through the Treaty of Manila. June 12, 1898 is celebrated as Independence Day from Spain, though that independence was not internationally recognized."
+    },
+    {
+      "id": 33,
+      "question": "Which of the following best describes scaffolding in education?",
+      "options": [
+        "Building physical structures in the classroom",
+        "Providing temporary support to help students achieve a task",
+        "Grouping students by ability level",
+        "Using technology to enhance learning"
+      ],
+      "correctAnswer": "Providing temporary support to help students achieve a task",
+      "explanation": "Scaffolding refers to a teaching method where temporary support is provided to students to help them complete tasks they couldn't accomplish independently, gradually removing support as competence increases."
+    },
+    {
+      "id": 34,
+      "question": "The Philippine national animal is:",
+      "options": [
+        "Philippine Eagle",
+        "Carabao",
+        "Tamaraw",
+        "Tarsier"
+      ],
+      "correctAnswer": "Carabao",
+      "explanation": "The Carabao (water buffalo) is the national animal of the Philippines, recognized for its importance in agriculture and rural life."
+    },
+    {
+      "id": 35,
+      "question": "Which of the following is a characteristic of project-based learning?",
+      "options": [
+        "Short-term focus on single subject content",
+        "Teacher-directed activities with predetermined outcomes",
+        "Extended inquiry process around authentic questions",
+        "Emphasis on memorization and recall"
+      ],
+      "correctAnswer": "Extended inquiry process around authentic questions",
+      "explanation": "Project-based learning involves students engaging in extended inquiry around authentic, complex questions, resulting in products or presentations that demonstrate their learning."
+    },
+    {
+      "id": 36,
+      "question": "The Banaue Rice Terraces are located in which Philippine province?",
+      "options": [
+        "Benguet",
+        "Ifugao",
+        "Mountain Province",
+        "Kalinga"
+      ],
+      "correctAnswer": "Ifugao",
+      "explanation": "The Banaue Rice Terraces, often called the 'Eighth Wonder of the World,' are located in Ifugao province in the Cordillera region of northern Luzon."
+    },
+    {
+      "id": 37,
+      "question": "Which of the following is NOT a principle of effective feedback?",
+      "options": [
+        "Timely delivery",
+        "Specificity",
+        "Focus on personal qualities rather than work",
+        "Actionable suggestions"
+      ],
+      "correctAnswer": "Focus on personal qualities rather than work",
+      "explanation": "Effective feedback should focus on the work or behavior, not personal qualities. Feedback that targets personal characteristics can be demotivating and less effective for improvement."
+    },
+    {
+      "id": 38,
+      "question": "The Philippine national hero who was known as the 'Sublime Paralytic' is:",
+      "options": [
+        "Jose Rizal",
+        "Andres Bonifacio",
+        "Apolinario Mabini",
+        "Emilio Aguinaldo"
+      ],
+      "correctAnswer": "Apolinario Mabini",
+      "explanation": "Apolinario Mabini was known as the 'Sublime Paralytic' due to his paralysis from the waist down, yet he served as the first Prime Minister of the Philippines and was a key intellectual leader of the Philippine Revolution."
+    },
+    {
+      "id": 39,
+      "question": "Which of the following best describes culturally responsive teaching?",
+      "options": [
+        "Teaching only about different cultures",
+        "Using students' cultural experiences to facilitate learning",
+        "Treating all students exactly the same regardless of background",
+        "Focusing exclusively on mainstream culture"
+      ],
+      "correctAnswer": "Using students' cultural experiences to facilitate learning",
+      "explanation": "Culturally responsive teaching recognizes the importance of including students' cultural references in all aspects of learning, using students' cultural knowledge and experiences as a bridge to facilitate more effective learning."
+    },
+    {
+      "id": 40,
+      "question": "The Philippine national tree is:",
+      "options": [
+        "Coconut tree",
+        "Bamboo",
+        "Narra",
+        "Acacia"
+      ],
+      "correctAnswer": "Narra",
+      "explanation": "The Narra (Pterocarpus indicus) is the national tree of the Philippines, valued for its durable hardwood and cultural significance."
+    },
+    {
+      "id": 41,
+      "question": "Which of the following is a key component of cooperative learning?",
+      "options": [
+        "Individual competition for grades",
+        "Teacher-centered instruction",
+        "Positive interdependence among group members",
+        "Homogeneous grouping by ability"
+      ],
+      "correctAnswer": "Positive interdependence among group members",
+      "explanation": "Positive interdependence is a key component of cooperative learning where group members perceive that they cannot succeed unless everyone in the group succeeds, promoting collaboration rather than competition."
+    },
+    {
+      "id": 42,
+      "question": "The Philippine-American War began in:",
+      "options": [
+        "1896",
+        "1898",
+        "1899",
+        "1901"
+      ],
+      "correctAnswer": "1899",
+      "explanation": "The Philippine-American War began in February 1899 following the Spanish-American War and lasted until 1902 officially, though conflict continued in some areas until 1913."
+    },
+    {
+      "id": 43,
+      "question": "Which of the following is NOT a type of assessment?",
+      "options": [
+        "Diagnostic assessment",
+        "Formative assessment",
+        "Summative assessment",
+        "Decorative assessment"
+      ],
+      "correctAnswer": "Decorative assessment",
+      "explanation": "Decorative assessment is not a recognized type of assessment in education. The main types are diagnostic (pre-assessment), formative (ongoing), and summative (final evaluation)."
+    },
+    {
+      "id": 44,
+      "question": "The Philippine national sport is:",
+      "options": [
+        "Basketball",
+        "Boxing",
+        "Arnis",
+        "Sipa"
+      ],
+      "correctAnswer": "Arnis",
+      "explanation": "Arnis, also known as Eskrima or Kali, is the national sport and martial art of the Philippines, focusing on weapon-based fighting with sticks, knives, and other weapons."
+    },
+    {
+      "id": 45,
+      "question": "Which of the following best describes the concept of 'transfer of learning'?",
+      "options": [
+        "Moving students from one classroom to another",
+        "Applying knowledge or skills learned in one context to a different context",
+        "Transferring student records between schools",
+        "Changing teaching methods during a lesson"
+      ],
+      "correctAnswer": "Applying knowledge or skills learned in one context to a different context",
+      "explanation": "Transfer of learning refers to the ability to apply knowledge, skills, or strategies learned in one context to new situations or problems, which is a key goal of education."
+    },
+    {
+      "id": 46,
+      "question": "The Chocolate Hills are located in which Philippine province?",
+      "options": [
+        "Cebu",
+        "Bohol",
+        "Palawan",
+        "Batanes"
+      ],
+      "correctAnswer": "Bohol",
+      "explanation": "The Chocolate Hills are a geological formation of over 1,200 hills located in Bohol province, named for their brown color during the dry season."
+    },
+    {
+      "id": 47,
+      "question": "Which of the following is a characteristic of inquiry-based learning?",
+      "options": [
+        "Teacher provides all information directly",
+        "Students follow predetermined steps to reach a single correct answer",
+        "Students generate questions and investigate to find answers",
+        "Focus on memorization of facts"
+      ],
+      "correctAnswer": "Students generate questions and investigate to find answers",
+      "explanation": "Inquiry-based learning is a student-centered approach where students generate questions, investigate, build knowledge, and reflect on their learning, with the teacher serving as a facilitator rather than the source of all information."
+    },
+    {
+      "id": 48,
+      "question": "The Philippine national dance is:",
+      "options": [
+        "Tinikling",
+        "Cariñosa",
+        "Singkil",
+        "Pandanggo sa Ilaw"
+      ],
+      "correctAnswer": "Tinikling",
+      "explanation": "Tinikling is considered the national dance of the Philippines, featuring dancers stepping between bamboo poles that are rhythmically tapped together."
+    },
+    {
+      "id": 49,
+      "question": "Which of the following best describes the concept of 'backward design' in curriculum planning?",
+      "options": [
+        "Starting with textbooks and planning activities based on chapters",
+        "Beginning with desired results and planning backward to assessments and activities",
+        "Designing curriculum based solely on available resources",
+        "Planning lessons in reverse chronological order"
+      ],
+      "correctAnswer": "Beginning with desired results and planning backward to assessments and activities",
+      "explanation": "Backward design, developed by Wiggins and McTighe, involves first identifying desired results, then determining acceptable evidence of learning, and finally planning learning experiences and instruction."
+    },
+    {
+      "id": 50,
+      "question": "The Ifugao epic 'Hudhud' was proclaimed by UNESCO as a:",
+      "options": [
+        "World Heritage Site",
+        "Masterpiece of the Oral and Intangible Heritage of Humanity",
+        "Biosphere Reserve",
+        "Protected Cultural Landmark"
+      ],
+      "correctAnswer": "Masterpiece of the Oral and Intangible Heritage of Humanity",
+      "explanation": "The Hudhud chants of the Ifugao were proclaimed by UNESCO as one of the Masterpieces of the Oral and Intangible Heritage of Humanity in 2001."
+    },
+  
+    {
+      "id": 51,
+      "question": "Which is the smallest unit of government in the Philippines?",
+      "options": [
+        "Barangay",
+        "Municipality",
+        "Province",
+        "City"
+      ],
+      "correctAnswer": "Barangay",
+      "explanation": "The barangay is the smallest administrative division in the Philippines."
+    },
+    {
+      "id": 52,
+      "question": "What is the capital city of the Philippines?",
+      "options": [
+        "Quezon City",
+        "Manila",
+        "Cebu",
+        "Davao"
+      ],
+      "correctAnswer": "Manila",
+      "explanation": "Manila is the capital city of the Philippines."
+    },
+    {
+      "id": 53,
+      "question": "Who is known as the 'Father of the Philippine Revolution'?",
+      "options": [
+        "Jose Rizal",
+        "Andres Bonifacio",
+        "Emilio Aguinaldo",
+        "Apolinario Mabini"
+      ],
+      "correctAnswer": "Andres Bonifacio",
+      "explanation": "Andres Bonifacio is regarded as the 'Father of the Philippine Revolution.'"
+    },
+    {
+      "id": 54,
+      "question": "Which is the largest island in the Philippines?",
+      "options": [
+        "Mindanao",
+        "Luzon",
+        "Visayas",
+        "Palawan"
+      ],
+      "correctAnswer": "Luzon",
+      "explanation": "Luzon is the largest island in the Philippines."
+    },
+    {
+      "id": 55,
+      "question": "What is the national bird of the Philippines?",
+      "options": [
+        "Maya",
+        "Carabao",
+        "Philippine Eagle",
+        "Tarsier"
+      ],
+      "correctAnswer": "Philippine Eagle",
+      "explanation": "The Philippine Eagle is the national bird of the Philippines."
+    },
+    {
+      "id": 56,
+      "question": "Which Filipino scientist is known for inventing the incubator?",
+      "options": [
+        "Fe del Mundo",
+        "Jose Rizal",
+        "Gregorio Zara",
+        "Julian Banzon"
+      ],
+      "correctAnswer": "Fe del Mundo",
+      "explanation": "Dr. Fe del Mundo invented a bamboo incubator for rural communities."
+    },
+    {
+      "id": 57,
+      "question": "What is the longest mountain range in the Philippines?",
+      "options": [
+        "Sierra Madre",
+        "Cordillera Central",
+        "Caraballo Mountains",
+        "Zambales Mountains"
+      ],
+      "correctAnswer": "Sierra Madre",
+      "explanation": "The Sierra Madre is the longest mountain range in the Philippines."
+    },
+    {
+      "id": 58,
+      "question": "Who wrote the poem 'Sa Aking Mga Kabata'?",
+      "options": [
+        "Andres Bonifacio",
+        "Jose Rizal",
+        "Francisco Balagtas",
+        "Emilio Jacinto"
+      ],
+      "correctAnswer": "Jose Rizal",
+      "explanation": "Jose Rizal wrote 'Sa Aking Mga Kabata' at a young age."
+    },
+    {
+      "id": 59,
+      "question": "Which is the oldest university in Asia?",
+      "options": [
+        "University of the Philippines",
+        "Ateneo de Manila University",
+        "University of Santo Tomas",
+        "Far Eastern University"
+      ],
+      "correctAnswer": "University of Santo Tomas",
+      "explanation": "The University of Santo Tomas, founded in 1611, is the oldest in Asia."
+    },
+    {
+      "id": 60,
+      "question": "What is the chemical symbol for gold?",
+      "options": [
+        "Ag",
+        "Au",
+        "Pb",
+        "Fe"
+      ],
+      "correctAnswer": "Au",
+      "explanation": "The chemical symbol for gold is Au."
+    },
+    {
+      "id": 61,
+      "question": "Which planet is known as the Red Planet?",
+      "options": [
+        "Venus",
+        "Mars",
+        "Jupiter",
+        "Saturn"
+      ],
+      "correctAnswer": "Mars",
+      "explanation": "Mars is called the Red Planet due to its reddish appearance."
+    },
+    {
+      "id": 62,
+      "question": "Who is the author of 'Florante at Laura'?",
+      "options": [
+        "Francisco Balagtas",
+        "Jose Rizal",
+        "Lope K. Santos",
+        "Nick Joaquin"
+      ],
+      "correctAnswer": "Francisco Balagtas",
+      "explanation": "Francisco Balagtas wrote the famous Filipino epic 'Florante at Laura.'"
+    },
+    {
+      "id": 63,
+      "question": "What is the process by which plants make their own food?",
+      "options": [
+        "Respiration",
+        "Photosynthesis",
+        "Transpiration",
+        "Fermentation"
+      ],
+      "correctAnswer": "Photosynthesis",
+      "explanation": "Photosynthesis is the process by which plants make food using sunlight."
+    },
+    {
+      "id": 64,
+      "question": "Which is the largest continent in the world?",
+      "options": [
+        "Africa",
+        "Asia",
+        "Europe",
+        "North America"
+      ],
+      "correctAnswer": "Asia",
+      "explanation": "Asia is the largest continent by both area and population."
+    },
+    {
+      "id": 65,
+      "question": "Who was the first President of the Philippines?",
+      "options": [
+        "Manuel L. Quezon",
+        "Emilio Aguinaldo",
+        "Jose P. Laurel",
+        "Sergio Osmeña"
+      ],
+      "correctAnswer": "Emilio Aguinaldo",
+      "explanation": "Emilio Aguinaldo was the first President of the Philippines."
+    },
+    {
+      "id": 66,
+      "question": "What is the boiling point of water at sea level in Celsius?",
+      "options": [
+        "90°C",
+        "100°C",
+        "120°C",
+        "80°C"
+      ],
+      "correctAnswer": "100°C",
+      "explanation": "Water boils at 100°C at sea level."
+    },
+    {
+      "id": 67,
+      "question": "Which Filipino is known as the 'Great Plebeian'?",
+      "options": [
+        "Jose Rizal",
+        "Andres Bonifacio",
+        "Emilio Aguinaldo",
+        "Apolinario Mabini"
+      ],
+      "correctAnswer": "Andres Bonifacio",
+      "explanation": "Andres Bonifacio is called the 'Great Plebeian.'"
+    },
+    {
+      "id": 68,
+      "question": "What is the largest organ in the human body?",
+      "options": [
+        "Heart",
+        "Liver",
+        "Skin",
+        "Lungs"
+      ],
+      "correctAnswer": "Skin",
+      "explanation": "The skin is the largest organ of the human body."
+    },
+    {
+      "id": 69,
+      "question": "Which is the main ingredient in the Filipino dish 'Sinigang'?",
+      "options": [
+        "Vinegar",
+        "Tamarind",
+        "Soy sauce",
+        "Coconut milk"
+      ],
+      "correctAnswer": "Tamarind",
+      "explanation": "Tamarind gives 'Sinigang' its distinct sour flavor."
+    },
+    {
+      "id": 70,
+      "question": "What is the value of Pi up to two decimal places?",
+      "options": [
+        "3.12",
+        "3.14",
+        "3.16",
+        "3.18"
+      ],
+      "correctAnswer": "3.14",
+      "explanation": "Pi is approximately 3.14 up to two decimal places."
+    },
+    
+        {
+          "id": 71,
+          "question": "Which branch of philosophy deals with the nature of knowledge?",
+          "options": [
+            "Metaphysics",
+            "Epistemology",
+            "Ethics",
+            "Aesthetics"
+          ],
+          "correctAnswer": "Epistemology",
+          "explanation": "Epistemology is the branch of philosophy concerned with the theory of knowledge, especially regarding its methods, validity, and scope."
+        },
+        {
+          "id": 72,
+          "question": "What is the term for the process where water changes directly from solid to gas without passing through the liquid state?",
+          "options": [
+            "Evaporation",
+            "Condensation",
+            "Sublimation",
+            "Deposition"
+          ],
+          "correctAnswer": "Sublimation",
+          "explanation": "Sublimation is the process where a substance changes directly from solid to gas without becoming a liquid first, such as dry ice turning to carbon dioxide gas."
+        },
+        {
+          "id": 73,
+          "question": "Which educational philosopher is known for his theory of multiple intelligences?",
+          "options": [
+            "John Dewey",
+            "Howard Gardner",
+            "Jean Piaget",
+            "Maria Montessori"
+          ],
+          "correctAnswer": "Howard Gardner",
+          "explanation": "Howard Gardner proposed the theory of multiple intelligences, suggesting that intelligence isn't a single general ability but consists of multiple distinct types of intelligence."
+        },
+        {
+          "id": 74,
+          "question": "What is the name of the pre-colonial Filipino writing system?",
+          "options": [
+            "Baybayin",
+            "Alibata",
+            "Kulitan",
+            "Suyat"
+          ],
+          "correctAnswer": "Baybayin",
+          "explanation": "Baybayin is the pre-colonial writing system used in the Philippines, particularly by the Tagalog people."
+        },
+        {
+          "id": 75,
+          "question": "Which law states that 'for every action, there is an equal and opposite reaction'?",
+          "options": [
+            "Newton's First Law",
+            "Newton's Second Law",
+            "Newton's Third Law",
+            "Law of Conservation of Energy"
+          ],
+          "correctAnswer": "Newton's Third Law",
+          "explanation": "Newton's Third Law of Motion states that for every action, there is an equal and opposite reaction."
+        },
+        {
+          "id": 76,
+          "question": "What is the term for the teaching approach that integrates multiple subjects around a central theme?",
+          "options": [
+            "Differentiated instruction",
+            "Integrated curriculum",
+            "Scaffolding",
+            "Direct instruction"
+          ],
+          "correctAnswer": "Integrated curriculum",
+          "explanation": "An integrated curriculum is an educational approach that combines multiple subjects around a central theme, allowing students to make connections across disciplines."
+        },
+        {
+          "id": 77,
+          "question": "Which Filipino revolutionary leader founded the women's section of the Katipunan called 'Katipuneras'?",
+          "options": [
+            "Melchora Aquino",
+            "Gabriela Silang",
+            "Teresa Magbanua",
+            "Gregoria de Jesus"
+          ],
+          "correctAnswer": "Gregoria de Jesus",
+          "explanation": "Gregoria de Jesus, also known as 'Lakambini ng Katipunan,' was the wife of Andres Bonifacio and founded the women's section of the Katipunan."
+        },
+        {
+          "id": 78,
+          "question": "What is the smallest particle of an element that retains its chemical properties?",
+          "options": [
+            "Atom",
+            "Molecule",
+            "Electron",
+            "Proton"
+          ],
+          "correctAnswer": "Atom",
+          "explanation": "An atom is the smallest particle of an element that retains the chemical properties of that element."
+        },
+        {
+          "id": 79,
+          "question": "Which assessment type is used to determine what students already know before beginning instruction?",
+          "options": [
+            "Formative assessment",
+            "Summative assessment",
+            "Diagnostic assessment",
+            "Performance assessment"
+          ],
+          "correctAnswer": "Diagnostic assessment",
+          "explanation": "Diagnostic assessment is used before instruction begins to determine students' prior knowledge, skills, and misconceptions."
+        },
+        {
+          "id": 80,
+          "question": "What is the name of the Filipino martial art that uses sticks, knives, and other weapons?",
+          "options": [
+            "Karate",
+            "Arnis",
+            "Taekwondo",
+            "Judo"
+          ],
+          "correctAnswer": "Arnis",
+          "explanation": "Arnis, also known as Eskrima or Kali, is a Filipino martial art that focuses on weapon-based fighting using sticks, knives, and other weapons."
+        },
+        {
+          "id": 81,
+          "question": "Which learning theory emphasizes the role of mental processes in learning?",
+          "options": [
+            "Behaviorism",
+            "Cognitivism",
+            "Constructivism",
+            "Humanism"
+          ],
+          "correctAnswer": "Cognitivism",
+          "explanation": "Cognitivism focuses on the thought process behind behavior and emphasizes mental processes such as thinking, memory, knowing, and problem-solving."
+        },
+        {
+          "id": 82,
+          "question": "What is the term for the ability to understand and manage one's own emotions and recognize those of others?",
+          "options": [
+            "Cognitive intelligence",
+            "Emotional intelligence",
+            "Social intelligence",
+            "Multiple intelligence"
+          ],
+          "correctAnswer": "Emotional intelligence",
+          "explanation": "Emotional intelligence refers to the ability to recognize, understand, and manage our own emotions and recognize, understand and influence the emotions of others."
+        },
+        {
+          "id": 83,
+          "question": "Which Philippine president implemented the 'Filipino First' policy?",
+          "options": [
+            "Manuel Quezon",
+            "Ramon Magsaysay",
+            "Carlos P. Garcia",
+            "Diosdado Macapagal"
+          ],
+          "correctAnswer": "Carlos P. Garcia",
+          "explanation": "President Carlos P. Garcia implemented the 'Filipino First' policy, which gave preference to Filipino citizens and businesses in economic activities."
+        },
+        {
+          "id": 84,
+          "question": "What is the process by which rocks are broken down into smaller pieces by weather, water, and biological activities?",
+          "options": [
+            "Erosion",
+            "Weathering",
+            "Deposition",
+            "Sedimentation"
+          ],
+          "correctAnswer": "Weathering",
+          "explanation": "Weathering is the process by which rocks are broken down into smaller pieces through exposure to weather, water, and biological activities."
+        },
+        {
+          "id": 85,
+          "question": "Which educational approach emphasizes hands-on, experiential learning?",
+          "options": [
+            "Direct instruction",
+            "Lecture-based learning",
+            "Experiential learning",
+            "Rote memorization"
+          ],
+          "correctAnswer": "Experiential learning",
+          "explanation": "Experiential learning emphasizes learning through experience and reflection, with students actively engaging in hands-on activities."
+        },
+        {
+          "id": 86,
+          "question": "What is the name of the Filipino epic that tells the story of the adventures of Lam-ang?",
+          "options": [
+            "Darangen",
+            "Biag ni Lam-ang",
+            "Hudhud",
+            "Hinilawod"
+          ],
+          "correctAnswer": "Biag ni Lam-ang",
+          "explanation": "Biag ni Lam-ang (Life of Lam-ang) is an epic poem from the Ilocano people that narrates the adventures of the eponymous hero Lam-ang."
+        },
+        {
+          "id": 87,
+          "question": "Which of the following is NOT a fossil fuel?",
+          "options": [
+            "Coal",
+            "Natural gas",
+            "Petroleum",
+            "Uranium"
+          ],
+          "correctAnswer": "Uranium",
+          "explanation": "Uranium is not a fossil fuel. It is a radioactive element used in nuclear power plants. Fossil fuels (coal, natural gas, petroleum) formed from the remains of ancient plants and animals."
+        },
+        {
+          "id": 88,
+          "question": "What teaching strategy involves students working together to solve problems and complete tasks?",
+          "options": [
+            "Direct instruction",
+            "Independent study",
+            "Cooperative learning",
+            "Lecture method"
+          ],
+          "correctAnswer": "Cooperative learning",
+          "explanation": "Cooperative learning involves students working together in small groups to maximize their own and each other's learning."
+        },
+        {
+          "id": 89,
+          "question": "Which Filipino revolutionary general was known as the 'Boy General'?",
+          "options": [
+            "Antonio Luna",
+            "Gregorio del Pilar",
+            "Emilio Aguinaldo",
+            "Miguel Malvar"
+          ],
+          "correctAnswer": "Gregorio del Pilar",
+          "explanation": "Gregorio del Pilar was known as the 'Boy General' because he became a general at the young age of 20 during the Philippine Revolution."
+        },
+        {
+          "id": 90,
+          "question": "What is the study of the Earth's physical features and processes called?",
+          "options": [
+            "Geology",
+            "Geography",
+            "Meteorology",
+            "Oceanography"
+          ],
+          "correctAnswer": "Geology",
+          "explanation": "Geology is the study of the Earth's physical structure, substances, history, and the processes that act on it."
+        },
+        {
+          "id": 91,
+          "question": "Which educational theorist is known for the concept of 'banking education'?",
+          "options": [
+            "John Dewey",
+            "Paulo Freire",
+            "Maria Montessori",
+            "B.F. Skinner"
+          ],
+          "correctAnswer": "Paulo Freire",
+          "explanation": "Paulo Freire criticized the 'banking' concept of education, where students are viewed as empty containers to be filled with knowledge by teachers."
+        },
+        {
+          "id": 92,
+          "question": "What is the traditional Filipino art of paper cutting called?",
+          "options": [
+            "Origami",
+            "Pabalat",
+            "Kirigami",
+            "Papel de hapon"
+          ],
+          "correctAnswer": "Pabalat",
+          "explanation": "Pabalat is a traditional Filipino art of paper cutting, particularly associated with decorative wrappers for pastillas de leche from Bulacan."
+        },
+        {
+          "id": 93,
+          "question": "Which of the following is a renewable energy source?",
+          "options": [
+            "Coal",
+            "Natural gas",
+            "Solar power",
+            "Petroleum"
+          ],
+          "correctAnswer": "Solar power",
+          "explanation": "Solar power is a renewable energy source that harnesses energy from the sun, unlike coal, natural gas, and petroleum which are non-renewable fossil fuels."
+        },
+        {
+          "id": 94,
+          "question": "What is the term for the teaching approach that adjusts instruction based on individual student needs?",
+          "options": [
+            "Standardized instruction",
+            "Differentiated instruction",
+            "Direct instruction",
+            "Whole-class instruction"
+          ],
+          "correctAnswer": "Differentiated instruction",
+          "explanation": "Differentiated instruction is an approach that tailors teaching to meet individual student differences in readiness, interest, and learning profile."
+        },
+        {
+          "id": 95,
+          "question": "Which Philippine president declared Martial Law in 1972?",
+          "options": [
+            "Diosdado Macapagal",
+            "Ferdinand Marcos",
+            "Corazon Aquino",
+            "Ramon Magsaysay"
+          ],
+          "correctAnswer": "Ferdinand Marcos",
+          "explanation": "Ferdinand Marcos declared Martial Law in the Philippines on September 21, 1972, which lasted until 1981."
+        },
+        {
+          "id": 96,
+          "question": "What is the process by which plants release water vapor into the atmosphere?",
+          "options": [
+            "Photosynthesis",
+            "Respiration",
+            "Transpiration",
+            "Condensation"
+          ],
+          "correctAnswer": "Transpiration",
+          "explanation": "Transpiration is the process by which plants release water vapor into the atmosphere through small pores in their leaves called stomata."
+        },
+        {
+          "id": 97,
+          "question": "Which learning style is characterized by a preference for visual information such as pictures and diagrams?",
+          "options": [
+            "Auditory learning",
+            "Visual learning",
+            "Kinesthetic learning",
+            "Reading/writing learning"
+          ],
+          "correctAnswer": "Visual learning",
+          "explanation": "Visual learning is a learning style where individuals prefer to learn through visual aids such as pictures, diagrams, and demonstrations."
+        },
+        {
+          "id": 98,
+          "question": "What is the name of the Filipino folk dance that mimics the movement of tikling birds?",
+          "options": [
+            "Tinikling",
+            "Pandanggo sa Ilaw",
+            "Cariñosa",
+            "Singkil"
+          ],
+          "correctAnswer": "Tinikling",
+          "explanation": "Tinikling is a traditional Filipino folk dance that imitates the movement of tikling birds as they walk between grass stems, run over tree branches, or dodge bamboo traps set by farmers."
+        },
+        {
+          "id": 99,
+          "question": "Which of the following is NOT a state of matter?",
+          "options": [
+            "Solid",
+            "Liquid",
+            "Gas",
+            "Energy"
+          ],
+          "correctAnswer": "Energy",
+          "explanation": "Energy is not a state of matter. The four common states of matter are solid, liquid, gas, and plasma."
+        },
+        {
+          "id": 100,
+          "question": "What is the educational approach that emphasizes learning through play?",
+          "options": [
+            "Direct instruction",
+            "Play-based learning",
+            "Lecture method",
+            "Rote memorization"
+          ],
+          "correctAnswer": "Play-based learning",
+          "explanation": "Play-based learning is an educational approach that emphasizes learning through play activities, which helps develop social skills, creativity, and problem-solving abilities."
+        },
+        {
+          "id": 101,
+          "question": "Which Filipino leader is known as the 'Brains of the Revolution'?",
+          "options": [
+            "Jose Rizal",
+            "Andres Bonifacio",
+            "Apolinario Mabini",
+            "Emilio Jacinto"
+          ],
+          "correctAnswer": "Apolinario Mabini",
+          "explanation": "Apolinario Mabini is known as the 'Brains of the Revolution' for his intellectual contributions to the Philippine Revolution and the first Philippine Republic."
+        },
+        {
+          "id": 102,
+          "question": "What is the process of a liquid changing to a gas called?",
+          "options": [
+            "Condensation",
+            "Evaporation",
+            "Sublimation",
+            "Deposition"
+          ],
+          "correctAnswer": "Evaporation",
+          "explanation": "Evaporation is the process by which a liquid changes into a gas or vapor at a temperature below its boiling point."
+        },
+        {
+          "id": 103,
+          "question": "Which educational theory suggests that learning occurs through observation and imitation of others?",
+          "options": [
+            "Behaviorism",
+            "Cognitivism",
+            "Social learning theory",
+            "Constructivism"
+          ],
+          "correctAnswer": "Social learning theory",
+          "explanation": "Social learning theory, developed by Albert Bandura, proposes that learning occurs through observation, imitation, and modeling of others' behavior."
+        },
+        {
+          "id": 104,
+          "question": "What is the traditional Filipino method of cooking food wrapped in banana leaves?",
+          "options": [
+            "Adobo",
+            "Inihaw",
+            "Paksiw",
+            "Pinais"
+          ],
+          "correctAnswer": "Pinais",
+          "explanation": "Pinais is a traditional Filipino cooking method where food is wrapped in banana leaves before being steamed or grilled, which infuses the food with the aroma of the leaves."
+        },
+        {
+          "id": 105,
+          "question": "Which of the following is NOT a type of rock?",
+          "options": [
+            "Igneous",
+            "Sedimentary",
+            "Metamorphic",
+            "Metallic"
+          ],
+          "correctAnswer": "Metallic",
+          "explanation": "Metallic is not a type of rock. The three main types of rocks are igneous, sedimentary, and metamorphic."
+        },
+        {
+          "id": 106,
+          "question": "What is the term for the teaching strategy that uses questions to stimulate critical thinking?",
+          "options": [
+            "Direct instruction",
+            "Socratic method",
+            "Lecture method",
+            "Demonstration method"
+          ],
+          "correctAnswer": "Socratic method",
+          "explanation": "The Socratic method is a form of cooperative argumentative dialogue between individuals, based on asking and answering questions to stimulate critical thinking and draw out ideas."
+        },
+        {
+          "id": 107,
+          "question": "Which Philippine president implemented the land reform program known as CARP?",
+          "options": [
+            "Ferdinand Marcos",
+            "Corazon Aquino",
+            "Fidel V. Ramos",
+            "Joseph Estrada"
+          ],
+          "correctAnswer": "Corazon Aquino",
+          "explanation": "President Corazon Aquino implemented the Comprehensive Agrarian Reform Program (CARP) in 1988 to redistribute agricultural lands to landless farmers and farm workers."
+        },
+        {
+          "id": 108,
+          "question": "What is the study of the Earth's atmosphere and weather patterns called?",
+          "options": [
+            "Geology",
+            "Meteorology",
+            "Oceanography",
+            "Astronomy"
+          ],
+          "correctAnswer": "Meteorology",
+          "explanation": "Meteorology is the scientific study of the Earth's atmosphere and weather patterns."
+        },
+        {
+          "id": 109,
+          "question": "Which educational philosopher advocated for 'learning by doing'?",
+          "options": [
+            "John Dewey",
+            "Maria Montessori",
+            "Jean Piaget",
+            "B.F. Skinner"
+          ],
+          "correctAnswer": "John Dewey",
+          "explanation": "John Dewey advocated for 'learning by doing' or experiential education, emphasizing that students should be actively engaged in meaningful activities."
+        },
+        {
+          "id": 110,
+          "question": "What is the name of the Filipino musical instrument made of bamboo tubes?",
+          "options": [
+            "Kulintang",
+            "Kudyapi",
+            "Angklung",
+            "Bungkaka"
+          ],
+          "correctAnswer": "Angklung",
+          "explanation": "The Angklung is a musical instrument made of bamboo tubes attached to a bamboo frame, each producing a single note when shaken or struck."
+        },
+        {
+          "id": 111,
+          "question": "Which of the following is a greenhouse gas?",
+          "options": [
+            "Oxygen",
+            "Nitrogen",
+            "Carbon dioxide",
+            "Hydrogen"
+          ],
+          "correctAnswer": "Carbon dioxide",
+          "explanation": "Carbon dioxide is a greenhouse gas that traps heat in the Earth's atmosphere, contributing to the greenhouse effect and climate change."
+        },
+        {
+          "id": 112,
+          "question": "What is the term for the teaching approach that uses real-world problems to facilitate learning?",
+          "options": [
+            "Direct instruction",
+            "Problem-based learning",
+            "Lecture method",
+            "Rote memorization"
+          ],
+          "correctAnswer": "Problem-based learning",
+          "explanation": "Problem-based learning is a student-centered approach where learning occurs through the experience of solving open-ended problems in real-world contexts."
+        },
+        {
+          "id": 113,
+          "question": "Which Filipino revolutionary leader established the Magdalo faction of the Katipunan?",
+          "options": [
+            "Andres Bonifacio",
+            "Emilio Aguinaldo",
+            "Apolinario Mabini",
+            "Emilio Jacinto"
+          ],
+          "correctAnswer": "Emilio Aguinaldo",
+          "explanation": "Emilio Aguinaldo established the Magdalo faction of the Katipunan in Cavite, which later conflicted with Bonifacio's Magdiwang faction."
+        },
+        {
+          "id": 114,
+          "question": "What is the process by which water vapor changes directly to ice without becoming liquid?",
+          "options": [
+            "Condensation",
+            "Evaporation",
+            "Sublimation",
+            "Deposition"
+          ],
+          "correctAnswer": "Deposition",
+          "explanation": "Deposition is the phase transition in which gas transforms directly into solid without passing through the liquid phase, such as when water vapor forms frost."
+        },
+        {
+          "id": 115,
+          "question": "Which learning theory emphasizes the importance of reinforcement and punishment in shaping behavior?",
+          "options": [
+            "Behaviorism",
+            "Cognitivism",
+            "Constructivism",
+            "Humanism"
+          ],
+          "correctAnswer": "Behaviorism",
+          "explanation": "Behaviorism focuses on observable behaviors and how they are shaped by environmental stimuli through reinforcement and punishment."
+        },
+        {
+          "id": 116,
+          "question": "What is the traditional Filipino art of embroidery called?",
+          "options": [
+            "Tinalak",
+            "Callado",
+            "Inabel",
+            "Hablon"
+          ],
+          "correctAnswer": "Callado",
+          "explanation": "Callado is a traditional Filipino embroidery technique characterized by intricate cutwork designs, particularly associated with the barong Tagalog."
+        },
+        {
+          "id": 117,
+          "question": "Which of the following is NOT a layer of the Earth's atmosphere?",
+          "options": [
+            "Troposphere",
+            "Stratosphere",
+            "Mesosphere",
+            "Lithosphere"
+          ],
+          "correctAnswer": "Lithosphere",
+          "explanation": "The lithosphere is not a layer of the Earth's atmosphere; it is the rigid outer part of the Earth, consisting of the crust and upper mantle. The atmospheric layers are troposphere, stratosphere, mesosphere, thermosphere, and exosphere."
+        },
+        {
+          "id": 118,
+          "question": "What is the educational approach that emphasizes student choice and self-directed learning?",
+          "options": [
+            "Direct instruction",
+            "Student-centered learning",
+            "Teacher-centered learning",
+            "Standardized instruction"
+          ],
+          "correctAnswer": "Student-centered learning",
+          "explanation": "Student-centered learning places the student at the center of the learning process, emphasizing student choice, interests, and self-directed learning."
+        },
+        {
+          "id": 119,
+          "question": "Which Philippine president is known for the 'Daang Matuwid' (Straight Path) governance platform?",
+          "options": [
+            "Gloria Macapagal Arroyo",
+            "Benigno Aquino III",
+            "Joseph Estrada",
+            "Rodrigo Duterte"
+          ],
+          "correctAnswer": "Benigno Aquino III",
+          "explanation": "President Benigno 'Noynoy' Aquino III used the 'Daang Matuwid' (Straight Path) as his governance platform, focusing on anti-corruption and transparency."
+        },
+        {
+          "id": 120,
+          "question": "What is the study of living organisms and their interactions with each other and their environment called?",
+          "options": [
+            "Geology",
+            "Ecology",
+            "Meteorology",
+            "Astronomy"
+          ],
+          "correctAnswer": "Ecology",
+          "explanation": "Ecology is the scientific study of the relationships between living organisms and their interactions with each other and their environment."
+        },
+        
+          
+            {
+              "id": 121,
+              "question": "Which theory of intelligence suggests that intelligence consists of three components: analytical, creative, and practical abilities?",
+              "options": [
+                "Multiple Intelligences Theory",
+                "Triarchic Theory of Intelligence",
+                "Two-Factor Theory",
+                "Fluid and Crystallized Intelligence Theory"
+              ],
+              "correctAnswer": "Triarchic Theory of Intelligence",
+              "explanation": "The Triarchic Theory of Intelligence, proposed by Robert Sternberg, suggests that intelligence consists of three components: analytical (academic problem-solving), creative (innovative thinking), and practical (applying knowledge in everyday situations)."
+            },
+            {
+              "id": 122,
+              "question": "What is the name of the Filipino indigenous group known for their rice terraces in Ifugao?",
+              "options": [
+                "T'boli",
+                "Mangyan",
+                "Ifugao",
+                "Badjao"
+              ],
+              "correctAnswer": "Ifugao",
+              "explanation": "The Ifugao people are known for building the famous rice terraces in the Cordillera region, which are recognized as a UNESCO World Heritage Site."
+            },
+            {
+              "id": 123,
+              "question": "Which of the following is NOT one of Bloom's six cognitive levels in the revised taxonomy?",
+              "options": [
+                "Remembering",
+                "Understanding",
+                "Memorizing",
+                "Creating"
+              ],
+              "correctAnswer": "Memorizing",
+              "explanation": "Memorizing is not one of the six cognitive levels in Bloom's revised taxonomy. The six levels are: Remembering, Understanding, Applying, Analyzing, Evaluating, and Creating."
+            },
+            {
+              "id": 124,
+              "question": "What is the term for the process where teachers gradually reduce support as students become more proficient?",
+              "options": [
+                "Differentiation",
+                "Scaffolding",
+                "Accommodation",
+                "Modification"
+              ],
+              "correctAnswer": "Scaffolding",
+              "explanation": "Scaffolding is the process where teachers provide temporary support to help students achieve a task, then gradually remove that support as students develop independence."
+            },
+            {
+              "id": 125,
+              "question": "Which Philippine volcano is known as the 'Perfect Cone' due to its symmetrical shape?",
+              "options": [
+                "Mount Pinatubo",
+                "Mount Apo",
+                "Taal Volcano",
+                "Mayon Volcano"
+              ],
+              "correctAnswer": "Mayon Volcano",
+              "explanation": "Mayon Volcano in Albay province is known as the 'Perfect Cone' because of its symmetrical conical shape."
+            },
+            {
+              "id": 126,
+              "question": "What is the term for the teaching strategy that involves students teaching other students?",
+              "options": [
+                "Reciprocal teaching",
+                "Peer tutoring",
+                "Collaborative learning",
+                "Jigsaw method"
+              ],
+              "correctAnswer": "Peer tutoring",
+              "explanation": "Peer tutoring is an instructional strategy where students teach other students, which benefits both the tutor and tutee by reinforcing learning and developing communication skills."
+            },
+            {
+              "id": 127,
+              "question": "Which Filipino scientist discovered the antibiotic properties of coconut oil?",
+              "options": [
+                "Fe del Mundo",
+                "Gregorio Zara",
+                "Eduardo San Juan",
+                "Arturo Alcaraz"
+              ],
+              "correctAnswer": "Arturo Alcaraz",
+              "explanation": "Arturo Alcaraz discovered the antibiotic properties of coconut oil, among his many contributions to geothermal energy research in the Philippines."
+            },
+            {
+              "id": 128,
+              "question": "What is the smallest unit of life that can function independently?",
+              "options": [
+                "Tissue",
+                "Cell",
+                "Organ",
+                "Molecule"
+              ],
+              "correctAnswer": "Cell",
+              "explanation": "The cell is the smallest unit of life that can function independently and is considered the basic structural and functional unit of all living organisms."
+            },
+            {
+              "id": 129,
+              "question": "Which educational philosophy emphasizes the importance of preparing students for real-life situations?",
+              "options": [
+                "Essentialism",
+                "Perennialism",
+                "Progressivism",
+                "Existentialism"
+              ],
+              "correctAnswer": "Progressivism",
+              "explanation": "Progressivism emphasizes learning by doing, preparing students for real-life situations, and focusing on problem-solving and critical thinking rather than rote memorization."
+            },
+            {
+              "id": 130,
+              "question": "What is the name of the traditional Filipino boat with outriggers?",
+              "options": [
+                "Vinta",
+                "Balangay",
+                "Bangka",
+                "Paraw"
+              ],
+              "correctAnswer": "Bangka",
+              "explanation": "Bangka is the traditional Filipino outrigger boat commonly used for fishing and transportation between islands."
+            },
+            {
+              "id": 131,
+              "question": "Which of the following is an example of intrinsic motivation?",
+              "options": [
+                "Studying to get a high grade",
+                "Learning a skill to earn money",
+                "Reading a book because you enjoy it",
+                "Completing homework to avoid punishment"
+              ],
+              "correctAnswer": "Reading a book because you enjoy it",
+              "explanation": "Intrinsic motivation comes from within the individual, such as doing an activity because it's personally rewarding or enjoyable, rather than for external rewards or pressures."
+            },
+            {
+              "id": 132,
+              "question": "Which Philippine president established the Cultural Center of the Philippines?",
+              "options": [
+                "Diosdado Macapagal",
+                "Ferdinand Marcos",
+                "Ramon Magsaysay",
+                "Carlos P. Garcia"
+              ],
+              "correctAnswer": "Ferdinand Marcos",
+              "explanation": "President Ferdinand Marcos established the Cultural Center of the Philippines (CCP) in 1969 as part of his administration's cultural program."
+            },
+            {
+              "id": 133,
+              "question": "What is the process by which green plants convert light energy into chemical energy?",
+              "options": [
+                "Respiration",
+                "Photosynthesis",
+                "Fermentation",
+                "Transpiration"
+              ],
+              "correctAnswer": "Photosynthesis",
+              "explanation": "Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy from the sun into chemical energy stored in glucose molecules."
+            },
+            {
+              "id": 134,
+              "question": "Which assessment approach evaluates student performance based on predetermined criteria rather than comparing students to each other?",
+              "options": [
+                "Norm-referenced assessment",
+                "Criterion-referenced assessment",
+                "Standardized assessment",
+                "Ipsative assessment"
+              ],
+              "correctAnswer": "Criterion-referenced assessment",
+              "explanation": "Criterion-referenced assessment evaluates student performance against predetermined criteria or standards, rather than comparing students to each other as in norm-referenced assessment."
+            },
+            {
+              "id": 135,
+              "question": "What is the name of the Filipino martial art that focuses on stick fighting?",
+              "options": [
+                "Sikaran",
+                "Dumog",
+                "Arnis",
+                "Yaw-Yan"
+              ],
+              "correctAnswer": "Arnis",
+              "explanation": "Arnis (also known as Eskrima or Kali) is a Filipino martial art that focuses on stick fighting, knife fighting, and hand-to-hand combat."
+            },
+            {
+              "id": 136,
+              "question": "Which of the following is NOT a constructivist teaching strategy?",
+              "options": [
+                "Problem-based learning",
+                "Discovery learning",
+                "Direct instruction",
+                "Collaborative projects"
+              ],
+              "correctAnswer": "Direct instruction",
+              "explanation": "Direct instruction is a teacher-centered approach where information is explicitly taught to students, unlike constructivist strategies that emphasize student-centered, active learning."
+            },
+            {
+              "id": 137,
+              "question": "Which Filipino hero wrote 'Mi Último Adiós' (My Last Farewell)?",
+              "options": [
+                "Andres Bonifacio",
+                "Jose Rizal",
+                "Emilio Aguinaldo",
+                "Apolinario Mabini"
+              ],
+              "correctAnswer": "Jose Rizal",
+              "explanation": "Jose Rizal wrote 'Mi Último Adiós' (My Last Farewell) the night before his execution on December 30, 1896."
+            },
+            {
+              "id": 138,
+              "question": "What is the term for the ability to understand one's own strengths, weaknesses, and learning preferences?",
+              "options": [
+                "Self-regulation",
+                "Metacognition",
+                "Self-efficacy",
+                "Growth mindset"
+              ],
+              "correctAnswer": "Metacognition",
+              "explanation": "Metacognition is the awareness and understanding of one's own thought processes, including knowledge about when and how to use particular strategies for learning or problem-solving."
+            },
+            {
+              "id": 139,
+              "question": "Which of the following is a primary function of the United Nations Educational, Scientific and Cultural Organization (UNESCO)?",
+              "options": [
+                "Military defense",
+                "Economic development",
+                "Promoting peace through education and culture",
+                "Regulating international trade"
+              ],
+              "correctAnswer": "Promoting peace through education and culture",
+              "explanation": "UNESCO's primary function is to contribute to peace and security by promoting international collaboration through education, science, culture, and communication."
+            },
+            {
+              "id": 140,
+              "question": "What is the traditional Filipino weaving technique that produces colorful patterns using threads dyed before weaving?",
+              "options": [
+                "Inabel",
+                "Ikat",
+                "Hablon",
+                "Tinalak"
+              ],
+              "correctAnswer": "Ikat",
+              "explanation": "Ikat is a traditional Filipino weaving technique where threads are dyed before weaving to create patterns, particularly practiced in regions like Mindanao."
+            },
+            {
+              "id": 141,
+              "question": "Which of the following is NOT a principle of Universal Design for Learning (UDL)?",
+              "options": [
+                "Multiple means of representation",
+                "Multiple means of action and expression",
+                "Multiple means of engagement",
+                "Multiple means of assessment"
+              ],
+              "correctAnswer": "Multiple means of assessment",
+              "explanation": "The three principles of Universal Design for Learning are multiple means of representation, action and expression, and engagement. 'Multiple means of assessment' is not one of the core UDL principles."
+            },
+            {
+              "id": 142,
+              "question": "Which Philippine president implemented the 'Pantawid Pamilyang Pilipino Program' (4Ps)?",
+              "options": [
+                "Gloria Macapagal Arroyo",
+                "Benigno Aquino III",
+                "Joseph Estrada",
+                "Fidel V. Ramos"
+              ],
+              "correctAnswer": "Gloria Macapagal Arroyo",
+              "explanation": "President Gloria Macapagal Arroyo implemented the Pantawid Pamilyang Pilipino Program (4Ps) in 2007, a conditional cash transfer program to reduce poverty."
+            },
+            {
+              "id": 143,
+              "question": "What is the term for the teaching approach that uses technology to enhance traditional face-to-face instruction?",
+              "options": [
+                "Online learning",
+                "Distance education",
+                "Blended learning",
+                "Virtual learning"
+              ],
+              "correctAnswer": "Blended learning",
+              "explanation": "Blended learning combines traditional face-to-face classroom methods with online digital activities, giving students some control over time, place, path, or pace of learning."
+            },
+            {
+              "id": 144,
+              "question": "Which of the following is a renewable source of energy?",
+              "options": [
+                "Coal",
+                "Natural gas",
+                "Geothermal energy",
+                "Petroleum"
+              ],
+              "correctAnswer": "Geothermal energy",
+              "explanation": "Geothermal energy is a renewable energy source that harnesses heat from the Earth's interior, unlike coal, natural gas, and petroleum which are non-renewable fossil fuels."
+            },
+            {
+              "id": 145,
+              "question": "What is the name of the traditional Filipino courtship serenade?",
+              "options": [
+                "Kundiman",
+                "Harana",
+                "Balitaw",
+                "Kumintang"
+              ],
+              "correctAnswer": "Harana",
+              "explanation": "Harana is the traditional Filipino courtship serenade where a man woos a woman by singing underneath her window at night, often accompanied by friends playing guitars."
+            },
+            {
+              "id": 146,
+              "question": "Which of the following best describes the concept of 'growth mindset'?",
+              "options": [
+                "The belief that intelligence is fixed and cannot be changed",
+                "The belief that abilities can be developed through dedication and hard work",
+                "The focus on comparing oneself to others",
+                "The emphasis on natural talent over effort"
+              ],
+              "correctAnswer": "The belief that abilities can be developed through dedication and hard work",
+              "explanation": "Growth mindset, a concept developed by Carol Dweck, is the belief that abilities can be developed through dedication, hard work, and learning from failures, as opposed to a fixed mindset that believes abilities are innate and unchangeable."
+            },
+            {
+              "id": 147,
+              "question": "Which Filipino revolutionary leader founded the Katipunan?",
+              "options": [
+                "Jose Rizal",
+                "Andres Bonifacio",
+                "Emilio Aguinaldo",
+                "Apolinario Mabini"
+              ],
+              "correctAnswer": "Andres Bonifacio",
+              "explanation": "Andres Bonifacio founded the Katipunan (Kataas-taasang, Kagalang-galangang Katipunan ng mga Anak ng Bayan) in 1892, a secret revolutionary society that fought for Philippine independence from Spain."
+            },
+            {
+              "id": 148,
+              "question": "What is the term for the teaching strategy that involves breaking down complex tasks into smaller, manageable steps?",
+              "options": [
+                "Chunking",
+                "Scaffolding",
+                "Differentiation",
+                "Modeling"
+              ],
+              "correctAnswer": "Chunking",
+              "explanation": "Chunking is a teaching strategy that involves breaking down complex information or tasks into smaller, more manageable pieces to facilitate learning and reduce cognitive load."
+            },
+            {
+              "id": 149,
+              "question": "Which of the following is NOT a characteristic of authentic assessment?",
+              "options": [
+                "Real-world tasks",
+                "Multiple-choice questions only",
+                "Performance-based evaluation",
+                "Application of knowledge and skills"
+              ],
+              "correctAnswer": "Multiple-choice questions only",
+              "explanation": "Authentic assessment typically involves real-world tasks, performance-based evaluation, and application of knowledge and skills, rather than relying solely on multiple-choice questions which are more characteristic of traditional assessment."
+            },
+            {
+              "id": 150,
+              "question": "What is the name of the Filipino traditional healing ritual that involves the use of herbs, prayers, and massage?",
+              "options": [
+                "Hilot",
+                "Albularyo",
+                "Kulam",
+                "Tawas"
+              ],
+              "correctAnswer": "Hilot",
+              "explanation": "Hilot is a traditional Filipino healing method that combines the use of herbs, prayers, and massage techniques to treat various ailments and promote wellness."
+            },
+            {
+              "id": 151,
+              "question": "What is the term for the teaching strategy that involves using technology to enhance traditional face-to-face instruction?",
+              "options": [
+                "Online learning",
+                "Distance education",
+                "Blended learning",
+                "Virtual learning"
+              ],
+              "correctAnswer": "Blended learning",
+              "explanation": "Blended learning combines traditional face-to-face classroom methods with online digital activities, giving students some control over time, place, path, or pace of learning."
+            }
+          ]
+        }
+
+   

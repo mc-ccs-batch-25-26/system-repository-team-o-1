@@ -1,0 +1,572 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Base body styles (can be adjusted) */
+
+body {
+  @apply transition-colors duration-300;
+}
+
+/* Theme-based background and text */
+.light-bg {
+  @apply bg-zinc-50 min-h-screen;
+}
+
+.dark-bg {
+  @apply bg-zinc-900;
+}
+
+.light-text {
+  @apply text-zinc-900;
+}
+
+.dark-text {
+  @apply text-zinc-100;
+}
+
+.light-secondary-text {
+  @apply text-zinc-600;
+}
+
+.dark-secondary-text {
+  @apply text-zinc-400;
+}
+
+
+
+.dark-border {
+  @apply border-zinc-700;
+}
+
+
+.light-card-bg {
+  @apply bg-zinc-50/50 backdrop-blur-md shadow-sm font-semibold;
+}
+
+.light-footer-bg {
+  @apply bg-zinc-100/50 rounded-t-2xl backdrop-blur-md shadow-sm font-semibold;
+}
+
+.light-analytics-bg {
+  @apply font-bold bg-white backdrop-blur-md shadow-sm text-lg;
+}
+
+.dark-card-bg {
+  @apply bg-zinc-800/50 backdrop-blur-md shadow-sm;
+}
+
+.light-card-hover-bg {
+  @apply hover:bg-zinc-100 hover:shadow-lg;
+}
+
+.dark-card-hover-bg {
+  @apply hover:bg-zinc-800 hover:shadow-lg;
+}
+
+.card-base {
+  @apply rounded-xl p-6 backdrop-filter shadow-lg transition-colors duration-300;
+}
+
+/* Topic Card Specific Styles */
+.light-topic-bg {
+  @apply bg-white;
+}
+
+.dark-topic-bg {
+  @apply bg-zinc-800/50 backdrop-blur-md shadow-sm;
+}
+
+.topic-card {
+  @apply flex flex-col justify-between min-h-[150px] p-5 rounded-lg transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1;
+  /* Added hover effects for interactivity */
+}
+
+.topic-card-title {
+  @apply font-semibold text-lg mb-2 transition-colors duration-200;
+  /* Increased font size for better readability */
+}
+
+.topic-card-questions {
+  @apply text-sm mb-3;
+  /* Added margin bottom for spacing */
+}
+
+.topic-card .start-button {
+  @apply absolute right-9 bottom-10 bg-black text-white px-4 py-2 rounded-md hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200 transition-all duration-200 text-sm font-medium shadow-md w-20 text-center;
+  /* Made button full width and added better padding */
+}
+
+/* Enhanced UI Components */
+.topic-card-enhanced {
+  @apply ring-1 ring-zinc-200 dark:ring-zinc-700 hover:ring-zinc-400 dark:hover:ring-zinc-500 hover:ring-opacity-50 transition-all duration-300;
+}
+
+.progress-card-enhanced {
+  @apply shadow-sm transition-colors duration-300;
+}
+
+.analytics-card-enhanced {
+  @apply hover:shadow-lg transition-all duration-300;
+}
+
+.hero-enhanced {
+  @apply py-16 md:py-24;
+}
+
+.hero-subtitle {
+  @apply text-xl md:text-2xl max-w-2xl mx-auto opacity-90 mb-8;
+}
+
+.hero-actions {
+  @apply flex justify-center mt-8;
+}
+
+.hero-button {
+  @apply bg-black dark:bg-white text-white dark:text-black font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:bg-zinc-800 dark:hover:bg-zinc-200;
+}
+
+.navbar-enhanced {
+  @apply backdrop-blur-md;
+}
+
+.search-enhanced {
+  @apply focus:ring-zinc-500 focus:ring-opacity-50 transition-all duration-300;
+}
+
+.quiz-mode-button {
+  @apply relative leading-relaxed w-32 left-36 py-2 px-4 rounded-md text-sm font-medium transition-colors bg-black text-white hover:bg-zinc-800 dark:bg-white dark:text-black dark:hover:bg-zinc-200;
+}
+
+.mock-mode-button {
+  @apply relative w-32 h-14 right-9 left-36 py-2 px-4 rounded-md text-sm font-medium transition-colors bg-white text-black border border-black hover:bg-zinc-100 dark:bg-black dark:text-white dark:border-white dark:hover:bg-zinc-800;
+}
+
+.cancel-button {
+  @apply rounded-md h-10 w-20 right-80 bg-zinc-200 text-black hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700;
+}
+
+/* Topics Grid Layout */
+.topics-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  /* Increased gap for better spacing */
+}
+
+/* Topic Card Badge - New element */
+.topic-card-badge {
+  @apply absolute top-3 right-3 bg-black dark:bg-white text-white dark:text-black text-xs px-2 py-1 rounded-full;
+}
+
+/* Topic Card Icon - New element */
+.topic-card-icon {
+  @apply text-black dark:text-white mb-3 text-2xl;
+}
+
+/* Topic Card Content Layout */
+.topic-card-content {
+  @apply flex-1;
+}
+
+/* Navbar Styles */
+.light-nav-bg {
+  @apply bg-white backdrop-blur-md shadow-sm
+}
+
+.light-nav-text {
+  @apply text-zinc-800;
+}
+
+.dark-nav-text {
+  @apply text-zinc-100;
+}
+
+.dark-nav-bg {
+  @apply bg-zinc-900/10 backdrop-blur-md shadow-sm;
+}
+
+.navbar {
+  @apply h-20 p-4 sticky top-0 z-50;
+}
+
+/* Increased z-index */
+.navbar-container {
+  @apply container mx-auto flex justify-between items-center;
+}
+
+.navbar-brand {
+  @apply rounded-md flex items-center;
+}
+
+.navbar-brand-icon {
+  @apply w-8 h-8 text-black dark:text-white mr-3;
+}
+
+/* Updated navbar brand text with light and dark mode variants */
+.navbar-brand-text {
+  @apply text-2xl font-bold transition-colors duration-300;
+}
+
+.light-brand-text {
+  @apply text-black;
+}
+
+.dark-brand-text {
+  @apply text-white;
+}
+
+.navbar-search {
+  @apply absolute left-60 right-4 top-4 hidden md:block mx-4 w-64;
+}
+
+.navbar-search-input {
+  @apply bg-transparent border w-full py-2 pl-10 pr-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 text-sm;
+}
+
+.navbar-search-icon {
+  @apply absolute inset-y-1.5 left-0 pl-3 flex items-center pointer-events-none w-6 h-6 text-zinc-400;
+}
+
+.navbar-actions {
+  @apply flex items-center space-x-4;
+}
+
+.navbar-theme-button {
+  @apply p-2 rounded-lg bg-zinc-100 text-black hover:bg-zinc-200 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700;
+}
+
+.navbar-links {
+  @apply space-x-6 hidden md:flex;
+}
+
+.navbar-link {
+  @apply flex items-center hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors;
+}
+
+.navbar-link-icon {
+  @apply h-5 w-5 mr-1;
+}
+
+.navbar-mobile-button {
+  @apply p-2 md:hidden;
+}
+
+/* Hide on medium screens and up */
+.navbar-mobile-icon {
+  @apply w-6 h-6;
+}
+
+/* Mobile Search */
+.mobile-search-container {
+  @apply md:hidden px-4 py-3;
+}
+
+.mobile-search-wrapper {
+  @apply relative;
+}
+
+.mobile-search-icon {
+  @apply absolute inset-y-1 left-0 pl-3 flex items-center pointer-events-none w-6 h-6 text-zinc-100;
+}
+
+.mobile-search-input {
+  @apply w-full py-2 pl-10 pr-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-zinc-500 text-sm;
+}
+
+/* Hero Section */
+
+.dark-hero-bg {
+  @apply bg-transparent;
+}
+
+.hero-section {
+  @apply py-12;
+}
+
+.hero-container {
+  @apply container mx-auto px-4 text-center;
+}
+
+.hero-title {
+  @apply text-4xl md:text-5xl font-bold mb-4 text-slate-900 dark:text-white transition-colors;
+}
+
+.hero-title.dark,
+.dark .hero-title {
+  color: white;
+}
+
+.ignore-css-syntax-error-wrapper {}
+
+.light-hero-subtitle {
+  @apply text-xl mb-8 max-w-2xl mx-auto text-zinc-600 dark:text-zinc-400;
+}
+
+.dark-hero-subtitle {
+  @apply text-xl mb-8 max-w-2xl mx-auto text-white;
+}
+
+/* Main Content */
+.main-content {
+  @apply container mx-auto px-4 py-8 space-y-8;
+}
+
+.light-section-title {
+  @apply text-2xl font-bold mb-6 text-black;
+}
+
+/* Combined styles */
+.dark-section-title {
+  @apply text-2xl font-bold mb-6 text-white;
+}
+
+/* Topics Section */
+.topics-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.view-all-button {
+  @apply text-sm text-black dark:text-white font-medium hover:underline;
+}
+
+.more-topics-message {
+  @apply mt-6 p-3 rounded-lg border flex items-center text-sm border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 text-zinc-600 dark:text-zinc-400;
+}
+
+.more-topics-icon {
+  @apply w-5 h-5 mr-3 text-zinc-500 dark:text-zinc-400 flex-shrink-0;
+}
+
+/* Progress Section */
+.progress-section {
+  @apply mt-8;
+}
+
+/* Keep margin if needed, or handle with main-content spacing */
+.progress-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4;
+}
+
+/* Adjusted grid */
+.progress-card {
+  @apply rounded-lg p-4 border flex flex-col justify-between;
+}
+
+/* Added flex */
+.progress-card-header {
+  @apply flex items-center mb-9;
+}
+
+.progress-card-icon-wrapper {
+  @apply w-12 h-12 rounded-full flex items-center justify-center mr-3;
+}
+
+.progress-card-icon {
+  @apply h-6 w-6;
+}
+
+.progress-card-value {
+  @apply text-2xl font-bold;
+}
+
+.progress-card-label {
+  @apply text-sm;
+}
+
+.progress-bar-bg {
+  @apply w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-2 mt-auto;
+}
+
+/* Added mt-auto */
+.progress-bar {
+  @apply h-2 rounded-full;
+}
+
+/* Specific progress card colors - All Zinc */
+.progress-icon-completion {
+  @apply bg-zinc-800;
+}
+
+.progress-icon-completion .progress-card-icon {
+  @apply text-zinc-400;
+}
+
+.progress-bar-completion {
+  @apply bg-black dark:bg-white;
+}
+
+.progress-icon-accuracy {
+  @apply bg-zinc-900;
+}
+
+.progress-icon-accuracy .progress-card-icon {
+  @apply text-zinc-400;
+}
+
+.progress-bar-accuracy {
+  @apply bg-black dark:bg-white;
+}
+
+.progress-icon-time {
+  @apply bg-zinc-900;
+}
+
+.progress-icon-time .progress-card-icon {
+  @apply text-zinc-400;
+}
+
+.progress-bar-time {
+  @apply bg-black dark:bg-white;
+}
+
+.progress-icon-quizzes {
+  @apply bg-zinc-900;
+}
+
+.progress-icon-quizzes .progress-card-icon {
+  @apply text-zinc-400;
+}
+
+.progress-bar-quizzes {
+  @apply bg-black dark:bg-white;
+}
+
+
+.error-message {
+  @apply mt-4 p-3 bg-zinc-100 text-zinc-700 rounded-lg border border-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-700;
+}
+
+.error-message-title {
+  @apply font-medium;
+}
+
+.error-message-details {
+  @apply text-sm mt-1;
+}
+
+/* Loading Spinner */
+.loading-spinner-container {
+  @apply flex justify-center py-8;
+}
+
+.loading-spinner {
+  @apply animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-zinc-900 dark:border-zinc-100;
+}
+
+/* Mobile Menu (Add if you implemented it) */
+.mobile-menu-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden;
+}
+
+.mobile-menu-drawer {
+  @apply fixed top-0 left-0 h-full w-64 shadow-lg p-6 z-40 transform transition-transform duration-300 ease-in-out;
+}
+
+.mobile-menu-open {
+  @apply translate-x-0;
+}
+
+.mobile-menu-closed {
+  @apply -translate-x-full;
+}
+
+.mobile-menu-header {
+  @apply flex justify-between items-center mb-8;
+}
+
+.mobile-menu-title {
+  @apply text-xl font-bold text-zinc-900 dark:text-zinc-100;
+}
+
+.mobile-menu-close-button {
+  @apply p-2;
+}
+
+.mobile-menu-nav {
+  @apply flex flex-col space-y-4;
+}
+
+.mobile-menu-link {
+  @apply hover:text-zinc-600 dark:hover:text-zinc-300 transition-colors flex items-center py-2;
+}
+
+.mobile-menu-link-icon {
+  @apply h-5 w-5 mr-3;
+}
+
+.mobile-menu-separator {
+  @apply pt-4 border-t;
+}
+
+/* Use theme border */
+.mobile-menu-theme-button {
+  @apply w-full flex items-center justify-center p-2 rounded-lg text-white;
+}
+
+.mobile-menu-theme-icon {
+  @apply h-5 w-5 mr-2;
+}
+
+.dark-footer-bg {
+  @apply bg-zinc-900/10 backdrop-blur-md shadow-sm font-semibold rounded-t-2xl;
+}
+.perspective-1000 { perspective: 1000px; }
+.transform-style-3d { transform-style: preserve-3d; }
+.backface-hidden { backface-visibility: hidden; }
+.rotate-y-180 { transform: rotateY(180deg); }

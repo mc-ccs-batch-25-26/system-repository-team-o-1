@@ -1,0 +1,845 @@
+{
+    "title": "LET Chemistry Major",
+    "questions": [
+      {
+        "id": 1,
+        "question": "What is the chemical symbol for water?",
+        "options": [
+          "H2O",
+          "CO2",
+          "O2",
+          "NaCl"
+        ],
+        "correctAnswer": "H2O",
+        "explanation": "H2O is the chemical formula for water, representing two hydrogen atoms and one oxygen atom."
+      },
+      {
+        "id": 2,
+        "question": "Which element has the atomic number 1?",
+        "options": [
+          "Helium",
+          "Oxygen",
+          "Hydrogen",
+          "Carbon"
+        ],
+        "correctAnswer": "Hydrogen",
+        "explanation": "Hydrogen is the first element on the periodic table and has an atomic number of 1."
+      },
+      {
+        "id": 3,
+        "question": "What is the pH of a neutral solution?",
+        "options": [
+          "0",
+          "7",
+          "14",
+          "1"
+        ],
+        "correctAnswer": "7",
+        "explanation": "A pH of 7 indicates a neutral solution. Values below 7 are acidic, and values above 7 are basic."
+      },
+      {
+        "id": 4,
+        "question": "Which of the following is a noble gas?",
+        "options": [
+          "Oxygen",
+          "Nitrogen",
+          "Helium",
+          "Carbon"
+        ],
+        "correctAnswer": "Helium",
+        "explanation": "Helium (He) is a noble gas, located in Group 18 of the periodic table, known for their stability and low reactivity."
+      },
+      {
+        "id": 5,
+        "question": "What is the common name for sodium chloride?",
+        "options": [
+          "Sugar",
+          "Vinegar",
+          "Baking Soda",
+          "Table Salt"
+        ],
+        "correctAnswer": "Table Salt",
+        "explanation": "Sodium chloride (NaCl) is commonly known as table salt."
+      },
+      {
+        "id": 6,
+        "question": "Which particle is found in the nucleus of an atom and has a positive charge?",
+        "options": [
+          "Electron",
+          "Proton",
+          "Neutron",
+          "Photon"
+        ],
+        "correctAnswer": "Proton",
+        "explanation": "Protons are positively charged particles found in the nucleus of an atom."
+      },
+      {
+        "id": 7,
+        "question": "What type of bond involves the sharing of electron pairs between atoms?",
+        "options": [
+          "Ionic Bond",
+          "Covalent Bond",
+          "Metallic Bond",
+          "Hydrogen Bond"
+        ],
+        "correctAnswer": "Covalent Bond",
+        "explanation": "A covalent bond is a chemical bond that involves the sharing of electron pairs between atoms."
+      },
+      {
+        "id": 8,
+        "question": "What is the main component of natural gas?",
+        "options": [
+          "Ethane",
+          "Propane",
+          "Methane",
+          "Butane"
+        ],
+        "correctAnswer": "Methane",
+        "explanation": "Methane (CH4) is the primary component of natural gas."
+      },
+      {
+        "id": 9,
+        "question": "Which of these is a property of acids?",
+        "options": [
+          "Bitter taste",
+          "Slippery feel",
+          "Turns red litmus paper blue",
+          "Sour taste"
+        ],
+        "correctAnswer": "Sour taste",
+        "explanation": "Acids are known for their sour taste. They also turn blue litmus paper red."
+      },
+      {
+        "id": 10,
+        "question": "What is the process by which a liquid turns into a gas?",
+        "options": [
+          "Condensation",
+          "Freezing",
+          "Evaporation",
+          "Melting"
+        ],
+        "correctAnswer": "Evaporation",
+        "explanation": "Evaporation is the process where a liquid changes to a gas or vapor."
+      },
+      {
+        "id": 11,
+        "question": "Which element is essential for respiration and is the most abundant element in the Earth's crust by mass?",
+        "options": [
+          "Carbon",
+          "Silicon",
+          "Oxygen",
+          "Iron"
+        ],
+        "correctAnswer": "Oxygen",
+        "explanation": "Oxygen (O) is essential for respiration and is the most abundant element in the Earth's crust by mass."
+      },
+      {
+        "id": 12,
+        "question": "What is the term for a substance that speeds up a chemical reaction without being consumed in the process?",
+        "options": [
+          "Reactant",
+          "Product",
+          "Inhibitor",
+          "Catalyst"
+        ],
+        "correctAnswer": "Catalyst",
+        "explanation": "A catalyst is a substance that increases the rate of a chemical reaction without itself undergoing any permanent chemical change."
+      },
+      {
+        "id": 13,
+        "question": "Which of these pH values represents the strongest acid?",
+        "options": [
+          "pH 1",
+          "pH 4",
+          "pH 6",
+          "pH 7"
+        ],
+        "correctAnswer": "pH 1",
+        "explanation": "The lower the pH value, the stronger the acid. Therefore, pH 1 is the strongest acid among the options."
+      },
+      {
+        "id": 14,
+        "question": "What is the chemical symbol for Gold?",
+        "options": [
+          "Ag",
+          "Au",
+          "Gd",
+          "Go"
+        ],
+        "correctAnswer": "Au",
+        "explanation": "The chemical symbol for Gold is Au, derived from its Latin name 'aurum'."
+      },
+      {
+        "id": 15,
+        "question": "Which of these is NOT a state of matter?",
+        "options": [
+          "Solid",
+          "Liquid",
+          "Gas",
+          "Energy"
+        ],
+        "correctAnswer": "Energy",
+        "explanation": "Solid, liquid, and gas are the three common states of matter. Plasma is often considered the fourth. Energy is not a state of matter."
+      },
+      {
+        "id": 16,
+        "question": "What is the primary gas that makes up the Earth's atmosphere (approximately 78%)?",
+        "options": [
+          "Oxygen",
+          "Carbon Dioxide",
+          "Nitrogen",
+          "Argon"
+        ],
+        "correctAnswer": "Nitrogen",
+        "explanation": "Nitrogen (N2) is the most abundant gas in Earth's atmosphere, making up about 78%."
+      },
+      {
+        "id": 17,
+        "question": "What type of chemical reaction absorbs heat from its surroundings?",
+        "options": [
+          "Exothermic",
+          "Endothermic",
+          "Combustion",
+          "Neutralization"
+        ],
+        "correctAnswer": "Endothermic",
+        "explanation": "Endothermic reactions absorb heat from their surroundings, causing a decrease in temperature of the surroundings."
+      },
+      {
+        "id": 18,
+        "question": "What is the smallest unit of a chemical element that retains the properties of that element?",
+        "options": [
+          "Molecule",
+          "Compound",
+          "Atom",
+          "Ion"
+        ],
+        "correctAnswer": "Atom",
+        "explanation": "An atom is the smallest unit of a chemical element that still has the chemical properties of that element."
+      },
+      {
+        "id": 19,
+        "question": "Which of these substances is a compound?",
+        "options": [
+          "Oxygen (O2)",
+          "Helium (He)",
+          "Water (H2O)",
+          "Gold (Au)"
+        ],
+        "correctAnswer": "Water (H2O)",
+        "explanation": "Water (H2O) is a compound because it is made of two different elements (hydrogen and oxygen) chemically bonded together. Oxygen, Helium and Gold are elements."
+      },
+      {
+        "id": 20,
+        "question": "What does the atomic number of an element represent?",
+        "options": [
+          "Number of neutrons",
+          "Number of protons",
+          "Total number of protons and neutrons",
+          "Number of electrons in a neutral atom"
+        ],
+        "correctAnswer": "Number of protons",
+        "explanation": "The atomic number (Z) of a chemical element is the number of protons found in the nucleus of every atom of that element."
+      },
+      {
+        "id": 21,
+        "question": "What is the term for a mixture in which the components are uniformly distributed?",
+        "options": [
+          "Heterogeneous mixture",
+          "Homogeneous mixture",
+          "Suspension",
+          "Colloid"
+        ],
+        "correctAnswer": "Homogeneous mixture",
+        "explanation": "A homogeneous mixture has a uniform composition throughout. It is also known as a solution."
+      },
+      {
+        "id": 22,
+        "question": "Which of the following is a strong base?",
+        "options": [
+          "Ammonia (NH3)",
+          "Vinegar (CH3COOH)",
+          "Sodium hydroxide (NaOH)",
+          "Water (H2O)"
+        ],
+        "correctAnswer": "Sodium hydroxide (NaOH)",
+        "explanation": "Sodium hydroxide (NaOH) is a strong base because it dissociates completely in water to produce hydroxide ions (OH-)."
+      },
+      {
+        "id": 23,
+        "question": "What is the process of a solid changing directly into a gas, without passing through the liquid state?",
+        "options": [
+          "Evaporation",
+          "Condensation",
+          "Sublimation",
+          "Deposition"
+        ],
+        "correctAnswer": "Sublimation",
+        "explanation": "Sublimation is the transition of a substance directly from the solid to the gas state, without passing through the liquid state."
+      },
+      {
+        "id": 24,
+        "question": "Which of these is a halogen?",
+        "options": [
+          "Sodium (Na)",
+          "Calcium (Ca)",
+          "Chlorine (Cl)",
+          "Neon (Ne)"
+        ],
+        "correctAnswer": "Chlorine (Cl)",
+        "explanation": "Chlorine (Cl) is a halogen, belonging to Group 17 of the periodic table. Halogens are highly reactive nonmetals."
+      },
+      {
+        "id": 25,
+        "question": "What is the unit of measurement for the amount of substance in chemistry?",
+        "options": [
+          "Gram",
+          "Liter",
+          "Mole",
+          "Pascal"
+        ],
+        "correctAnswer": "Mole",
+        "explanation": "The mole (mol) is the SI unit for the amount of a substance."
+      },
+      {
+        "id": 26,
+        "question": "Which law states that for a fixed amount of gas at constant temperature, the volume of the gas is inversely proportional to its pressure?",
+        "options": [
+          "Charles's Law",
+          "Boyle's Law",
+          "Avogadro's Law",
+          "Gay-Lussac's Law"
+        ],
+        "correctAnswer": "Boyle's Law",
+        "explanation": "Boyle's Law describes the inverse relationship between pressure and volume of a gas at constant temperature and moles."
+      },
+      {
+        "id": 27,
+        "question": "What is the term for a solution that contains the maximum amount of solute that can be dissolved at a given temperature?",
+        "options": [
+          "Unsaturated solution",
+          "Saturated solution",
+          "Supersaturated solution",
+          "Dilute solution"
+        ],
+        "correctAnswer": "Saturated solution",
+        "explanation": "A saturated solution is one in which no more solute can be dissolved in the solvent at a given temperature."
+      },
+      {
+        "id": 28,
+        "question": "Which of these is an example of a physical change?",
+        "options": [
+          "Burning wood",
+          "Rusting of iron",
+          "Melting ice",
+          "Digesting food"
+        ],
+        "correctAnswer": "Melting ice",
+        "explanation": "Melting ice is a physical change because it only changes the state of water (solid to liquid) but not its chemical identity (H2O). Burning, rusting, and digesting involve chemical transformations."
+      },
+      {
+        "id": 29,
+        "question": "What is the common name for dihydrogen monoxide?",
+        "options": [
+          "Ammonia",
+          "Vinegar",
+          "Water",
+          "Hydrogen Peroxide"
+        ],
+        "correctAnswer": "Water",
+        "explanation": "Dihydrogen monoxide (H2O) is the systematic chemical name for water."
+      },
+      {
+        "id": 30,
+        "question": "Which subatomic particle has a neutral charge?",
+        "options": [
+          "Proton",
+          "Electron",
+          "Neutron",
+          "Positron"
+        ],
+        "correctAnswer": "Neutron",
+        "explanation": "Neutrons are subatomic particles found in the nucleus of an atom and have no electric charge (they are neutral)."
+      },
+      {
+        "id": 31,
+        "question": "What type of reaction is represented by the general equation A + B → AB?",
+        "options": [
+          "Decomposition",
+          "Single replacement",
+          "Double replacement",
+          "Synthesis (Combination)"
+        ],
+        "correctAnswer": "Synthesis (Combination)",
+        "explanation": "This equation represents a synthesis or combination reaction, where two or more simple substances combine to form a more complex substance."
+      },
+      {
+        "id": 32,
+        "question": "Which of the following elements is a metalloid?",
+        "options": [
+          "Aluminum (Al)",
+          "Silicon (Si)",
+          "Sulfur (S)",
+          "Phosphorus (P)"
+        ],
+        "correctAnswer": "Silicon (Si)",
+        "explanation": "Silicon (Si) is a metalloid, exhibiting properties intermediate between metals and nonmetals."
+      },
+      {
+        "id": 33,
+        "question": "What is the term for the number of protons plus neutrons in an atom's nucleus?",
+        "options": [
+          "Atomic number",
+          "Mass number",
+          "Isotope number",
+          "Avogadro's number"
+        ],
+        "correctAnswer": "Mass number",
+        "explanation": "The mass number (A) is the total number of protons and neutrons in an atomic nucleus."
+      },
+      {
+        "id": 34,
+        "question": "Which gas is produced during photosynthesis?",
+        "options": [
+          "Carbon Dioxide (CO2)",
+          "Oxygen (O2)",
+          "Nitrogen (N2)",
+          "Methane (CH4)"
+        ],
+        "correctAnswer": "Oxygen (O2)",
+        "explanation": "Photosynthesis in plants consumes carbon dioxide and water and produces glucose and oxygen."
+      },
+      {
+        "id": 35,
+        "question": "What is the chemical formula for sulfuric acid?",
+        "options": [
+          "HCl",
+          "HNO3",
+          "H2SO4",
+          "H2CO3"
+        ],
+        "correctAnswer": "H2SO4",
+        "explanation": "The chemical formula for sulfuric acid, a strong mineral acid, is H2SO4."
+      },
+      {
+        "id": 36,
+        "question": "Which of these describes a property of nonmetals?",
+        "options": [
+          "Good electrical conductors",
+          "Malleable and ductile",
+          "Typically form cations",
+          "Poor electrical conductors and brittle"
+        ],
+        "correctAnswer": "Poor electrical conductors and brittle",
+        "explanation": "Nonmetals are generally poor conductors of heat and electricity, are brittle when solid, and tend to gain electrons to form anions."
+      },
+      {
+        "id": 37,
+        "question": "What is an isotope?",
+        "options": [
+          "Atoms of the same element with different numbers of protons",
+          "Atoms of different elements with the same number of neutrons",
+          "Atoms of the same element with different numbers of neutrons",
+          "Atoms of the same element with different numbers of electrons"
+        ],
+        "correctAnswer": "Atoms of the same element with different numbers of neutrons",
+        "explanation": "Isotopes are variants of a particular chemical element which differ in neutron number, and consequently in nucleon number (mass number)."
+      },
+      {
+        "id": 38,
+        "question": "What is the term for a substance that is dissolved in another substance to form a solution?",
+        "options": [
+          "Solvent",
+          "Solute",
+          "Suspension",
+          "Emulsion"
+        ],
+        "correctAnswer": "Solute",
+        "explanation": "The solute is the substance that is dissolved in a solvent to form a solution."
+      },
+      {
+        "id": 39,
+        "question": "Which of these represents an empirical formula?",
+        "options": [
+          "C6H12O6 (Glucose)",
+          "H2O2 (Hydrogen Peroxide)",
+          "CH2O (Formaldehyde/Empirical for Glucose)",
+          "N2H4 (Hydrazine)"
+        ],
+        "correctAnswer": "CH2O (Formaldehyde/Empirical for Glucose)",
+        "explanation": "An empirical formula represents the simplest whole-number ratio of atoms in a compound. CH2O is the empirical formula for glucose (C6H12O6)."
+      },
+      {
+        "id": 40,
+        "question": "What is the charge of an electron?",
+        "options": [
+          "Positive (+1)",
+          "Negative (-1)",
+          "Neutral (0)",
+          "Positive (+2)"
+        ],
+        "correctAnswer": "Negative (-1)",
+        "explanation": "Electrons are subatomic particles with a negative elementary electric charge."
+      },
+      {
+        "id": 41,
+        "question": "Which of these separation techniques is best suited for separating a solid from a liquid?",
+        "options": [
+          "Distillation",
+          "Chromatography",
+          "Filtration",
+          "Evaporation (to collect the solid)"
+        ],
+        "correctAnswer": "Filtration",
+        "explanation": "Filtration is a method used to separate insoluble solids from liquids or gases by using a filter medium that allows the fluid to pass through but not the solid."
+      },
+      {
+        "id": 42,
+        "question": "What does 'alkali metals' refer to?",
+        "options": [
+          "Group 1 elements (excluding Hydrogen)",
+          "Group 2 elements",
+          "Group 17 elements (Halogens)",
+          "Group 18 elements (Noble Gases)"
+        ],
+        "correctAnswer": "Group 1 elements (excluding Hydrogen)",
+        "explanation": "The alkali metals are the elements in Group 1 of the periodic table, from Lithium (Li) to Francium (Fr). They are highly reactive metals."
+      },
+      {
+        "id": 43,
+        "question": "What is the term for the energy required to remove an electron from a gaseous atom or ion?",
+        "options": [
+          "Electron affinity",
+          "Electronegativity",
+          "Ionization energy",
+          "Activation energy"
+        ],
+        "correctAnswer": "Ionization energy",
+        "explanation": "Ionization energy is the minimum energy required to remove the most loosely bound electron from an isolated gaseous atom, positive ion, or molecule."
+      },
+      {
+        "id": 44,
+        "question": "Which of these is a characteristic of a metallic bond?",
+        "options": [
+          "Localized electrons shared between two atoms",
+          "Transfer of electrons from one atom to another",
+          "A 'sea' of delocalized electrons shared among many atoms",
+          "Weak intermolecular forces"
+        ],
+        "correctAnswer": "A 'sea' of delocalized electrons shared among many atoms",
+        "explanation": "Metallic bonding is characterized by a lattice of positive metal ions surrounded by a 'sea' of delocalized electrons that are free to move throughout the structure."
+      },
+      {
+        "id": 45,
+        "question": "What type of compound is typically formed between a metal and a nonmetal?",
+        "options": [
+          "Covalent compound",
+          "Ionic compound",
+          "Metallic compound",
+          "Organic compound"
+        ],
+        "correctAnswer": "Ionic compound",
+        "explanation": "Ionic compounds are typically formed when a metal (which tends to lose electrons) reacts with a nonmetal (which tends to gain electrons), resulting in an electrostatic attraction between ions."
+      },
+      {
+        "id": 46,
+        "question": "What is Avogadro's number approximately equal to?",
+        "options": [
+          "6.022 x 10^20",
+          "6.022 x 10^23",
+          "3.141 x 10^10",
+          "1.602 x 10^-19"
+        ],
+        "correctAnswer": "6.022 x 10^23",
+        "explanation": "Avogadro's number is the number of constituent particles (usually atoms or molecules) in one mole of a given substance, and its value is approximately 6.022 x 10^23 mol^-1."
+      },
+      {
+        "id": 47,
+        "question": "Which of these is the chemical formula for ozone?",
+        "options": [
+          "O2",
+          "O3",
+          "CO2",
+          "H2O"
+        ],
+        "correctAnswer": "O3",
+        "explanation": "Ozone is a molecule composed of three oxygen atoms, with the chemical formula O3."
+      },
+      {
+        "id": 48,
+        "question": "What is the name of the process where a substance absorbs moisture from the atmosphere until it dissolves in the absorbed water and forms a solution?",
+        "options": [
+          "Efflorescence",
+          "Deliquescence",
+          "Hygroscopy",
+          "Desiccation"
+        ],
+        "correctAnswer": "Deliquescence",
+        "explanation": "Deliquescence is the process by which a substance absorbs moisture from the atmosphere until it dissolves in the absorbed water and forms a solution."
+      },
+      {
+        "id": 49,
+        "question": "Which of these is an allotrope of carbon?",
+        "options": [
+          "Silicon carbide",
+          "Dry ice (Solid CO2)",
+          "Diamond",
+          "Quartz (SiO2)"
+        ],
+        "correctAnswer": "Diamond",
+        "explanation": "Allotropes are different structural forms of the same element. Diamond, graphite, and fullerenes are well-known allotropes of carbon."
+      },
+      {
+        "id": 50,
+        "question": "What is the general formula for an alkane?",
+        "options": [
+          "CnH2n",
+          "CnH2n+2",
+          "CnH2n-2",
+          "Cn(H2O)m"
+        ],
+        "correctAnswer": "CnH2n+2",
+        "explanation": "Alkanes are saturated hydrocarbons with the general formula CnH2n+2, where n is the number of carbon atoms."
+      },
+      {
+        "id": 51,
+        "question": "What is the pH of a solution with a hydrogen ion concentration [H+] of 1 x 10^-3 M?",
+        "options": [
+          "1",
+          "3",
+          "7",
+          "11"
+        ],
+        "correctAnswer": "3",
+        "explanation": "The pH of a solution is calculated as -log[H+]. So, pH = -log(1 x 10^-3) = 3."
+      },
+      {
+        "id": 52,
+        "question": "Which of the following is a polymer?",
+        "options": [
+          "Glucose",
+          "Water",
+          "Polyethylene",
+          "Sodium chloride"
+        ],
+        "correctAnswer": "Polyethylene",
+        "explanation": "Polyethylene is a synthetic polymer made from repeating ethylene (C2H4) monomer units."
+      },
+      {
+        "id": 53,
+        "question": "What is the name of the functional group -OH in organic chemistry?",
+        "options": [
+          "Carbonyl group",
+          "Carboxyl group",
+          "Hydroxyl group",
+          "Aldehyde group"
+        ],
+        "correctAnswer": "Hydroxyl group",
+        "explanation": "The -OH functional group is known as the hydroxyl group, characteristic of alcohols and phenols."
+      },
+      {
+        "id": 54,
+        "question": "Which element is the most electronegative?",
+        "options": [
+          "Oxygen (O)",
+          "Fluorine (F)",
+          "Chlorine (Cl)",
+          "Nitrogen (N)"
+        ],
+        "correctAnswer": "Fluorine (F)",
+        "explanation": "Fluorine is the most electronegative element on the periodic table, with a Pauling electronegativity value of 3.98."
+      },
+      {
+        "id": 55,
+        "question": "What is the primary product of the complete combustion of hydrocarbons?",
+        "options": [
+          "Carbon monoxide and water",
+          "Carbon dioxide and water",
+          "Carbon and hydrogen",
+          "Soot and water"
+        ],
+        "correctAnswer": "Carbon dioxide and water",
+        "explanation": "Complete combustion of hydrocarbons (compounds containing only carbon and hydrogen) in the presence of sufficient oxygen produces carbon dioxide (CO2) and water (H2O)."
+      },
+      {
+        "id": 56,
+        "question": "Which of these is an example of an exothermic process?",
+        "options": [
+          "Melting ice",
+          "Boiling water",
+          "Burning a candle",
+          "Photosynthesis"
+        ],
+        "correctAnswer": "Burning a candle",
+        "explanation": "Burning a candle (combustion) is an exothermic process because it releases heat and light energy into the surroundings."
+      },
+      {
+        "id": 57,
+        "question": "What is the term for a reaction in which an acid and a base react to form a salt and water?",
+        "options": [
+          "Oxidation-reduction reaction",
+          "Neutralization reaction",
+          "Precipitation reaction",
+          "Combustion reaction"
+        ],
+        "correctAnswer": "Neutralization reaction",
+        "explanation": "A neutralization reaction is a chemical reaction in which an acid and a base react quantitatively with each other to form a salt and water."
+      },
+      {
+        "id": 58,
+        "question": "Which of these elements exists as a diatomic molecule at room temperature?",
+        "options": [
+          "Helium (He)",
+          "Neon (Ne)",
+          "Nitrogen (N2)",
+          "Argon (Ar)"
+        ],
+        "correctAnswer": "Nitrogen (N2)",
+        "explanation": "Nitrogen exists as a diatomic molecule (N2) at room temperature. Other common diatomic elements include H2, O2, F2, Cl2, Br2, and I2."
+      },
+      {
+        "id": 59,
+        "question": "What is the term for the temperature and pressure at which the solid, liquid, and vapor phases of a pure substance can coexist in equilibrium?",
+        "options": [
+          "Critical point",
+          "Triple point",
+          "Boiling point",
+          "Melting point"
+        ],
+        "correctAnswer": "Triple point",
+        "explanation": "The triple point of a substance is the specific temperature and pressure at which its three phases (gas, liquid, and solid) coexist in thermodynamic equilibrium."
+      },
+      {
+        "id": 60,
+        "question": "Which of the following represents a reduction process?",
+        "options": [
+          "Gain of oxygen",
+          "Loss of electrons",
+          "Increase in oxidation state",
+          "Gain of electrons"
+        ],
+        "correctAnswer": "Gain of electrons",
+        "explanation": "Reduction is a chemical process that involves the gain of electrons or a decrease in oxidation state by a molecule, atom, or ion."
+      },
+      {
+        "id": 61,
+        "question": "What is the chemical formula for methane?",
+        "options": [
+          "C2H6",
+          "CH4",
+          "C3H8",
+          "C4H10"
+        ],
+        "correctAnswer": "CH4",
+        "explanation": "Methane is the simplest alkane with the chemical formula CH4."
+      },
+      {
+        "id": 62,
+        "question": "Which type of radiation has the highest energy?",
+        "options": [
+          "Radio waves",
+          "Microwaves",
+          "Visible light",
+          "Gamma rays"
+        ],
+        "correctAnswer": "Gamma rays",
+        "explanation": "Gamma rays are a form of electromagnetic radiation with the shortest wavelength and highest frequency, thus carrying the most energy."
+      },
+      {
+        "id": 63,
+        "question": "What is the name given to a horizontal row in the periodic table?",
+        "options": [
+          "Group",
+          "Period",
+          "Family",
+          "Series"
+        ],
+        "correctAnswer": "Period",
+        "explanation": "A horizontal row in the periodic table is called a period. Elements in the same period have the same number of electron shells."
+      },
+      {
+        "id": 64,
+        "question": "What is the term for a substance that cannot be broken down into simpler substances by chemical means?",
+        "options": [
+          "Compound",
+          "Mixture",
+          "Element",
+          "Solution"
+        ],
+        "correctAnswer": "Element",
+        "explanation": "An element is a pure substance consisting only of atoms that all have the same numbers of protons in their atomic nuclei."
+      },
+      {
+        "id": 65,
+        "question": "Which of these is a property of bases?",
+        "options": [
+          "Sour taste",
+          "Reacts with metals to produce hydrogen gas",
+          "Turns blue litmus paper red",
+          "Slippery feel and bitter taste"
+        ],
+        "correctAnswer": "Slippery feel and bitter taste",
+        "explanation": "Bases typically have a slippery feel, a bitter taste, and turn red litmus paper blue."
+      },
+      {
+        "id": 66,
+        "question": "What type of bonding is found in diamond?",
+        "options": [
+          "Ionic bonding",
+          "Metallic bonding",
+          "Covalent network bonding",
+          "Hydrogen bonding"
+        ],
+        "correctAnswer": "Covalent network bonding",
+        "explanation": "Diamond is a giant covalent structure in which each carbon atom is covalently bonded to four other carbon atoms in a tetrahedral arrangement, forming a strong, rigid lattice."
+      },
+      {
+        "id": 67,
+        "question": "What is the term for the minimum amount of energy required to start a chemical reaction?",
+        "options": [
+          "Enthalpy of reaction",
+          "Activation energy",
+          "Gibbs free energy",
+          "Entropy"
+        ],
+        "correctAnswer": "Activation energy",
+        "explanation": "Activation energy (Ea) is the minimum energy that must be available to a chemical system with potential reactants to result in a chemical reaction."
+      },
+      {
+        "id": 68,
+        "question": "Which gas law relates the volume and temperature of a gas at constant pressure and moles?",
+        "options": [
+          "Boyle's Law",
+          "Charles's Law",
+          "Avogadro's Law",
+          "Ideal Gas Law"
+        ],
+        "correctAnswer": "Charles's Law",
+        "explanation": "Charles's Law states that for a fixed amount of gas at constant pressure, the volume is directly proportional to its absolute temperature (in Kelvin)."
+      },
+      {
+        "id": 69,
+        "question": "What is the common name for ethanoic acid?",
+        "options": [
+          "Formic acid",
+          "Acetic acid",
+          "Butyric acid",
+          "Citric acid"
+        ],
+        "correctAnswer": "Acetic acid",
+        "explanation": "Ethanoic acid (CH3COOH) is commonly known as acetic acid, the main component of vinegar."
+      },
+      {
+        "id": 70,
+        "question": "Which of the following is a transition metal?",
+        "options": [
+          "Sodium (Na)",
+          "Magnesium (Mg)",
+          "Iron (Fe)",
+          "Aluminum (Al)"
+        ],
+        "correctAnswer": "Iron (Fe)",
+        "explanation": "Iron (Fe) is a transition metal, located in the d-block of the periodic table, known for forming colored compounds and having multiple oxidation states."
+      }
+    ]
+  }

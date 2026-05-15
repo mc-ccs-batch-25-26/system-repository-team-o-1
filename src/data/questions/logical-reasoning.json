@@ -1,0 +1,805 @@
+{
+  "category": "Logical Reasoning",
+  "questions": [
+    {
+      "id": "LR_AN_001",
+      "subcategory": "Analogies",
+      "difficulty": "easy",
+      "question": "DOCTOR is to HOSPITAL as TEACHER is to:",
+      "options": ["Student", "School", "Book", "Lesson"],
+      "correctAnswer": "School",
+      "explanation": "A doctor works in a hospital; a teacher works in a school. This is a worker-workplace relationship analogy. The relationship is 'professional : primary workplace.'",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "worker-workplace"]
+    },
+    {
+      "id": "LR_AN_002",
+      "subcategory": "Analogies",
+      "difficulty": "easy",
+      "question": "HAND is to GLOVE as FOOT is to:",
+      "options": ["Shoe", "Sock", "Boot", "Sandal"],
+      "correctAnswer": "Sock",
+      "explanation": "A hand wears a glove; a foot wears a sock. Both are coverings worn directly on the body part before outerwear. Shoe is an outer covering, but sock is the direct equivalent of glove.",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "item-purpose"]
+    },
+    {
+      "id": "LR_AN_003",
+      "subcategory": "Analogies",
+      "difficulty": "medium",
+      "question": "PEN is to WRITE as KNIFE is to:",
+      "options": ["Sharp", "Cut", "Blade", "Cooking"],
+      "correctAnswer": "Cut",
+      "explanation": "A pen is used to write; a knife is used to cut. This is a tool-action analogy. The relationship is 'tool : primary function.'",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "tool-function"]
+    },
+    {
+      "id": "LR_AN_004",
+      "subcategory": "Analogies",
+      "difficulty": "medium",
+      "question": "FISH is to SCHOOL as BIRD is to:",
+      "options": ["Nest", "Flock", "Fly", "Tree"],
+      "correctAnswer": "Flock",
+      "explanation": "A group of fish is called a school; a group of birds is called a flock. This is a collective noun analogy: 'animal : group name.'",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "collective nouns"]
+    },
+    {
+      "id": "LR_AN_005",
+      "subcategory": "Analogies",
+      "difficulty": "hard",
+      "question": "LETHARGY is to ENERGY as PESSIMISM is to:",
+      "options": ["Hope", "Sadness", "Fear", "Doubt"],
+      "correctAnswer": "Hope",
+      "explanation": "Lethargy is the opposite/lack of energy; pessimism is the opposite/lack of hope. This is an antonym analogy: 'word : opposite.'",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "antonyms"]
+    },
+    {
+      "id": "LR_AN_006",
+      "subcategory": "Analogies",
+      "difficulty": "easy",
+      "question": "BOOK is to CHAPTER as SONG is to:",
+      "options": ["Music", "Verse", "Singer", "Melody"],
+      "correctAnswer": "Verse",
+      "explanation": "A book is composed of chapters; a song is composed of verses. This is a whole-part analogy: 'whole : component part.'",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "whole-part"]
+    },
+    {
+      "id": "LR_AN_007",
+      "subcategory": "Analogies",
+      "difficulty": "medium",
+      "question": "RAIN is to FLOOD as WIND is to:",
+      "options": ["Breeze", "Hurricane", "Storm", "Air"],
+      "correctAnswer": "Hurricane",
+      "explanation": "Excessive rain causes a flood; excessive wind causes a hurricane. This is a cause-extreme result analogy: 'excess of A : extreme form of A.'",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "cause-effect"]
+    },
+    {
+      "id": "LR_AN_008",
+      "subcategory": "Analogies",
+      "difficulty": "hard",
+      "question": "CACOPHONY is to SOUND as CHAOS is to:",
+      "options": ["Order", "Confusion", "Peace", "Disorder"],
+      "correctAnswer": "Disorder",
+      "explanation": "Cacophony is an unpleasant, harsh mixture of sounds; chaos is complete disorder. The relationship is 'negative form : general concept.' Both describe extreme negative states.",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "definitional"]
+    },
+    {
+      "id": "LR_AN_009",
+      "subcategory": "Analogies",
+      "difficulty": "easy",
+      "question": "CUB is to BEAR as FAWN is to:",
+      "options": ["Lion", "Dog", "Deer", "Fox"],
+      "correctAnswer": "Deer",
+      "explanation": "A cub is a young bear; a fawn is a young deer. This is a 'young animal : adult animal' analogy.",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "young-adult"]
+    },
+    {
+      "id": "LR_AN_010",
+      "subcategory": "Analogies",
+      "difficulty": "medium",
+      "question": "THERMOMETER is to TEMPERATURE as BAROMETER is to:",
+      "options": ["Speed", "Pressure", "Height", "Direction"],
+      "correctAnswer": "Pressure",
+      "explanation": "A thermometer measures temperature; a barometer measures atmospheric pressure. This is an 'instrument : what it measures' analogy.",
+      "source": "Logical Reasoning — Analogies",
+      "tags": ["analogies", "instrument-measurement"]
+    },
+    {
+      "id": "LR_DE_001",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "easy",
+      "question": "All birds have feathers. A penguin is a bird. Therefore:",
+      "options": [
+        "A penguin does not have feathers",
+        "A penguin has feathers",
+        "All birds are penguins",
+        "Only penguins have feathers"
+      ],
+      "correctAnswer": "A penguin has feathers",
+      "explanation": "If all birds have feathers and a penguin is a bird, then by deductive reasoning, a penguin must have feathers. This is a classic syllogism: All A are B, C is A, therefore C is B.",
+      "source": "Logical Reasoning — Deduction",
+      "tags": ["deductive reasoning", "syllogisms"]
+    },
+    {
+      "id": "LR_DE_002",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "easy",
+      "question": "If all squares are rectangles, and shape X is a square, then:",
+      "options": [
+        "Shape X is not a rectangle",
+        "Shape X is a rectangle",
+        "Shape X may or may not be a rectangle",
+        "All rectangles are squares"
+      ],
+      "correctAnswer": "Shape X is a rectangle",
+      "explanation": "If all squares are rectangles (A ⊂ B) and X is a square (X ∈ A), then X must be a rectangle (X ∈ B). This is valid deductive reasoning using set inclusion.",
+      "source": "Logical Reasoning — Deduction",
+      "tags": ["deductive reasoning", "set logic"]
+    },
+    {
+      "id": "LR_DE_003",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "medium",
+      "question": "If no reptiles have fur, and a snake is a reptile, which statement must be true?",
+      "options": [
+        "A snake has fur",
+        "A snake may have fur",
+        "A snake does not have fur",
+        "Some reptiles have fur"
+      ],
+      "correctAnswer": "A snake does not have fur",
+      "explanation": "No reptiles have fur → all reptiles lack fur. A snake is a reptile → a snake lacks fur. Valid deduction: No A are B; C is A; therefore C is not B.",
+      "source": "Logical Reasoning — Deduction",
+      "tags": ["deductive reasoning", "universal negative"]
+    },
+    {
+      "id": "LR_DE_004",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "medium",
+      "question": "Some teachers are writers. All writers are creative. Which conclusion follows?",
+      "options": [
+        "All teachers are creative",
+        "Some teachers are creative",
+        "No teachers are creative",
+        "All creative people are teachers"
+      ],
+      "correctAnswer": "Some teachers are creative",
+      "explanation": "Some teachers are writers (overlap exists). All writers are creative. Therefore, the teachers who are writers must be creative. Valid: Some A are B, All B are C, therefore Some A are C.",
+      "source": "Logical Reasoning — Syllogisms",
+      "tags": ["deductive reasoning", "some-all"]
+    },
+    {
+      "id": "LR_DE_005",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "hard",
+      "question": "If all graduates pass the board exam, and Maria passed the board exam, which of the following must be true?",
+      "options": [
+        "Maria is a graduate",
+        "Maria may or may not be a graduate",
+        "Maria is not a graduate",
+        "All who pass are graduates"
+      ],
+      "correctAnswer": "Maria may or may not be a graduate",
+      "explanation": "All graduates pass (A → B), but B does not necessarily imply A. This is the fallacy of affirming the consequent. Maria passing does not prove she is a graduate — others may also pass.",
+      "source": "Logical Reasoning — Logical Fallacies",
+      "tags": ["deductive reasoning", "affirming the consequent"]
+    },
+    {
+      "id": "LR_DE_006",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "easy",
+      "question": "If it rains, the ground will be wet. The ground is wet. Therefore:",
+      "options": [
+        "It definitely rained",
+        "It may or may not have rained",
+        "It did not rain",
+        "Rain is the only way the ground gets wet"
+      ],
+      "correctAnswer": "It may or may not have rained",
+      "explanation": "If A → B, B is true does not prove A. The ground could be wet from other causes (sprinkler, flooding). This illustrates necessary vs. sufficient conditions. Rain is sufficient but not necessary for wet ground.",
+      "source": "Logical Reasoning — Fallacies",
+      "tags": ["deductive reasoning", "necessary vs sufficient"]
+    },
+    {
+      "id": "LR_DE_007",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "medium",
+      "question": "All athletes are healthy. Some athletes are students. Therefore:",
+      "options": [
+        "All students are healthy",
+        "Some students are healthy",
+        "No students are healthy",
+        "All healthy people are athletes"
+      ],
+      "correctAnswer": "Some students are healthy",
+      "explanation": "Some athletes are students means there is overlap. Those students who are athletes are also healthy (since all athletes are healthy). Valid: All A are B, Some A are C, therefore Some C are B.",
+      "source": "Logical Reasoning — Syllogisms",
+      "tags": ["deductive reasoning", "three-term syllogism"]
+    },
+    {
+      "id": "LR_DE_008",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "hard",
+      "question": "Neither the manager nor the assistant was at the meeting. If an employee was at the meeting, it could NOT be:",
+      "options": ["A clerk", "The manager", "An intern", "A supervisor"],
+      "correctAnswer": "The manager",
+      "explanation": "'Neither A nor B' means both A and B are excluded. The manager and assistant were definitely not at the meeting. So if someone was there, it cannot be the manager (or assistant).",
+      "source": "Logical Reasoning — Negation",
+      "tags": ["deductive reasoning", "neither-nor"]
+    },
+    {
+      "id": "LR_DE_009",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "easy",
+      "question": "If all roses are flowers, and this plant is not a flower, then:",
+      "options": [
+        "This plant is definitely a rose",
+        "This plant is definitely not a rose",
+        "This plant may be a rose",
+        "All flowers are roses"
+      ],
+      "correctAnswer": "This plant is definitely not a rose",
+      "explanation": "All roses are flowers (R → F). If an object is not a flower (¬F), it cannot be a rose (¬R). This is modus tollens: If P → Q, and ¬Q, then ¬P. Valid deduction.",
+      "source": "Logical Reasoning — Modus Tollens",
+      "tags": ["deductive reasoning", "modus tollens"]
+    },
+    {
+      "id": "LR_DE_010",
+      "subcategory": "Deductive Reasoning",
+      "difficulty": "hard",
+      "question": "Every member of Team A scored above 80%. Juan scored 75%. Which conclusion is valid?",
+      "options": [
+        "Juan is on Team A",
+        "Juan is not on Team A",
+        "Juan might be on Team A",
+        "Team A's scores are wrong"
+      ],
+      "correctAnswer": "Juan is not on Team A",
+      "explanation": "If every member scores > 80% (M → S), and Juan scored 75% (¬S), then Juan cannot be a member (¬M). Modus tollens: P → Q, ¬Q, therefore ¬P.",
+      "source": "Logical Reasoning — Modus Tollens",
+      "tags": ["deductive reasoning", "contrapositive"]
+    },
+    {
+      "id": "LR_SE_001",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "easy",
+      "question": "Find the next number: 2, 4, 6, 8, ___",
+      "options": ["9", "10", "12", "14"],
+      "correctAnswer": "10",
+      "explanation": "Each number increases by 2. This is an arithmetic sequence with a common difference of +2. 8 + 2 = 10.",
+      "source": "Logical Reasoning — Number Sequences",
+      "tags": ["sequences", "arithmetic"]
+    },
+    {
+      "id": "LR_SE_002",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "easy",
+      "question": "Find the next number: 3, 6, 12, 24, ___",
+      "options": ["30", "36", "48", "72"],
+      "correctAnswer": "48",
+      "explanation": "Each number is multiplied by 2. This is a geometric sequence with a common ratio of 2. 24 × 2 = 48.",
+      "source": "Logical Reasoning — Number Sequences",
+      "tags": ["sequences", "geometric"]
+    },
+    {
+      "id": "LR_SE_003",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "medium",
+      "question": "What comes next? 1, 1, 2, 3, 5, 8, ___",
+      "options": ["10", "11", "13", "15"],
+      "correctAnswer": "13",
+      "explanation": "This is the Fibonacci sequence: each number is the sum of the two preceding ones. 5 + 8 = 13.",
+      "source": "Logical Reasoning — Number Sequences",
+      "tags": ["sequences", "fibonacci"]
+    },
+    {
+      "id": "LR_SE_004",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "medium",
+      "question": "Find the missing number: 2, 6, ___, 54, 162",
+      "options": ["12", "18", "24", "30"],
+      "correctAnswer": "18",
+      "explanation": "Each number is multiplied by 3. 2×3=6, 6×3=18, 18×3=54, 54×3=162. Geometric sequence with ratio 3.",
+      "source": "Logical Reasoning — Number Sequences",
+      "tags": ["sequences", "geometric"]
+    },
+    {
+      "id": "LR_SE_005",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "hard",
+      "question": "What is the next term? 2, 5, 10, 17, 26, ___",
+      "options": ["33", "35", "37", "41"],
+      "correctAnswer": "37",
+      "explanation": "Differences: +3, +5, +7, +9. The differences increase by 2 each time. Next difference: +11. 26 + 11 = 37. This is a quadratic sequence: n² + 1.",
+      "source": "Logical Reasoning — Number Sequences",
+      "tags": ["sequences", "quadratic"]
+    },
+    {
+      "id": "LR_SE_006",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "easy",
+      "question": "What is the next letter? A, C, E, G, ___",
+      "options": ["H", "I", "J", "K"],
+      "correctAnswer": "I",
+      "explanation": "Skip one letter each time: A (skip B) → C (skip D) → E (skip F) → G (skip H) → I. Pattern: every other letter of the alphabet.",
+      "source": "Logical Reasoning — Letter Sequences",
+      "tags": ["sequences", "letters"]
+    },
+    {
+      "id": "LR_SE_007",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "medium",
+      "question": "Find the next number: 100, 81, 64, 49, ___",
+      "options": ["36", "30", "25", "16"],
+      "correctAnswer": "36",
+      "explanation": "These are squares: 10²=100, 9²=81, 8²=64, 7²=49, 6²=36. The bases decrease by 1 each time.",
+      "source": "Logical Reasoning — Number Patterns",
+      "tags": ["sequences", "squares"]
+    },
+    {
+      "id": "LR_SE_008",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "hard",
+      "question": "What comes next? 1, 3, 7, 15, 31, ___",
+      "options": ["45", "47", "63", "65"],
+      "correctAnswer": "63",
+      "explanation": "Each number is (previous × 2) + 1: 1×2+1=3, 3×2+1=7, 7×2+1=15, 15×2+1=31, 31×2+1=63. Pattern: 2ⁿ - 1.",
+      "source": "Logical Reasoning — Number Sequences",
+      "tags": ["sequences", "pattern recognition"]
+    },
+    {
+      "id": "LR_SE_009",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "medium",
+      "question": "Which number does NOT belong? 3, 7, 11, 14, 19",
+      "options": ["3", "11", "14", "19"],
+      "correctAnswer": "14",
+      "explanation": "All other numbers are prime: 3, 7, 11, 19 are prime numbers. 14 is composite (2×7). 14 is the outlier.",
+      "source": "Logical Reasoning — Odd One Out",
+      "tags": ["patterns", "odd one out", "prime numbers"]
+    },
+    {
+      "id": "LR_SE_010",
+      "subcategory": "Sequences & Patterns",
+      "difficulty": "hard",
+      "question": "What letter completes the pattern? B, E, H, K, ___",
+      "options": ["M", "N", "O", "P"],
+      "correctAnswer": "N",
+      "explanation": "Skip 2 letters each time: B (skip C,D) → E (skip F,G) → H (skip I,J) → K (skip L,M) → N. Pattern: +3 positions in the alphabet.",
+      "source": "Logical Reasoning — Letter Patterns",
+      "tags": ["sequences", "letter patterns"]
+    },
+    {
+      "id": "LR_SY_001",
+      "subcategory": "Syllogisms",
+      "difficulty": "medium",
+      "question": "All dogs are mammals. No mammals are fish. Therefore:",
+      "options": [
+        "No dogs are fish",
+        "Some dogs are fish",
+        "All fish are dogs",
+        "Some fish are dogs"
+      ],
+      "correctAnswer": "No dogs are fish",
+      "explanation": "All A are B. No B are C. Therefore No A are C. If dogs are a subset of mammals, and mammals have no overlap with fish, then dogs have no overlap with fish. Valid syllogism.",
+      "source": "Logical Reasoning — Syllogisms",
+      "tags": ["syllogisms", "categorical"]
+    },
+    {
+      "id": "LR_SY_002",
+      "subcategory": "Syllogisms",
+      "difficulty": "medium",
+      "question": "All fruits contain seeds. Tomatoes contain seeds. Therefore:",
+      "options": [
+        "Tomatoes are definitely fruits",
+        "Tomatoes may or may not be fruits",
+        "Tomatoes are not fruits",
+        "Only fruits contain seeds"
+      ],
+      "correctAnswer": "Tomatoes may or may not be fruits",
+      "explanation": "All fruits have seeds (F → S), but having seeds does not imply being a fruit. Other things (vegetables) can also have seeds. Affirming the consequent fallacy.",
+      "source": "Logical Reasoning — Fallacies",
+      "tags": ["syllogisms", "logical fallacies"]
+    },
+    {
+      "id": "LR_SY_003",
+      "subcategory": "Syllogisms",
+      "difficulty": "hard",
+      "question": "Some politicians are honest. No honest person is corrupt. Which conclusion follows?",
+      "options": [
+        "Some politicians are corrupt",
+        "Some politicians are not corrupt",
+        "All politicians are honest",
+        "No politicians are corrupt"
+      ],
+      "correctAnswer": "Some politicians are not corrupt",
+      "explanation": "Some politicians are honest → that subset is not corrupt (since no honest person is corrupt). Valid: Some A are B, No B are C, therefore Some A are not C.",
+      "source": "Logical Reasoning — Syllogisms",
+      "tags": ["syllogisms", "some-no"]
+    },
+    {
+      "id": "LR_SY_004",
+      "subcategory": "Syllogisms",
+      "difficulty": "easy",
+      "question": "All cats are animals. All animals need water. Therefore:",
+      "options": [
+        "All cats need water",
+        "Some cats need water",
+        "Cats do not need water",
+        "Only cats need water"
+      ],
+      "correctAnswer": "All cats need water",
+      "explanation": "All A are B. All B are C. Therefore All A are C. This is a valid transitive syllogism. If cats are animals and animals need water, cats need water.",
+      "source": "Logical Reasoning — Syllogisms",
+      "tags": ["syllogisms", "transitive"]
+    },
+    {
+      "id": "LR_SY_005",
+      "subcategory": "Syllogisms",
+      "difficulty": "hard",
+      "question": "No engineer is a poet. Some poets are musicians. Which is valid?",
+      "options": [
+        "No engineer is a musician",
+        "Some musicians are not engineers",
+        "All musicians are poets",
+        "No musician is an engineer"
+      ],
+      "correctAnswer": "Some musicians are not engineers",
+      "explanation": "Some poets are musicians → at least one person is both. That person is not an engineer (since no engineer is a poet). So some musicians (at least one) are not engineers. Valid conclusion.",
+      "source": "Logical Reasoning — Syllogisms",
+      "tags": ["syllogisms", "complex"]
+    },
+    {
+      "id": "LR_PR_001",
+      "subcategory": "Pattern Recognition",
+      "difficulty": "medium",
+      "question": "Which shape completes the pattern? □ ○ △ □ ○ ___",
+      "options": ["□", "○", "△", "◇"],
+      "correctAnswer": "△",
+      "explanation": "The pattern repeats every 3 shapes: square → circle → triangle → square → circle → triangle. The next should be triangle.",
+      "source": "Logical Reasoning — Visual Patterns",
+      "tags": ["patterns", "visual", "repeating"]
+    },
+    {
+      "id": "LR_PR_002",
+      "subcategory": "Pattern Recognition",
+      "difficulty": "easy",
+      "question": "What comes next in this pattern? Red, Blue, Red, Blue, Red, ___",
+      "options": ["Green", "Blue", "Red", "Yellow"],
+      "correctAnswer": "Blue",
+      "explanation": "The pattern alternates: Red, Blue, Red, Blue, Red... The next color is Blue. Simple alternating pattern with period 2.",
+      "source": "Logical Reasoning — Alternating Patterns",
+      "tags": ["patterns", "alternating"]
+    },
+    {
+      "id": "LR_PR_003",
+      "subcategory": "Pattern Recognition",
+      "difficulty": "hard",
+      "question": "In a certain code, CAT is written as DBU. How would DOG be written in the same code?",
+      "options": ["EPH", "EPG", "FPH", "EQH"],
+      "correctAnswer": "EPH",
+      "explanation": "Each letter is shifted forward by 1: C→D, A→B, T→U. So DOG becomes D→E, O→P, G→H = EPH. This is a Caesar cipher with shift of +1.",
+      "source": "Logical Reasoning — Coding-Decoding",
+      "tags": ["patterns", "coding", "letter shift"]
+    },
+    {
+      "id": "LR_PR_004",
+      "subcategory": "Pattern Recognition",
+      "difficulty": "medium",
+      "question": "If 2=4, 3=9, 4=16, then 5=?",
+      "options": ["20", "25", "30", "35"],
+      "correctAnswer": "25",
+      "explanation": "The pattern is n → n²: 2²=4, 3²=9, 4²=16, so 5²=25. Recognizing that the output is the square of the input.",
+      "source": "Logical Reasoning — Functional Patterns",
+      "tags": ["patterns", "functions", "squares"]
+    },
+    {
+      "id": "LR_PR_005",
+      "subcategory": "Pattern Recognition",
+      "difficulty": "hard",
+      "question": "In a code, APPLE is written as BQQMF. How would PEAR be written?",
+      "options": ["QFBS", "QFBR", "QFBU", "QEBS"],
+      "correctAnswer": "QFBS",
+      "explanation": "Each letter is shifted forward by 1: P→Q, E→F, A→B, R→S = QFBS. Same Caesar cipher pattern, consistent shift of +1.",
+      "source": "Logical Reasoning — Coding-Decoding",
+      "tags": ["patterns", "coding", "consistent rule"]
+    },
+    {
+      "id": "LR_AI_001",
+      "subcategory": "Assumptions & Inferences",
+      "difficulty": "medium",
+      "question": "Statement: \"To reduce traffic, the city should invest in more public transportation.\" What is the underlying assumption?",
+      "options": [
+        "People will use public transportation if it is available",
+        "Public transportation is always profitable",
+        "Cars are better than buses",
+        "Traffic cannot be reduced"
+      ],
+      "correctAnswer": "People will use public transportation if it is available",
+      "explanation": "The argument assumes that investing in public transport will lead to people using it, which will reduce traffic. If people won't use it, the investment won't reduce traffic. This is an unstated premise.",
+      "source": "Logical Reasoning — Assumptions",
+      "tags": ["assumptions", "argument analysis"]
+    },
+    {
+      "id": "LR_AI_002",
+      "subcategory": "Assumptions & Inferences",
+      "difficulty": "hard",
+      "question": "Statement: \"Students who attend review classes score higher on exams.\" Which of the following, if true, would WEAKEN this claim?",
+      "options": [
+        "Students who attend review classes also study more independently",
+        "Review classes are offered for free",
+        "Students like review classes",
+        "Review classes cover all topics"
+      ],
+      "correctAnswer": "Students who attend review classes also study more independently",
+      "explanation": "If students who attend review classes also study more independently, then higher scores may be due to independent study, not the review class. This introduces an alternative cause, weakening the causal claim.",
+      "source": "Logical Reasoning — Weakening Arguments",
+      "tags": ["inferences", "weakening", "causation"]
+    },
+    {
+      "id": "LR_AI_003",
+      "subcategory": "Assumptions & Inferences",
+      "difficulty": "medium",
+      "question": "If the government increases the minimum wage, some businesses may reduce hiring. What is inferred?",
+      "options": [
+        "Increasing minimum wage guarantees more jobs",
+        "There may be a trade-off between higher wages and employment levels",
+        "All businesses will close",
+        "Minimum wage has no effect on hiring"
+      ],
+      "correctAnswer": "There may be a trade-off between higher wages and employment levels",
+      "explanation": "The statement suggests a possible negative consequence: higher wages → businesses may hire fewer people. This infers a trade-off. It doesn't claim certainty — 'may' indicates possibility.",
+      "source": "Logical Reasoning — Inference",
+      "tags": ["inferences", "cause-effect"]
+    },
+    {
+      "id": "LR_AI_004",
+      "subcategory": "Assumptions & Inferences",
+      "difficulty": "easy",
+      "question": "\"All successful applicants passed the interview.\" Which must be true?",
+      "options": [
+        "Everyone who passed the interview is a successful applicant",
+        "If someone is a successful applicant, they passed the interview",
+        "Failing the interview means you are successful",
+        "The interview is optional"
+      ],
+      "correctAnswer": "If someone is a successful applicant, they passed the interview",
+      "explanation": "The statement says 'All successful applicants passed the interview.' This means successful → passed interview. It does NOT say passed interview → successful. Don't reverse the implication.",
+      "source": "Logical Reasoning — Conditional Statements",
+      "tags": ["inferences", "conditionals", "implication direction"]
+    },
+    {
+      "id": "LR_AI_005",
+      "subcategory": "Assumptions & Inferences",
+      "difficulty": "hard",
+      "question": "A study finds: \"Countries with higher education spending have higher literacy rates.\" What can be concluded?",
+      "options": [
+        "Higher education spending directly causes higher literacy",
+        "There is a correlation between education spending and literacy",
+        "Lower spending causes illiteracy",
+        "Literacy rates determine education spending"
+      ],
+      "correctAnswer": "There is a correlation between education spending and literacy",
+      "explanation": "The study only shows correlation, not causation. It's possible that richer countries spend more AND have higher literacy due to other factors. Correlation does not imply causation.",
+      "source": "Logical Reasoning — Correlation vs Causation",
+      "tags": ["inferences", "correlation", "causation caution"]
+    },
+    {
+      "id": "LR_CS_001",
+      "subcategory": "Critical Analysis",
+      "difficulty": "medium",
+      "question": "Which of the following is an opinion rather than a fact?",
+      "options": [
+        "The Earth orbits the Sun",
+        "Water boils at 100°C at sea level",
+        "Pizza is the best food in the world",
+        "The Philippines has over 7,000 islands"
+      ],
+      "correctAnswer": "Pizza is the best food in the world",
+      "explanation": "A fact can be verified objectively. 'Pizza is the best food' is subjective — it cannot be proven true or false. The other three statements are verifiable facts.",
+      "source": "Logical Reasoning — Fact vs Opinion",
+      "tags": ["critical analysis", "fact vs opinion"]
+    },
+    {
+      "id": "LR_CS_002",
+      "subcategory": "Critical Analysis",
+      "difficulty": "hard",
+      "question": "\"Every time I wear my lucky shirt, my team wins. Therefore, my shirt causes the team to win.\" This is an example of:",
+      "options": [
+        "Valid deduction",
+        "Post hoc fallacy",
+        "Statistical proof",
+        "Scientific reasoning"
+      ],
+      "correctAnswer": "Post hoc fallacy",
+      "explanation": "Post hoc ergo propter hoc: 'after this, therefore because of this.' The fallacy assumes that because B follows A, A caused B. Correlation (wearing shirt → team wins) does not prove causation.",
+      "source": "Logical Reasoning — Logical Fallacies",
+      "tags": ["critical analysis", "fallacies", "post hoc"]
+    },
+    {
+      "id": "LR_CS_003",
+      "subcategory": "Critical Analysis",
+      "difficulty": "medium",
+      "question": "\"You can't trust his opinion on education reform because he never finished college.\" This is an example of:",
+      "options": [
+        "Valid argument",
+        "Ad hominem fallacy",
+        "Straw man fallacy",
+        "Statistical evidence"
+      ],
+      "correctAnswer": "Ad hominem fallacy",
+      "explanation": "Ad hominem attacks the person making the argument rather than addressing the argument itself. The person's education status doesn't determine the validity of their opinion on education reform.",
+      "source": "Logical Reasoning — Logical Fallacies",
+      "tags": ["critical analysis", "ad hominem"]
+    },
+    {
+      "id": "LR_CS_004",
+      "subcategory": "Critical Analysis",
+      "difficulty": "easy",
+      "question": "Which argument is stronger? (A) \"Most doctors recommend this medicine.\" (B) \"95% of 10,000 surveyed doctors recommend this medicine.\"",
+      "options": ["A is stronger", "B is stronger", "Both are equal", "Neither is persuasive"],
+      "correctAnswer": "B is stronger",
+      "explanation": "B is stronger because it provides specific data (95% of 10,000) rather than vague language ('most'). Specific statistics make an argument more credible and verifiable.",
+      "source": "Logical Reasoning — Argument Strength",
+      "tags": ["critical analysis", "argument strength", "specificity"]
+    },
+    {
+      "id": "LR_CS_005",
+      "subcategory": "Critical Analysis",
+      "difficulty": "hard",
+      "question": "\"Either we cut funding for the arts, or our schools will go bankrupt.\" This is an example of:",
+      "options": [
+        "Valid reasoning",
+        "False dilemma / Either-or fallacy",
+        "Statistical argument",
+        "Appeal to authority"
+      ],
+      "correctAnswer": "False dilemma / Either-or fallacy",
+      "explanation": "The false dilemma presents only two options when others likely exist (e.g., raising taxes, cutting other programs, seeking donations). It oversimplifies a complex situation into black-and-white choices.",
+      "source": "Logical Reasoning — Logical Fallacies",
+      "tags": ["critical analysis", "false dilemma", "either-or"]
+    },
+    {
+      "id": "LR_DM_001",
+      "subcategory": "Data & Mathematical Reasoning",
+      "difficulty": "medium",
+      "question": "If 3 workers can build a wall in 5 days, how many days would it take 5 workers to build the same wall?",
+      "options": ["2", "3", "4", "7"],
+      "correctAnswer": "3",
+      "explanation": "Total work = 3 × 5 = 15 worker-days. With 5 workers: days = 15 ÷ 5 = 3. More workers → fewer days. This is inverse proportion: people × days = constant.",
+      "source": "Logical Reasoning — Proportional Reasoning",
+      "tags": ["data reasoning", "inverse proportion", "work"]
+    },
+    {
+      "id": "LR_DM_002",
+      "subcategory": "Data & Mathematical Reasoning",
+      "difficulty": "medium",
+      "question": "A bus leaves every 15 minutes. If the first bus leaves at 6:00 AM, what time does the seventh bus leave?",
+      "options": ["7:15 AM", "7:30 AM", "7:45 AM", "8:00 AM"],
+      "correctAnswer": "7:30 AM",
+      "explanation": "Bus 1: 6:00, Bus 2: 6:15, Bus 3: 6:30, Bus 4: 6:45, Bus 5: 7:00, Bus 6: 7:15, Bus 7: 7:30. Each bus adds 15 minutes. 7th bus = 6:00 + (6 × 15 min) = 7:30.",
+      "source": "Logical Reasoning — Time Reasoning",
+      "tags": ["data reasoning", "time", "intervals"]
+    },
+    {
+      "id": "LR_DM_003",
+      "subcategory": "Data & Mathematical Reasoning",
+      "difficulty": "easy",
+      "question": "In a race, Juan finished ahead of Pedro but behind Maria. Who finished first?",
+      "options": ["Juan", "Pedro", "Maria", "Cannot be determined"],
+      "correctAnswer": "Maria",
+      "explanation": "Maria > Juan > Pedro. Juan is behind Maria (Maria ahead), and ahead of Pedro. So Maria finished ahead of both. Maria is first.",
+      "source": "Logical Reasoning — Ordering",
+      "tags": ["data reasoning", "ordering", "ranking"]
+    },
+    {
+      "id": "LR_DM_004",
+      "subcategory": "Data & Mathematical Reasoning",
+      "difficulty": "hard",
+      "question": "There are 5 houses in a row. The green house is to the left of the white house. The blue house is at one end. The red house is next to the blue house. Which house is in the middle?",
+      "options": ["Green", "White", "Red", "Cannot be determined"],
+      "correctAnswer": "Cannot be determined",
+      "explanation": "Multiple arrangements are possible. Blue could be at position 1 or 5. Red next to blue. Green left of white could be in several positions. Without more constraints, the middle house cannot be uniquely determined.",
+      "source": "Logical Reasoning — Logic Puzzles",
+      "tags": ["data reasoning", "puzzles", "constraints"]
+    },
+    {
+      "id": "LR_DM_005",
+      "subcategory": "Data & Mathematical Reasoning",
+      "difficulty": "medium",
+      "question": "If 5 machines produce 5 widgets in 5 minutes, how many widgets would 10 machines produce in 10 minutes?",
+      "options": ["10", "15", "20", "25"],
+      "correctAnswer": "20",
+      "explanation": "1 machine in 5 min = 1 widget. 1 machine in 10 min = 2 widgets. 10 machines in 10 min = 20 widgets. Rate: 1 machine = 1 widget/5 min = 0.2 widgets/min. 10 machines × 10 min × 0.2 = 20.",
+      "source": "Logical Reasoning — Rate Problems",
+      "tags": ["data reasoning", "rates", "scaling"]
+    },
+    {
+      "id": "LR_VD_001",
+      "subcategory": "Verbal Deduction",
+      "difficulty": "medium",
+      "question": "\"Only employees with ID cards can enter the building. Ana entered the building.\" What can be concluded?",
+      "options": [
+        "Ana has an ID card",
+        "Ana may or may not have an ID card",
+        "Ana does not need an ID card",
+        "Ana lost her ID card"
+      ],
+      "correctAnswer": "Ana has an ID card",
+      "explanation": "If ONLY employees with ID cards can enter (Entry → ID card), and Ana entered, then Ana must have an ID card. Modus ponens: If A then B; A is true; therefore B.",
+      "source": "Logical Reasoning — Conditional Logic",
+      "tags": ["verbal deduction", "modus ponens"]
+    },
+    {
+      "id": "LR_VD_002",
+      "subcategory": "Verbal Deduction",
+      "difficulty": "easy",
+      "question": "\"Studying is necessary to pass the exam.\" This means:",
+      "options": [
+        "If you study, you will definitely pass",
+        "If you pass, you must have studied",
+        "Everyone who studies passes",
+        "Studying and passing are unrelated"
+      ],
+      "correctAnswer": "If you pass, you must have studied",
+      "explanation": "'Studying is necessary' means you cannot pass without studying. Pass → Studied. Necessary condition = must be present for the outcome. But studying alone may not be sufficient.",
+      "source": "Logical Reasoning — Necessary Condition",
+      "tags": ["verbal deduction", "necessary condition"]
+    },
+    {
+      "id": "LR_VD_003",
+      "subcategory": "Verbal Deduction",
+      "difficulty": "hard",
+      "question": "\"If the alarm goes off, there is a fire. The alarm is going off.\" Assuming the first statement is true, what follows?",
+      "options": [
+        "There is definitely a fire",
+        "There is probably a fire",
+        "There cannot be a fire",
+        "The alarm is faulty"
+      ],
+      "correctAnswer": "There is definitely a fire",
+      "explanation": "Given: If alarm → fire. Alarm is going off. By modus ponens, there must be a fire. This assumes the conditional statement is true and applies deductive logic.",
+      "source": "Logical Reasoning — Deduction",
+      "tags": ["verbal deduction", "modus ponens"]
+    },
+    {
+      "id": "LR_VD_004",
+      "subcategory": "Verbal Deduction",
+      "difficulty": "medium",
+      "question": "\"Most of the students in this class passed the test. Ana is in this class.\" What can be concluded?",
+      "options": [
+        "Ana definitely passed",
+        "Ana definitely failed",
+        "Ana probably passed",
+        "Ana probably failed"
+      ],
+      "correctAnswer": "Ana probably passed",
+      "explanation": "'Most' means more than 50%. Since most students passed, Ana is more likely to have passed than failed. But 'most' is not 'all,' so it's probable, not certain.",
+      "source": "Logical Reasoning — Probability",
+      "tags": ["verbal deduction", "probability", "most"]
+    },
+    {
+      "id": "LR_VD_005",
+      "subcategory": "Verbal Deduction",
+      "difficulty": "hard",
+      "question": "\"You can achieve success only if you work hard.\" Which of the following is consistent with this statement?",
+      "options": [
+        "Someone who works hard always succeeds",
+        "Someone who succeeded must have worked hard",
+        "Working hard guarantees nothing",
+        "Success and hard work are unrelated"
+      ],
+      "correctAnswer": "Someone who succeeded must have worked hard",
+      "explanation": "'Only if' introduces a necessary condition: Success → Hard work. If someone succeeded, hard work must have occurred. This is equivalent to 'No success without hard work.'",
+      "source": "Logical Reasoning — Necessary Condition",
+      "tags": ["verbal deduction", "only if", "necessary condition"]
+    }
+  ]
+}

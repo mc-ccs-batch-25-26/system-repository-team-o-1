@@ -1,0 +1,144 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FaFacebook, FaInstagram, FaEnvelope, FaPhoneAlt } from 'react-icons/fa';
+
+interface FooterProps {
+  isDarkMode: boolean;
+}
+
+const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
+  const currentYear = new Date().getFullYear();
+
+  // Theme-based classes
+  const bgClass = isDarkMode ? "bg-zinc-950 border-t border-zinc-800" : "bg-zinc-50 border-t border-zinc-200";
+  const textClass = isDarkMode ? "text-zinc-400" : "text-zinc-600";
+  const headingClass = isDarkMode ? "text-zinc-100" : "text-zinc-900";
+  const linkHoverClass = isDarkMode ? "hover:text-green-400" : "hover:text-green-600";
+  const iconBgClass = isDarkMode ? "bg-zinc-900 hover:bg-zinc-800" : "bg-white hover:bg-zinc-100";
+  const dividerClass = isDarkMode ? "border-zinc-800" : "border-zinc-200";
+
+  return (
+    <footer className={`${bgClass} transition-colors duration-300 w-full mt-auto`}>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-16 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-12">
+
+          {/* Brand Column */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <span className={`text-xl font-bold ${headingClass}`}>CiviQuest</span>
+            </div>
+            <p className={`text-sm leading-relaxed ${textClass}`}>
+              Empowering future Exam Taker with comprehensive preparation tools for the Civil Service Examination.
+            </p>
+            <div className="flex gap-3">
+              {[
+                { icon: FaFacebook, label: "Facebook" },
+                { icon: FaInstagram, label: "Instagram" }
+              ].map((Social, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  className={`w-10 h-10 rounded-lg ${iconBgClass} flex items-center justify-center transition-all duration-200 shadow-sm border ${dividerClass} ${textClass} ${linkHoverClass}`}
+                  aria-label={Social.label}
+                >
+                  <Social.icon size={18} />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h3 className={`font-semibold mb-6 ${headingClass}`}>Platform</h3>
+            <ul className="space-y-4">
+              {[
+                { label: "Review Dashboard", to: "/" },
+                { label: "LessonsContent", to: "/LessonsPage" },
+                { label: "Mock Exams", to: "/QuizzesPage" },
+                { label: "Progress", to: "/ProgressPage" }
+              ].map((link, index) => (
+                <li key={index}>
+                  <Link
+                    to={link.to}
+                    className={`text-sm ${textClass} ${linkHoverClass} transition-colors duration-200 flex items-center gap-2`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company & Legal */}
+          <div>
+            <h3 className={`font-semibold mb-6 ${headingClass}`}>Company</h3>
+            <ul className="space-y-4">
+              {[
+                { label: "About Us", to: "#" },
+                { label: "Terms of Service", to: "/terms-of-service" },
+                { label: "Privacy Policy", to: "#" }
+              ].map((link, index) => (
+                <li key={index}>
+                  {link.to.startsWith('/') ? (
+                    <Link to={link.to} className={`text-sm ${textClass} ${linkHoverClass} transition-colors duration-200`}>
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a href={link.to} className={`text-sm ${textClass} ${linkHoverClass} transition-colors duration-200`}>
+                      {link.label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h3 className={`font-semibold mb-6 ${headingClass}`}>Contact</h3>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <div className={`mt-1 p-2 rounded-md ${isDarkMode ? 'bg-zinc-900' : 'bg-white'} border ${dividerClass}`}>
+                  <FaEnvelope className="text-green-500" size={14} />
+                </div>
+                <div>
+                  <p className={`text-xs font-medium mb-1 ${textClass}`}>Email us at</p>
+                  <a href="mailto:letreviewer148@gmail.com" className={`text-sm font-medium ${headingClass} ${linkHoverClass}`}>
+                    GamifiedCivilService@gmail.com
+                  </a>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className={`mt-1 p-2 rounded-md ${isDarkMode ? 'bg-zinc-900' : 'bg-white'} border ${dividerClass}`}>
+                  <FaPhoneAlt className="text-green-500" size={14} />
+                </div>
+                <div>
+                  <p className={`text-xs font-medium mb-1 ${textClass}`}>Call us</p>
+                  <a href="tel:+639610783789" className={`text-sm font-medium ${headingClass} ${linkHoverClass}`}>
+                    +63 951 900 9913
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+        {/* Bottom Bar */}
+        <div className={`pt-8 border-t ${dividerClass} flex flex-col md:flex-row justify-between items-center gap-4`}>
+          <p className={`text-sm ${textClass}`}>
+            © {currentYear} CiviQuest. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6">
+            <span className={`text-xs ${textClass} flex items-center gap-1`}>
+              Designed with <span className="text-red-500"></span> for Civil Service Aspirants
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
