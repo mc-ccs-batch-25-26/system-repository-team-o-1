@@ -5,6 +5,7 @@ import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES } from '../../da
 import QuizEngine from './QuizEngine';
 import SmartRecommendation from './SmartRecommendation';
 import { motion } from 'framer-motion';
+import { saveMistake } from '../../data/mockQuestions';
 
 const CATEGORY_COLORS: Record<string, { pill: string; bar: string; score: string }> = {
   'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',     bar: 'bg-blue-500',    score: 'text-blue-600 dark:text-blue-400'    },
@@ -29,7 +30,7 @@ interface DailyQuizProps {
 const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: DailyQuizProps) => {
   const textClass = isDarkMode ? 'text-white' : 'text-zinc-900';
   const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
-  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200';
+  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
   const btnPrimary = 'bg-blue-600 hover:bg-blue-700 text-white';
 
   const [phase, setPhase] = useState<'start' | 'quiz' | 'results'>('start');
@@ -119,7 +120,7 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
     setLoadingAI(true);
     setShowAI(true);
     try {
-      const apiKey = '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';
+      const apiKey = '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';
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -168,11 +169,14 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
         console.error('Failed to save answer:', err);
       }
     }
-
+    if (!isCorrect) {
+  saveMistake(q, selected, q.category || 'Unknown');
+    }
     if (!isCorrect) {
       await getAIExplanation(q, selected);
     }
   };
+  
 
   const nextQuestion = () => {
     setShowAI(false);
@@ -343,7 +347,7 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
         <div className={`${cardBg} rounded-2xl border p-7 text-center space-y-3`}>
           <p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass}`}>Total correct</p>
           <p className="text-6xl font-bold text-blue-600">{score}/{questions.length}</p>
-          <div className={`w-full rounded-full h-2.5 overflow-hidden ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-200'}`}>
+          <div className={`w-full rounded-full h-2.5 overflow-hidden ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`}>
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${(score / questions.length) * 100}%` }}
@@ -412,7 +416,7 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
         <div className={`flex justify-between text-xs font-medium ${subtextClass}`}>
           <span>Question {currentIndex + 1} of {questions.length}</span>
         </div>
-        <div className={`w-full rounded-full h-1.5 overflow-hidden ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
+        <div className={`w-full rounded-full h-1.5 overflow-hidden ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`}>
           <motion.div
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}

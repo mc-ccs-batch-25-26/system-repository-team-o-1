@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
 import { FaPaperPlane, FaTimes, FaMoon, FaSun, FaTrash, FaCopy, FaHistory, FaPlus, FaChevronLeft } from 'react-icons/fa';
 import { getProgressStats } from '../firebase/progressService';
 import { getCategoryPerformanceData } from '../firebase/analyticsService';
 import { getUserData } from '../firebase/userService';
 import { supabase } from '../supabase/supabaseClient';
+import { useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
 interface FloatingChatbotProps {
@@ -62,17 +63,6 @@ const formatMessageTime = (timestamp: number): string => {
   });
 };
 
-const createNewSession = (): ChatSession => {
-  const now = Date.now();
-  return {
-    id: now.toString(),
-    label: formatSessionLabel(now),
-    messages: [{ ...DEFAULT_MESSAGE, id: now.toString(), timestamp: now }],
-    createdAt: now,
-    updatedAt: now
-  };
-};
-
 const TypingEffect: React.FC<{ text: string; darkMode: boolean; onComplete: () => void }> = ({ text, darkMode, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -120,7 +110,6 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
   const [userStats, setUserStats] = useState<any>(null);
   const [userProgressData, setUserProgressData] = useState<any[]>([]);
 
-  // Chat History
   const [sessions, setSessions] = useState<ChatSession[]>(loadSessions);
   const [activeSessionId, setActiveSessionId] = useState<string>('current');
   const [showHistory, setShowHistory] = useState(false);
@@ -131,6 +120,28 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+
+  const location = useLocation();
+
+  // Close on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
+
+  // Close on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (chatRef.current && !chatRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     const handleAIReview = (e: Event) => {
@@ -308,7 +319,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
         return;
       }
 
-      const openRouterApiKey = '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';
+      const openRouterApiKey = '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';
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -320,7 +331,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
         body: JSON.stringify({
           model: 'google/gemini-2.0-flash-001',
           messages: [
-            { role: 'system', content: 'You are CiviQuest Buddy. Only answer Civil Service Exam topics. Keep responses direct,concise and helpful. Refuse off-topic questions politely.' },
+            { role: 'system', content: 'You are CiviQuest Buddy. Only answer Civil Service Exam topics. Keep responses direct, concise and helpful. Refuse off-topic questions politely.' },
             ...messages.slice(-6).map(msg => ({ role: msg.sender === 'user' ? 'user' : 'assistant', content: msg.content })),
             { role: 'user', content: text }
           ]
@@ -363,9 +374,8 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             drag dragMomentum={false}
             style={{ x, y }}
-            className={`absolute ${position.includes('bottom') ? 'bottom-16' : 'top-16'} ${position.includes('right') ? 'right-0' : 'left-0'} w-96 sm:w-[440px] h-[540px] rounded-xl shadow-xl flex flex-col overflow-hidden border ${darkMode ? 'border-gray-700' : 'border-gray-200'} cursor-move`}
+            className={`absolute ${position.includes('bottom') ? 'bottom-16' : 'top-16'} ${position.includes('right') ? 'right-0' : 'left-0'} w-96 sm:w-[440px] h-[540px] rounded-xl shadow-xl flex flex-col overflow-hidden border ${darkMode ? 'border-gray-700' : 'border-zinc-300'} cursor-move`}
           >
-            {/* Header */}
             <div className={`p-3 flex justify-between items-center ${darkMode ? 'bg-gray-900' : 'bg-blue-900'} text-white border-b ${darkMode ? 'border-gray-700' : 'border-blue-800'}`}>
               {showHistory ? (
                 <div className="flex items-center gap-2">
@@ -407,7 +417,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
                     <div
                       key={session.id}
                       onClick={() => loadSession(session.id)}
-                      className={`flex items-center justify-between px-4 py-3 cursor-pointer border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-gray-100 hover:bg-gray-50'}`}
+                      className={`flex items-center justify-between px-4 py-3 cursor-pointer border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-zinc-300 hover:bg-gray-50'}`}
                     >
                       <div>
                         <div className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{session.label}</div>
@@ -430,7 +440,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
                           className={`px-3.5 py-2.5 rounded-2xl text-sm inline-block ${
                             message.sender === 'user'
                               ? 'bg-blue-600 text-white rounded-br-md'
-                              : darkMode ? 'bg-gray-700 text-gray-100 rounded-bl-md' : 'bg-gray-200 text-gray-800 rounded-bl-md'
+                              : darkMode ? 'bg-gray-700 text-gray-100 rounded-bl-md' : 'bg-zinc-300 text-gray-800 rounded-bl-md'
                           }`}
                           style={{ wordBreak: 'break-word' }}
                         >
@@ -481,7 +491,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
                   ))}
                   {isLoading && (
                     <div className="flex justify-start mb-3">
-                      <div className={`px-4 py-3 rounded-2xl rounded-bl-md ${darkMode ? 'bg-gray-700' : 'bg-gray-200'}`}>
+                      <div className={`px-4 py-3 rounded-2xl rounded-bl-md ${darkMode ? 'bg-gray-700' : 'bg-zinc-300'}`}>
                         <div className="flex space-x-1">
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
                           <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
@@ -493,7 +503,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
                   <div ref={messagesEndRef} />
                 </div>
 
-                <div className={`border-t ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'} p-2 cursor-default`} onMouseDown={e => e.stopPropagation()}>
+                <div className={`border-t ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-zinc-300 bg-white'} p-2 cursor-default`} onMouseDown={e => e.stopPropagation()}>
                   <div className={`flex items-center rounded-xl overflow-hidden border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-300'}`}>
                     <input ref={inputRef} type="text" value={input} onChange={e => setInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && sendMessage()} placeholder="Type a message..." className={`flex-1 p-3 bg-transparent focus:outline-none text-sm ${darkMode ? 'text-white placeholder-gray-400' : 'text-gray-800'}`} />
                     <button onClick={sendMessage} disabled={isLoading || !input.trim()} className="text-blue-500 hover:text-blue-600 p-3 transition-colors disabled:opacity-50">

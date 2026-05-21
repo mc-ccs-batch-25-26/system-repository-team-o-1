@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { supabase } from './supabase/supabaseClient';
 import { ClipboardList } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 
 // Quiz mode components
 import QuizHub, { QuizMode } from './components/quiz/QuizHub';
@@ -15,16 +16,17 @@ const QuizzesPage = () => {
   const { isDarkMode } = useOutletContext<any>();
   const textClass    = isDarkMode ? 'text-white'    : 'text-zinc-900';
   const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
-  const cardBg       = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200';
+  const cardBg       = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
 
   const [mode, setMode] = useState<QuizMode>('hub');
   const [pretestChecked, setPretestChecked] = useState(false);
   const [pretestLoading, setPretestLoading] = useState(true);
   const [streakCount, setStreakCount] = useState(0);
   const [practiceCategory, setPracticeCategory] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    const checkPretest = async () => {
+   useEffect(() => {
+  const checkPretest = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) { setPretestLoading(false); return; }
       const { data } = await supabase
@@ -35,6 +37,9 @@ const QuizzesPage = () => {
       setPretestChecked(data?.pretest_done === true);
       setStreakCount(data?.streak_count || 0);
       setPretestLoading(false);
+       if (searchParams.get('mode') === 'daily') {
+      setMode('daily');
+    }
     };
     checkPretest();
   }, []);
@@ -61,7 +66,7 @@ const QuizzesPage = () => {
     return (
       <div className="w-full max-w-7xl mx-auto px-4 py-8 flex items-center justify-center h-64">
         <div className="flex flex-col items-center gap-3">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-zinc-200 border-t-blue-500" />
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-zinc-300 border-t-blue-500" />
           <p className={`text-sm ${subtextClass}`}>Loading your profile…</p>
         </div>
       </div>

@@ -81,26 +81,26 @@ const LessonsPage: React.FC = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) { setLoading(false); return; }
 
-        const updated = Object.entries(FLASHCARD_TOTALS).map(([name, total]) => {
-          const saved = localStorage.getItem(`lessons_completed_${name}`);
-          const completed = saved ? JSON.parse(saved).length : 0;
-          return { name, total, completed, accuracy: 0 };
-        });
-
+        // Fetch from Supabase performance table (NOT localStorage)
         const { data: perf } = await supabase
           .from('performance')
-          .select('accuracy_rate, total_answered, categories:category_id(name)')
+          .select('accuracy_rate, total_answered, total_correct, category_id')
           .eq('user_id', user.id);
 
-        if (perf && perf.length > 0) {
-          perf.forEach((p: any) => {
-            const idx = updated.findIndex(c => c.name === p.categories?.name);
-            if (idx >= 0) {
-              updated[idx].accuracy = Math.round(p.accuracy_rate || 0);
-              updated[idx].completed = Math.max(updated[idx].completed, p.total_answered || 0);
-            }
-          });
-        }
+        const { data: categories } = await supabase.from('categories').select('id, name');
+
+        // Map performance data to categories
+        const updated = Object.entries(FLASHCARD_TOTALS).map(([name, total]) => {
+          const category = categories?.find(c => c.name === name);
+          const perfData = perf?.find(p => p.category_id === category?.id);
+          return {
+            name,
+            total,
+            completed: perfData?.total_answered || 0,
+            accuracy: Math.round(perfData?.accuracy_rate || 0),
+          };
+        });
+
         setCategoryProgress(updated);
       } catch {
         // use defaults
@@ -125,7 +125,7 @@ const LessonsPage: React.FC = () => {
 
   const textClass = isDarkMode ? 'text-white' : 'text-zinc-900';
   const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
-  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200';
+  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
   const trackBg = isDarkMode ? 'bg-zinc-700' : 'bg-zinc-100';
 
   return (
@@ -153,7 +153,7 @@ const LessonsPage: React.FC = () => {
           },
           { 
             label: 'Lessons done', 
-            value: `${categoryProgress.reduce((s, c) => s + (c.completed > 0 ? 1 : 0), 0) * 4}`, 
+            value: `${categoryProgress.filter(c => c.completed > 0).length}`, 
             sub: 'across 3 subjects',
             colorClasses: isDarkMode ? 'bg-violet-900/10 border-violet-800/30' : 'bg-violet-50/50 border-violet-100',
             icon: (
@@ -252,7 +252,6 @@ const LessonsPage: React.FC = () => {
                 onClick={() => navigate(`/lessons/${encodeURIComponent(cat.name)}`)}
                 className={`${cardBg} rounded-xl border shadow-sm cursor-pointer group transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] overflow-hidden`}
               >
-                {/* Top section */}
                 <div className="p-6 pb-4 flex items-start gap-4">
                   <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
                     {cfg?.icon}
@@ -271,7 +270,6 @@ const LessonsPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Progress bar */}
                 <div className="px-6 pb-4">
                   <div className={`w-full ${trackBg} rounded-full h-1.5 overflow-hidden`}>
                     <motion.div
@@ -283,7 +281,6 @@ const LessonsPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Modules row */}
                 <div className="px-6 pb-4 flex flex-wrap gap-2">
                   {(cfg?.modules || []).map((mod, mi) => {
                     const done = mi < Math.ceil((pct / 100) * (cfg?.modules.length || 4));
@@ -294,10 +291,10 @@ const LessonsPage: React.FC = () => {
                           done
                             ? isDarkMode
                               ? 'bg-zinc-700 border-zinc-600 text-zinc-300'
-                              : 'bg-zinc-50 border-zinc-200 text-zinc-600'
+                              : 'bg-zinc-50 border-zinc-300 text-zinc-600'
                             : isDarkMode
                             ? 'bg-zinc-800 border-zinc-700 text-zinc-500'
-                            : 'bg-white border-zinc-200 text-zinc-400'
+                            : 'bg-white border-zinc-300 text-zinc-400'
                         }`}
                       >
                         {done
@@ -310,8 +307,7 @@ const LessonsPage: React.FC = () => {
                   })}
                 </div>
 
-                {/* Footer */}
-                <div className={`px-6 py-3 flex items-center justify-between border-t ${isDarkMode ? 'border-zinc-700' : 'border-zinc-100'}`}>
+                <div className={`px-6 py-3 flex items-center justify-between border-t ${isDarkMode ? 'border-zinc-700' : 'border-zinc-300'}`}>
                   <p className={`text-xs ${subtextClass}`}>
                     {cat.completed}/{cat.total} items
                     {cat.accuracy > 0 && <span className="ml-2">· {cat.accuracy}% accuracy</span>}

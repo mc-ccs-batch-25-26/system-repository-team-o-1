@@ -47,7 +47,7 @@ const PretestPage = () => {
   const goToNext = () => { if (currentQuestion < PRETEST_QUESTIONS.length - 1) setCurrentQuestion(p => p + 1); };
   const goToPrevious = () => { if (currentQuestion > 0) setCurrentQuestion(p => p - 1); };
 
- const getResults = () => {
+  const getResults = () => {
     const cat: Record<string, { total: number; correct: number }> = {};
     PRETEST_QUESTIONS.forEach(q => {
       if (!cat[q.category]) {
@@ -67,47 +67,64 @@ const PretestPage = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         const categoryPerformance = getResults();
+        
+        // Mark pretest as done
         await supabase.from('profiles').update({ pretest_done: true }).eq('id', session.user.id);
+        
+        // Award XP
         const pretestXP = 100;
         const { data: profile } = await supabase.from('profiles').select('xp, level').eq('id', session.user.id).single();
         if (profile) {
           const newXP = (profile.xp || 0) + pretestXP;
           await supabase.from('profiles').update({ xp: newXP, level: Math.floor(newXP / 500) + 1 }).eq('id', session.user.id);
         }
+
+        // Fetch categories for mapping
         const { data: categories } = await supabase.from('categories').select('id, name');
+        
+        // Save performance per category
         for (const [categoryName, stats] of Object.entries(categoryPerformance)) {
           const categoryId = categories?.find(c => c.name === categoryName)?.id;
-          if (categoryId) {
-            // Fetch existing performance for this category
-            const { data: existingPerf } = await supabase
-              .from('performance')
-              .select('total_answered, total_correct')
-              .eq('user_id', session.user.id)
-              .eq('category_id', categoryId)
-              .maybeSingle();
+          if (!categoryId) {
+            console.warn(`Category not found: ${categoryName}`);
+            continue;
+          }
 
-            const prevAnswered = existingPerf?.total_answered || 0;
-            const prevCorrect = existingPerf?.total_correct || 0;
+          // Fetch existing performance
+          const { data: existingPerf } = await supabase
+            .from('performance')
+            .select('total_answered, total_correct')
+            .eq('user_id', session.user.id)
+            .eq('category_id', categoryId)
+            .maybeSingle();
 
-            const newTotalAnswered = prevAnswered + stats.total;
-            const newTotalCorrect = prevCorrect + stats.correct;
-            const newAccuracy = newTotalAnswered > 0 ? (newTotalCorrect / newTotalAnswered) * 100 : 0;
+          const prevAnswered = existingPerf?.total_answered || 0;
+          const prevCorrect = existingPerf?.total_correct || 0;
+          const newTotalAnswered = prevAnswered + stats.total;
+          const newTotalCorrect = prevCorrect + stats.correct;
+          const newAccuracy = newTotalAnswered > 0 ? (newTotalCorrect / newTotalAnswered) * 100 : 0;
 
-            await supabase.from('performance').upsert(
-              {
-                user_id: session.user.id,
-                category_id: categoryId,
-                accuracy_rate: newAccuracy,
-                total_answered: newTotalAnswered,
-                total_correct: newTotalCorrect,
-              },
-              { onConflict: 'user_id, category_id' }
-            );
+          const { error: upsertErr } = await supabase.from('performance').upsert(
+            {
+              user_id: session.user.id,
+              category_id: categoryId,
+              accuracy_rate: newAccuracy,
+              total_answered: newTotalAnswered,
+              total_correct: newTotalCorrect,
+            },
+            { onConflict: 'user_id, category_id' }
+          );
+
+          if (upsertErr) {
+            console.error(`Failed to upsert performance for ${categoryName}:`, upsertErr);
           }
         }
+
+        // Save quiz session
+        const totalScore = Object.values(categoryPerformance).reduce((s, c) => s + c.correct, 0);
         await supabase.from('quiz_sessions').insert({
           user_id: session.user.id,
-          score: Object.values(categoryPerformance).reduce((s, c) => s + c.correct, 0),
+          score: totalScore,
           is_pretest: true,
           is_timed: false,
           ended_at: new Date().toISOString(),
@@ -120,7 +137,7 @@ const PretestPage = () => {
     }
   };
 
-  const handleContinue = () => { navigate('/', { replace: true }); window.location.reload(); };
+  const handleContinue = () => { window.location.href = '/'; };                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 
   const results = showResults ? getResults() : null;
   const totalCorrect = results ? Object.values(results).reduce((s, c) => s + c.correct, 0) : 0;
@@ -134,10 +151,10 @@ const PretestPage = () => {
             <h1 className="text-2xl font-bold text-zinc-900 dark:text-white">Pre-Test complete!</h1>
             <p className="text-sm text-zinc-500">Here's your baseline performance</p>
           </div>
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-7 text-center space-y-3">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 p-7 text-center space-y-3">
             <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Total correct</p>
             <p className="text-6xl font-bold text-blue-600">{totalCorrect}/{PRETEST_QUESTIONS.length}</p>
-            <div className="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-2.5 overflow-hidden">
+            <div className="w-full bg-zinc-300 dark:bg-zinc-700 rounded-full h-2.5 overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(totalCorrect / PRETEST_QUESTIONS.length) * 100}%` }}
@@ -152,7 +169,7 @@ const PretestPage = () => {
               const col = getScoreColor(stats.correct, stats.total);
               const catCol = CATEGORY_COLORS[category];
               return (
-                <div key={category} className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 space-y-2.5">
+                <div key={category} className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-300 dark:border-zinc-800 p-4 space-y-2.5">
                   <div className="flex items-center justify-between">
                     <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${catCol?.pill || ''}`}>{category}</span>
                     <span className={`text-sm font-bold ${col.text}`}>{stats.correct}/{stats.total}</span>
@@ -186,7 +203,7 @@ const PretestPage = () => {
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex flex-col items-center justify-center py-12 px-4">
         <div className="w-full max-w-xl space-y-6">
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-11 space-y-6">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 p-11 space-y-6">
             <div className="flex flex-col items-center gap-3 text-center">
               <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center">
                 <ClipboardList className="w-7 h-7 text-blue-500" />
@@ -237,7 +254,7 @@ const PretestPage = () => {
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex flex-col items-center py-6 px-4">
-      <div className="w-full max-w-3xl space-y-8">
+      <div className="w-full max-w-2xl space-y-9">
         <div className="text-center space-y-0.5">
           <h1 className="text-xl font-bold text-zinc-900 dark:text-white">Diagnostic Pre-Test</h1>
           <p className="text-xs text-zinc-500">Answer all {PRETEST_QUESTIONS.length} questions to assess your baseline</p>
@@ -249,7 +266,7 @@ const PretestPage = () => {
             <span>Question {currentQuestion + 1} of {PRETEST_QUESTIONS.length}</span>
             <span>{answeredCount} answered</span>
           </div>
-          <div className="w-full bg-zinc-200 dark:bg-zinc-700 rounded-full h-1.5 overflow-hidden">
+          <div className="w-full bg-zinc-300 dark:bg-zinc-700 rounded-full h-1.5 overflow-hidden">
             <motion.div
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.3 }}
@@ -281,7 +298,7 @@ const PretestPage = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.18 }}
-            className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 space-y-5 shadow-sm"
+            className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-300 dark:border-zinc-800 p-6 space-y-5 shadow-sm"
           >
             <div className="space-y-3">
               <span className={`inline-block text-xs font-semibold px-2.5 py-1 rounded-full ${catCol?.pill || ''}`}>
@@ -303,7 +320,7 @@ const PretestPage = () => {
                     className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition-all ${
                       isSelected
                         ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 ring-1 ring-blue-500'
-                        : 'border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800'
+                        : 'border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800'
                     }`}
                   >
                     <div className="flex items-center justify-between">

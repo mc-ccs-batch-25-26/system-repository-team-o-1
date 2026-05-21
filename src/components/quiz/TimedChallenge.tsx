@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { supabase } from '../../supabase/supabaseClient';
 import { MOCK_QUESTIONS, MockQuestion, shuffleArray } from '../../data/mockQuestions';
 import QuizEngine from './QuizEngine';
+import { saveMistake } from '../../data/mockQuestions';
 
 interface TimedChallengeProps {
   isDarkMode: boolean;
@@ -15,7 +16,7 @@ const CHALLENGE_DURATION = 5 * 60; // 5 minutes
 const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
   const textClass = isDarkMode ? 'text-white' : 'text-zinc-900';
   const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
-  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200';
+  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
   const btnPrimary = 'bg-rose-600 hover:bg-rose-700 text-white';
 
   const [phase, setPhase] = useState<'start' | 'challenge' | 'results'>('start');
@@ -87,6 +88,10 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
       setCombo(newCombo);
       if (newCombo > maxCombo) setMaxCombo(newCombo);
       setCorrectCount(prev => prev + 1);
+
+      if (!isCorrect) {
+  saveMistake(q, selected, q.category || 'Unknown');
+      }
 
       // Points: base 100 + speed bonus + combo multiplier
       const speedBonus = Math.floor(timeLeft / 30) * 10; // More time left = more bonus
@@ -238,12 +243,12 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
           <p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass}`}>Total Points</p>
           <div className="text-6xl font-bold text-rose-500 mt-2 mb-4">{points.toLocaleString()}</div>
 
-          <div className="grid grid-cols-3 gap-2 border-t border-zinc-200 dark:border-zinc-800 pt-4 mt-2">
+          <div className="grid grid-cols-3 gap-2 border-t border-zinc-300 dark:border-zinc-800 pt-4 mt-2">
             <div>
               <p className={`text-2xl font-bold ${textClass}`}>{questionsAttempted}</p>
               <p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>Attempted</p>
             </div>
-            <div className="border-x border-zinc-200 dark:border-zinc-800">
+            <div className="border-x border-zinc-300 dark:border-zinc-800">
               <p className={`text-2xl font-bold text-emerald-500`}>{correctCount}</p>
               <p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>Correct</p>
             </div>
@@ -257,7 +262,7 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
         </div>
 
         {personalBest && !isNewBest && (
-          <div className={`p-4 rounded-xl border text-center ${isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50' : 'bg-zinc-50 border-zinc-200'}`}>
+          <div className={`p-4 rounded-xl border text-center ${isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50' : 'bg-zinc-50 border-zinc-300'}`}>
             <p className={`text-xs font-semibold uppercase tracking-wider ${subtextClass}`}>Personal Best</p>
             <p className={`text-xl font-bold text-amber-500 mt-1`}>{personalBest.score.toLocaleString()} pts</p>
           </div>
@@ -286,18 +291,18 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
           ? isDarkMode ? 'bg-red-900/80 border-red-700' : 'bg-red-50/90 border-red-200'
           : timeLeft < 60
           ? isDarkMode ? 'bg-yellow-900/80 border-yellow-700' : 'bg-yellow-50/90 border-yellow-200'
-          : isDarkMode ? 'bg-zinc-800/80 border-zinc-700' : 'bg-white/90 border-zinc-200'
+          : isDarkMode ? 'bg-zinc-800/80 border-zinc-700' : 'bg-white/90 border-zinc-300'
       }`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button onClick={onBack} className={`p-1.5 rounded-lg border ${isDarkMode ? 'border-zinc-700 hover:bg-zinc-700' : 'border-zinc-200 hover:bg-zinc-100'} transition-colors hidden sm:block`}>
+            <button onClick={onBack} className={`p-1.5 rounded-lg border ${isDarkMode ? 'border-zinc-700 hover:bg-zinc-700' : 'border-zinc-300 hover:bg-zinc-100'} transition-colors hidden sm:block`}>
               <ArrowLeft className="w-4 h-4" />
             </button>
             <div>
               <p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>Points</p>
               <p className={`text-lg font-bold ${textClass}`}>{points.toLocaleString()}</p>
             </div>
-            <div className="w-px h-8 bg-zinc-200 dark:bg-zinc-700 hidden sm:block" />
+            <div className="w-px h-8 bg-zinc-300 dark:bg-zinc-700 hidden sm:block" />
             <div>
               <p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>Combo</p>
               <p className={`text-lg font-bold ${combo >= 3 ? 'text-orange-500' : textClass}`}>

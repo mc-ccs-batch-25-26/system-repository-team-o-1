@@ -5,6 +5,7 @@ import { supabase } from '../../supabase/supabaseClient';
 import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES } from '../../data/mockQuestions';
 import QuizEngine from './QuizEngine';
 import SmartRecommendation from './SmartRecommendation';
+import { saveMistake } from '../../data/mockQuestions';
 
 const CATEGORY_COLORS: Record<string, { pill: string; bar: string; score: string }> = {
   'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',     bar: 'bg-blue-500',    score: 'text-blue-600 dark:text-blue-400'    },
@@ -31,7 +32,7 @@ const EXAM_DURATION = 90 * 60; // 90 minutes in seconds
 const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockExamProps) => {
   const textClass = isDarkMode ? 'text-white' : 'text-zinc-900';
   const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
-  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200';
+  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
   const btnPrimary = 'bg-purple-600 hover:bg-purple-700 text-white';
 
   const [phase, setPhase] = useState<'start' | 'exam' | 'results'>('start');
@@ -102,13 +103,21 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
     // Save to Supabase (no feedback, just record)
     if (sessionRef.current) {
       const q = questions.find(q => q.id === questionId)!;
+      const isCorrect = selected === q.correct;
+      
       try {
         await supabase.from('quiz_session_answers').insert({
           session_id: sessionRef.current,
           question_id: questionId,
           selected_answer: selected,
-          is_correct: selected === q.correct,
+          is_correct: isCorrect,
         });
+        
+        // Save wrong answer to Mistake Notebook
+        if (!isCorrect) {
+          saveMistake(q, selected, q.category || 'Unknown');
+        }
+        
       } catch (err) {
         console.error('Failed to save answer:', err);
       }
@@ -303,7 +312,7 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
             {percentage}% — {passed ? 'PASSED' : 'NEEDS IMPROVEMENT'}
           </p>
 
-          <div className={`w-full rounded-full h-2.5 overflow-hidden mt-4 ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-200'}`}>
+          <div className={`w-full rounded-full h-2.5 overflow-hidden mt-4 ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`}>
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${percentage}%` }}
@@ -320,7 +329,7 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
             <p className={`text-lg font-bold ${textClass}`}>{formatTime(timeTaken)}</p>
             <p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>Time Taken</p>
           </div>
-          <div className="border-x border-zinc-200 dark:border-zinc-700">
+          <div className="border-x border-zinc-300 dark:border-zinc-700">
             <p className={`text-lg font-bold ${textClass}`}>{questions.length > 0 ? Math.round(timeTaken / questions.length) : 0}s</p>
             <p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>Avg/Question</p>
           </div>
@@ -367,7 +376,7 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
           <button onClick={() => setPhase('start')} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm ${btnPrimary} transition-colors`}>
             Retake Exam
           </button>
-          <button onClick={onBack} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm border transition-colors ${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`}>
+          <button onClick={onBack} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm border transition-colors ${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-400 text-zinc-700 hover:bg-zinc-50'}`}>
             Back to Hub
           </button>
         </div>
@@ -387,11 +396,11 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
           ? isDarkMode ? 'bg-red-900/80 border-red-700' : 'bg-red-50/90 border-red-200'
           : isTimeLow
           ? isDarkMode ? 'bg-yellow-900/80 border-yellow-700' : 'bg-yellow-50/90 border-yellow-200'
-          : isDarkMode ? 'bg-zinc-800/80 border-zinc-700' : 'bg-white/90 border-zinc-200'
+          : isDarkMode ? 'bg-zinc-800/80 border-zinc-700' : 'bg-white/90 border-zinc-300'
       }`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button onClick={onBack} className={`p-1.5 rounded-lg border ${isDarkMode ? 'border-zinc-700 hover:bg-zinc-700' : 'border-zinc-200 hover:bg-zinc-100'} transition-colors`}>
+            <button onClick={onBack} className={`p-1.5 rounded-lg border ${isDarkMode ? 'border-zinc-700 hover:bg-zinc-700' : 'border-zinc-300 hover:bg-zinc-100'} transition-colors`}>
               <ArrowLeft className="w-4 h-4" />
             </button>
             <span className={`text-xs font-bold uppercase tracking-wider ${subtextClass}`}>
@@ -455,8 +464,8 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
           disabled={currentIndex === 0}
           className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 border transition-all ${
             currentIndex === 0
-              ? 'opacity-40 cursor-not-allowed border-zinc-200 dark:border-zinc-800 text-zinc-400'
-              : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`
+              ? 'opacity-40 cursor-not-allowed border-zinc-300 dark:border-zinc-800 text-zinc-400'
+              : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-400 text-zinc-700 hover:bg-zinc-50'}`
           }`}
         >
           <ArrowLeft className="w-4 h-4" /> Previous
@@ -488,8 +497,8 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
                 idx === currentIndex
                   ? 'bg-purple-600 text-white ring-4 ring-purple-500/20 shadow-md'
                   : answers[q.id]
-                  ? isDarkMode ? 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600' : 'bg-zinc-200 text-zinc-700 hover:bg-zinc-300'
-                  : isDarkMode ? 'bg-zinc-800 border border-zinc-700 text-zinc-500 hover:bg-zinc-700' : 'bg-white border border-zinc-200 text-zinc-400 hover:bg-zinc-50'
+                  ? isDarkMode ? 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600' : 'bg-zinc-300 text-zinc-700 hover:bg-zinc-300'
+                  : isDarkMode ? 'bg-zinc-800 border border-zinc-700 text-zinc-500 hover:bg-zinc-700' : 'bg-white border border-zinc-300 text-zinc-400 hover:bg-zinc-50'
               }`}
             >
               {idx + 1}

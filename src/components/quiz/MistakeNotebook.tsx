@@ -1,19 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, BookMarked, RefreshCw, Lightbulb, Filter, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '../../supabase/supabaseClient';
+import { getMistakes, SavedMistake } from '../../data/mockQuestions';
 import { CATEGORIES } from '../../data/mockQuestions';
-
-interface Mistake {
-  id: string;
-  question_id: string;
-  question_text: string;
-  options: string[];
-  correct_answer: string;
-  selected_answer: string;
-  category_name: string;
-  created_at: string;
-}
 
 interface MistakeNotebookProps {
   isDarkMode: boolean;
@@ -23,9 +12,9 @@ interface MistakeNotebookProps {
 const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
   const textClass = isDarkMode ? 'text-white' : 'text-zinc-900';
   const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
-  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200';
+  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
 
-  const [mistakes, setMistakes] = useState<Mistake[]>([]);
+  const [mistakes, setMistakes] = useState<SavedMistake[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterCategory, setFilterCategory] = useState<string>('All');
   const [retryMode, setRetryMode] = useState(false);
@@ -41,67 +30,14 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
     fetchMistakes();
   }, []);
 
-  const fetchMistakes = async () => {
+  const fetchMistakes = () => {
     setLoading(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { setLoading(false); return; }
-
-    // Get wrong answers from quiz_session_answers, joined with questions
-    const { data, error } = await supabase
-      .from('quiz_session_answers')
-      .select(`
-        id,
-        question_id,
-        selected_answer,
-        is_correct,
-        created_at,
-        session:session_id(user_id),
-        question:question_id(
-          question_text,
-          option_a,
-          option_b,
-          option_c,
-          option_d,
-          correct_answer,
-          category:category_id(name)
-        )
-      `)
-      .eq('is_correct', false)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching mistakes:', error);
-      setLoading(false);
-      return;
-    }
-
-    // Filter to only this user's answers and map to Mistake shape
-    const userMistakes: Mistake[] = (data || [])
-      .filter((item: any) => item.session?.user_id === user.id && item.question)
-      .map((item: any) => ({
-        id: item.id,
-        question_id: item.question_id,
-        question_text: item.question.question_text,
-        options: [item.question.option_a, item.question.option_b, item.question.option_c, item.question.option_d],
-        correct_answer: item.question.correct_answer,
-        selected_answer: item.selected_answer,
-        category_name: item.question.category?.name || 'Unknown',
-        created_at: item.created_at,
-      }));
-
-    // Deduplicate by question_id (keep latest)
-    const seen = new Set<string>();
-    const deduped = userMistakes.filter(m => {
-      if (seen.has(m.question_id)) return false;
-      seen.add(m.question_id);
-      return true;
-    });
-
-    setMistakes(deduped);
+    const data = getMistakes();
+    setMistakes(data);
     setLoading(false);
   };
 
-  const getAIExplanation = async (mistake: Mistake) => {
+  const getAIExplanation = async (mistake: SavedMistake) => {
     if (aiExplanations[mistake.id]) return;
     setLoadingAI(mistake.id);
     try {
@@ -115,7 +51,7 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
           'X-Title': 'CiviQuest'
         },
         body: JSON.stringify({
-          model: 'openrouter/free',
+          model: 'google/gemini-2.0-flash-001',
           messages: [{
             role: 'system',
             content: 'You are a Civil Service Exam tutor. Explain in 2-3 sentences why the answer is correct and why the user\'s choice was wrong. Be concise and helpful.'
@@ -129,7 +65,7 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
       const text = data.choices?.[0]?.message?.content || `The correct answer is "${mistake.correct_answer}".`;
       setAiExplanations(prev => ({ ...prev, [mistake.id]: text }));
     } catch {
-      setAiExplanations(prev => ({ ...prev, [mistake.id]: `The correct answer is "${mistake.correct_answer}".` }));
+      setAiExplanations(prev => ({ ...prev, [mistake.id]: `The correct answer is "${mistake.correct_answer}". Review this topic to improve.` }));
     } finally {
       setLoadingAI(null);
     }
@@ -178,7 +114,7 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
         <div className="w-full max-w-md mx-auto px-4 py-8 space-y-5">
           <div className="text-center space-y-1">
             <h1 className={`text-2xl font-bold ${textClass}`}>Retry Complete! 💪</h1>
-            <p className={`text-sm ${subtextClass}`}>Let's see how much you've improved</p>
+            <p className={`text-sm ${subtextClass}`}>Here's how you improved</p>
           </div>
 
           <div className={`${cardBg} rounded-2xl border p-7 text-center shadow-sm`}>
@@ -186,7 +122,7 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
             <div className="text-6xl font-bold text-emerald-500 mt-2 mb-2">{retryScore}<span className={`text-2xl ${subtextClass}`}>/{filteredMistakes.length}</span></div>
             <p className={`text-sm font-medium ${subtextClass}`}>Previously Wrong → Now Correct</p>
             
-            <div className={`w-full rounded-full h-2.5 overflow-hidden mt-5 ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-200'}`}>
+            <div className={`w-full rounded-full h-2.5 overflow-hidden mt-5 ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`}>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(retryScore / filteredMistakes.length) * 100}%` }}
@@ -224,7 +160,7 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
               Retry Mode
             </span>
           </div>
-          <div className={`w-full rounded-full h-1.5 overflow-hidden ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
+          <div className={`w-full rounded-full h-1.5 overflow-hidden ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`}>
             <motion.div
               animate={{ width: `${((retryIndex + 1) / filteredMistakes.length) * 100}%` }}
               transition={{ duration: 0.3 }}
@@ -268,7 +204,7 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
                         ? 'border-red-500 bg-red-50/50 dark:bg-red-900/20'
                         : isSelected
                         ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 ring-1 ring-blue-500'
-                        : `border-zinc-200 dark:border-zinc-700 ${!answered ? 'hover:bg-zinc-50 dark:hover:bg-zinc-800' : ''}`
+                        : `border-zinc-300 dark:border-zinc-700 ${!answered ? 'hover:bg-zinc-50 dark:hover:bg-zinc-800' : ''}`
                     }`}
                   >
                     <div className="flex items-center justify-between">
@@ -334,7 +270,7 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
               className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${
                 filterCategory === cat
                   ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
-                  : `${isDarkMode ? 'border-zinc-700 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200' : 'border-zinc-200 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-800'}`
+                  : `${isDarkMode ? 'border-zinc-700 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200' : 'border-zinc-300 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-800'}`
               }`}
             >
               {cat} ({count})
@@ -407,7 +343,7 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
                       exit={{ height: 0, opacity: 0 }}
                       className="overflow-hidden"
                     >
-                      <div className={`px-5 pb-5 pt-3 border-t ${isDarkMode ? 'border-zinc-700/50' : 'border-zinc-100'}`}>
+                      <div className={`px-5 pb-5 pt-3 border-t ${isDarkMode ? 'border-zinc-700/50' : 'border-zinc-300'}`}>
                         <div className="space-y-2 mb-4">
                           <div className={`flex items-start gap-3 p-3 rounded-xl ${isDarkMode ? 'bg-red-900/10' : 'bg-red-50/50'}`}>
                             <XCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
@@ -439,12 +375,12 @@ const MistakeNotebook = ({ isDarkMode, onBack }: MistakeNotebookProps) => {
                             onClick={() => getAIExplanation(mistake)}
                             disabled={loadingAI === mistake.id}
                             className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium border transition-all ${
-                              isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'border-zinc-200 text-zinc-700 hover:bg-zinc-50'
+                              isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'
                             }`}
                           >
                             {loadingAI === mistake.id ? (
                               <>
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-zinc-500"></div>
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
                                 Generating explanation...
                               </>
                             ) : (

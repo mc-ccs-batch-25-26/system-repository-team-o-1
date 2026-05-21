@@ -92,6 +92,10 @@ body {
 
 
 
+.light-border {
+  @apply border-zinc-300;
+}
+
 .dark-border {
   @apply border-zinc-700;
 }

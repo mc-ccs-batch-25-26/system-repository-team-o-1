@@ -112,7 +112,7 @@ const Settings: React.FC = () => {
         
         {/* Header */}
         <div className="flex items-center mb-8">
-          <Link to="/" className={`mr-4 p-2 rounded-full ${isDarkMode ? 'hover:bg-zinc-800 text-zinc-400 hover:text-white' : 'hover:bg-zinc-200 text-zinc-600 hover:text-black'} transition-colors`}>
+          <Link to="/" className={`mr-4 p-2 rounded-full ${isDarkMode ? 'hover:bg-zinc-800 text-zinc-400 hover:text-white' : 'hover:bg-zinc-300 text-zinc-600 hover:text-black'} transition-colors`}>
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
@@ -129,8 +129,8 @@ const Settings: React.FC = () => {
         <div className="space-y-6">
           
           {/* Display Profile Section */}
-          <section className={`rounded-xl border ${isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50' : 'bg-white border-zinc-200'} overflow-hidden`}>
-            <div className={`px-6 py-4 border-b ${isDarkMode ? 'border-zinc-700/50' : 'border-zinc-100'}`}>
+          <section className={`rounded-xl border ${isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50' : 'bg-white border-zinc-300'} overflow-hidden`}>
+            <div className={`px-6 py-4 border-b ${isDarkMode ? 'border-zinc-700/50' : 'border-zinc-300'}`}>
               <h2 className="text-lg font-semibold flex items-center gap-2">
                 <User className="h-5 w-5" />
                 Display Profile
@@ -152,8 +152,8 @@ const Settings: React.FC = () => {
           </section>
 
           {/* Theme Section */}
-          <section className={`rounded-xl border ${isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50' : 'bg-white border-zinc-200'} overflow-hidden`}>
-            <div className={`px-6 py-4 border-b ${isDarkMode ? 'border-zinc-700/50' : 'border-zinc-100'}`}>
+          <section className={`rounded-xl border ${isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50' : 'bg-white border-zinc-300'} overflow-hidden`}>
+            <div className={`px-6 py-4 border-b ${isDarkMode ? 'border-zinc-700/50' : 'border-zinc-300'}`}>
               <h2 className="text-lg font-semibold flex items-center gap-2">
                 {isDarkMode ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                 Appearance
@@ -170,7 +170,7 @@ const Settings: React.FC = () => {
                 <button
                   onClick={handleThemeToggle}
                   className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors ${
-                    isDarkMode ? 'bg-zinc-700 text-zinc-100 hover:bg-zinc-600' : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-200'
+                    isDarkMode ? 'bg-zinc-700 text-zinc-100 hover:bg-zinc-600' : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-300'
                   }`}
                 >
                   {isDarkMode ? <><Sun className="h-4 w-4" /> Switch to Light</> : <><Moon className="h-4 w-4" /> Switch to Dark</>}
@@ -180,8 +180,8 @@ const Settings: React.FC = () => {
           </section>
 
           {/* Clear Data */}
-          <section className={`rounded-xl border ${isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50' : 'bg-white border-zinc-200'} overflow-hidden`}>
-            <div className={`px-6 py-4 border-b ${isDarkMode ? 'border-zinc-700/50' : 'border-zinc-100'}`}>
+          <section className={`rounded-xl border ${isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50' : 'bg-white border-zinc-300'} overflow-hidden`}>
+            <div className={`px-6 py-4 border-b ${isDarkMode ? 'border-zinc-700/50' : 'border-zinc-300'}`}>
               <h2 className="text-lg font-semibold flex items-center gap-2">
                 <SettingsIcon className="h-5 w-5" />
                 Data Management

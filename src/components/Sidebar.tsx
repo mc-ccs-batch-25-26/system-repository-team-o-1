@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Home, Settings, LogOut, GraduationCap, Clock, TrendingUp, ChevronsLeft, ChevronsRight, Book } from 'lucide-react';
 import { supabase } from '../supabase/supabaseClient';
 import { useState } from 'react';
+import UserAvatar from './UserAvatar';
 
 interface SidebarProps {
   isDarkMode: boolean;
@@ -9,9 +10,13 @@ interface SidebarProps {
   setIsOpen: (isOpen: boolean) => void;
   isCollapsed: boolean;
   setIsCollapsed: (isCollapsed: boolean) => void;
+  onProfileClick: () => void;
+  avatarUrl: string | null;
+  username: string;
+  userEmail: string;
 }
 
-const Sidebar = ({ isDarkMode, isOpen, setIsOpen, isCollapsed, setIsCollapsed }: SidebarProps) => {
+const Sidebar = ({ isDarkMode, isOpen, setIsOpen, isCollapsed, setIsCollapsed, onProfileClick, avatarUrl, username, userEmail }: SidebarProps) => {
   const location = useLocation();
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
@@ -98,6 +103,30 @@ const Sidebar = ({ isDarkMode, isOpen, setIsOpen, isCollapsed, setIsCollapsed }:
             );
           })}
         </nav>
+
+        {/* User Info */}
+        {!isCollapsed && (
+          <div className={`px-3 py-3 border-t ${isDarkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>
+            <button 
+              onClick={onProfileClick}
+              className="flex items-center gap-3 w-full hover:opacity-80 transition-opacity"
+            >
+              <UserAvatar 
+                avatarUrl={avatarUrl}
+                username={username}
+                size={36} 
+              />
+              <div className="flex-1 min-w-0 text-left">
+                <p className={`text-sm font-medium truncate ${isDarkMode ? 'text-white' : 'text-zinc-900'}`}>
+                  {username}
+                </p>
+                <p className={`text-xs truncate ${isDarkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                  {userEmail}
+                </p>
+              </div>
+            </button>
+          </div>
+        )}
 
         {/* Logout */}
         <div className={`p-3 flex-shrink-0 border-t ${isDarkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>

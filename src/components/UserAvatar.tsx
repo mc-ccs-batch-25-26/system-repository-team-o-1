@@ -7,6 +7,25 @@ interface UserAvatarProps {
   className?: string;
 }
 
+const AVATAR_COLORS = [
+  'bg-blue-600',
+  'bg-emerald-600',
+  'bg-violet-600',
+  'bg-amber-600',
+  'bg-rose-600',
+  'bg-cyan-600',
+  'bg-pink-600',
+  'bg-indigo-600',
+];
+
+const getColorFromName = (name: string): string => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+};
+
 const UserAvatar: React.FC<UserAvatarProps> = ({ avatarUrl, username, size = 40, className = '' }) => {
   const getInitials = (name: string) => {
     if (!name) return '??';
@@ -17,31 +36,37 @@ const UserAvatar: React.FC<UserAvatarProps> = ({ avatarUrl, username, size = 40,
     return (words[0][0] + words[words.length - 1][0]).toUpperCase();
   };
 
-  // If there's an avatarUrl, use it. Some DiceBear URLs might be explicitly saved.
+  // If there's an avatarUrl, use the image
   if (avatarUrl) {
     return (
       <div 
-        className={`rounded-full overflow-hidden border-2 border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center flex-shrink-0 ${className}`}
+        className={`rounded-full overflow-hidden border-2 border-zinc-200 dark:border-zinc-700 flex items-center justify-center flex-shrink-0 ${className}`}
         style={{ width: size, height: size }}
       >
         <img 
           src={avatarUrl} 
           alt={`${username}'s avatar`} 
           className="w-full h-full object-cover"
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = 'none';
+          }}
         />
       </div>
     );
   }
 
-  // Otherwise, fallback to initials
+  // Fallback to initials with unique color
+  const bgColor = getColorFromName(username || 'user');
+  const fontSize = typeof size === 'number' ? size * 0.38 : '1rem';
+
   return (
     <div 
-        className={`rounded-full overflow-hidden border-2 border-zinc-200 dark:border-zinc-700 bg-blue-600 flex items-center justify-center flex-shrink-0 text-white font-bold ${className}`}
-        style={{ 
-          width: size, 
-          height: size,
-          fontSize: typeof size === 'number' ? size * 0.4 : '1rem' 
-        }}
+      className={`rounded-full border-2 border-zinc-200 dark:border-zinc-700 flex items-center justify-center flex-shrink-0 text-white font-bold ${bgColor} ${className}`}
+      style={{ 
+        width: size, 
+        height: size,
+        fontSize: fontSize,
+      }}
     >
       {getInitials(username)}
     </div>

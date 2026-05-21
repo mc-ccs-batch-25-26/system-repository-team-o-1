@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { X, Edit3, Upload, Loader2, Save } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { X, Edit3, Loader2, Save } from 'lucide-react';
 import { supabase } from '../supabase/supabaseClient';
 import UserAvatar from './UserAvatar';
 
@@ -12,10 +12,6 @@ interface ProfileModalProps {
   onProfileUpdated: (newUsername: string, newAvatarUrl: string | null) => void;
 }
 
-const RECOMMENDED_AVATARS = [
-  'explorer', 'scholar', 'master', 'thinker', 'hero', 'creator'
-].map(seed => `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`);
-
 const ProfileModal: React.FC<ProfileModalProps> = ({ 
   onClose, userId, initialUsername, initialAvatarUrl, memberSince, onProfileUpdated 
 }) => {
@@ -23,10 +19,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   const [selectedAvatar, setSelectedAvatar] = useState<string | null>(initialAvatarUrl);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Read-only member since parsing
   const displayMemberSince = memberSince 
     ? new Date(memberSince).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
     : 'Unknown';
@@ -51,7 +45,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
       const fileExt = file.name.split('.').pop() || 'jpg';
       const fileName = `${userId}.${fileExt}`;
       
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from('avatars')
         .upload(fileName, file, { 
           upsert: true,
@@ -62,7 +56,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
       const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(fileName);
       setSelectedAvatar(`${urlData.publicUrl}?t=${Date.now()}`);
-      setShowAvatarOptions(false);
     } catch (err: any) {
       alert(err.message || 'Error uploading image');
     } finally {
@@ -91,9 +84,9 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 shadow-2xl">
-      <div className="w-full max-w-sm rounded-2xl overflow-hidden border bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-xl relative flex flex-col">
+      <div className="w-full max-w-sm rounded-2xl overflow-hidden border bg-white dark:bg-zinc-900 border-zinc-300 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 shadow-xl">
         {/* Header */}
-        <div className="px-6 py-4 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800">
+        <div className="px-6 py-4 flex items-center justify-between border-b border-zinc-300 dark:border-zinc-800">
           <h2 className="text-xl font-bold">Edit Profile</h2>
           <button 
             onClick={onClose} 
@@ -104,10 +97,10 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
         </div>
 
         {/* Content */}
-        <div className="p-6 flex flex-col gap-6 overflow-y-auto">
+        <div className="p-6 space-y-6">
           {/* Avatar Section */}
           <div className="flex flex-col items-center">
-            <div className="relative group">
+            <div className="relative">
               <UserAvatar 
                 avatarUrl={selectedAvatar} 
                 username={username || 'User'} 
@@ -115,42 +108,20 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
                 className="shadow-lg"
               />
               <button 
-                onClick={() => setShowAvatarOptions(!showAvatarOptions)}
-                className="absolute bottom-0 right-0 p-2 bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transition transform hover:scale-105"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="absolute bottom-0 right-0 p-2 bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transition"
               >
                 {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Edit3 className="w-4 h-4" />}
               </button>
             </div>
-
-            {showAvatarOptions && (
-              <div className="mt-4 w-full bg-zinc-50 dark:bg-zinc-800 rounded-xl p-4 border border-zinc-200 dark:border-zinc-700">
-                <p className="text-xs font-semibold mb-3 tracking-wider uppercase text-zinc-500 text-center">Choose an Avatar</p>
-                <div className="grid grid-cols-3 gap-3 mb-3">
-                  {RECOMMENDED_AVATARS.map((url, i) => (
-                    <button
-                      key={i}
-                      onClick={() => { setSelectedAvatar(url); setShowAvatarOptions(false); }}
-                      className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
-                        selectedAvatar === url 
-                          ? 'border-blue-500 scale-105 shadow-md' 
-                          : 'border-transparent hover:scale-105 bg-white dark:bg-zinc-700'
-                      }`}
-                    >
-                      <img src={url} alt={`Avatar ${i}`} className="w-full h-full object-cover p-2" />
-                    </button>
-                  ))}
-                </div>
-                <div className="text-center">
-                  <button 
-                    onClick={() => fileInputRef.current?.click()}
-                    className="text-sm text-blue-600 dark:text-blue-400 font-medium hover:underline flex items-center justify-center gap-2 mx-auto"
-                  >
-                    <Upload className="w-4 h-4" /> Upload Custom Photo
-                  </button>
-                  <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept="image/*" className="hidden" />
-                </div>
-              </div>
-            )}
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              onChange={handleFileUpload} 
+              accept="image/png, image/jpeg, image/gif, image/webp"
+              className="hidden" 
+            />
           </div>
 
           {/* Form Fields */}
@@ -161,34 +132,23 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+                className="w-full px-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
                 placeholder="Enter display name"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-zinc-500">Username</label>
-              <input
-                type="text"
-                value={initialUsername}
-                disabled
-                className="w-full px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 cursor-not-allowed font-medium"
-              />
-              <p className="text-[10px] mt-1 text-zinc-400">Username cannot be changed.</p>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider mb-1 text-zinc-500">Member Since</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-zinc-500">Member Since</label>
               <p className="text-sm font-medium">{displayMemberSince}</p>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-end gap-3 bg-zinc-50 dark:bg-zinc-900/50">
+        <div className="px-6 py-4 border-t border-zinc-300 dark:border-zinc-800 flex justify-end gap-3 bg-zinc-50 dark:bg-zinc-900/50">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
+            className="px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-zinc-300 dark:hover:bg-zinc-800 transition-colors"
           >
             Cancel
           </button>

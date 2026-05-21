@@ -5,6 +5,7 @@ import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES } from '../../da
 import QuizEngine from './QuizEngine';
 import SmartRecommendation from './SmartRecommendation';
 import { motion } from 'framer-motion';
+import { saveMistake } from '../../data/mockQuestions';
 
 const CATEGORY_COLORS: Record<string, { pill: string; bar: string; score: string }> = {
   'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',     bar: 'bg-blue-500',    score: 'text-blue-600 dark:text-blue-400'    },
@@ -29,7 +30,7 @@ interface PracticeModeProps {
 const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory }: PracticeModeProps) => {
   const textClass = isDarkMode ? 'text-white' : 'text-zinc-900';
   const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
-  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200';
+  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
   const btnPrimary = 'bg-blue-600 hover:bg-blue-700 text-white';
 
   const [phase, setPhase] = useState<'config' | 'quiz' | 'results'>('config');
@@ -124,7 +125,9 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
     const isCorrect = selected === q.correct;
     setAnswers(prev => ({ ...prev, [questionId]: selected }));
     if (isCorrect) setScore(prev => prev + 1);
-
+    if (!isCorrect) {
+  saveMistake(q, selected, q.category || 'Unknown');
+    }
     if (sessionRef.current) {
       try {
         await supabase.from('quiz_session_answers').insert({
@@ -229,7 +232,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
                     className={`px-4 py-3.5 rounded-xl text-sm font-medium border transition-all ${
                       selectedCategory === cat
                         ? 'bg-blue-600 text-white border-blue-600 shadow-md'
-                        : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'border-zinc-200 text-zinc-700 hover:bg-zinc-50'}`
+                        : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`
                     }`}
                   >
                     {cat}
@@ -249,7 +252,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
                     className={`px-4 py-3.5 rounded-xl text-sm font-medium border transition-all ${
                       selectedDifficulty === opt.value
                         ? 'bg-blue-600 text-white border-blue-600 shadow-md'
-                        : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'border-zinc-200 text-zinc-700 hover:bg-zinc-50'}`
+                        : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`
                     }`}
                   >
                     {opt.label}
@@ -285,7 +288,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
         <div className={`${cardBg} rounded-2xl border p-7 text-center space-y-3`}>
           <p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass}`}>Total correct</p>
           <p className="text-6xl font-bold text-blue-600">{score}/{questions.length}</p>
-          <div className={`w-full rounded-full h-2.5 overflow-hidden ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-200'}`}>
+          <div className={`w-full rounded-full h-2.5 overflow-hidden ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`}>
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${(score / questions.length) * 100}%` }}
@@ -358,7 +361,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
             Practice Mode
           </span>
         </div>
-        <div className={`w-full rounded-full h-1.5 overflow-hidden ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`}>
+        <div className={`w-full rounded-full h-1.5 overflow-hidden ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`}>
           <motion.div
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}

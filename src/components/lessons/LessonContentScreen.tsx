@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
 import { useOutletContext, useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, CheckCircle2, XCircle, RefreshCw, Trophy, Target } from 'lucide-react';
-import { lessonContent, LessonItem, QuizQuestion } from '../../data/lessonContent';
+import { ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, XCircle, RefreshCw, Trophy, Target } from 'lucide-react';
+import { lessonContent } from '../../data/lessonContent';
 import { supabase } from '../../supabase/supabaseClient';
 
-const CATEGORY_COLORS: Record<string, { bg: string; text: string; lightBg: string; border: string }> = {
-  'Verbal Ability': { bg: 'bg-blue-500', text: 'text-blue-500', lightBg: 'bg-blue-100', border: 'border-blue-500' },
-  'Quantitative Ability': { bg: 'bg-emerald-500', text: 'text-emerald-500', lightBg: 'bg-emerald-100', border: 'border-emerald-500' },
-  'Logical Reasoning': { bg: 'bg-violet-500', text: 'text-violet-500', lightBg: 'bg-violet-100', border: 'border-violet-500' }
+const CATEGORY_COLORS: Record<string, { bg: string; text: string; lightBg: string; border: string; chip: string; chipText: string }> = {
+  'Verbal Ability': {
+    bg: 'bg-blue-500',
+    text: 'text-blue-600',
+    lightBg: 'bg-blue-50',
+    border: 'border-blue-500',
+    chip: 'bg-blue-50 dark:bg-blue-950/40',
+    chipText: 'text-blue-600 dark:text-blue-400',
+  },
+  'Quantitative Ability': {
+    bg: 'bg-emerald-500',
+    text: 'text-emerald-600',
+    lightBg: 'bg-emerald-50',
+    border: 'border-emerald-500',
+    chip: 'bg-emerald-50 dark:bg-emerald-950/40',
+    chipText: 'text-emerald-600 dark:text-emerald-400',
+  },
+  'Logical Reasoning': {
+    bg: 'bg-violet-500',
+    text: 'text-violet-600',
+    lightBg: 'bg-violet-50',
+    border: 'border-violet-500',
+    chip: 'bg-violet-50 dark:bg-violet-950/40',
+    chipText: 'text-violet-600 dark:text-violet-400',
+  },
 };
 
 type Phase = 'INTRO' | 'CONTENT' | 'QUIZ' | 'RESULTS';
@@ -16,20 +37,17 @@ type Phase = 'INTRO' | 'CONTENT' | 'QUIZ' | 'RESULTS';
 export const LessonContentScreen: React.FC = () => {
   const { isDarkMode } = useOutletContext<any>();
   const navigate = useNavigate();
-  const { category, topic } = useParams<{ category: string, topic: string }>();
+  const { category, topic } = useParams<{ category: string; topic: string }>();
 
   const [phase, setPhase] = useState<Phase>('INTRO');
-  
-  // Content Phase State
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
-  
-  // Quiz Phase State
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [quizScore, setQuizScore] = useState(0);
   const [showExplanation, setShowExplanation] = useState(false);
   const [aiExplanation, setAiExplanation] = useState<string>('');
   const [isAiLoading, setIsAiLoading] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<'keyPoints' | 'simpleExplanation' | 'example' | null>(null);
 
   const categoryData = lessonContent.find(c => c.title === category);
   const topicData = categoryData?.topics.find(t => t.title === topic);
@@ -37,7 +55,7 @@ export const LessonContentScreen: React.FC = () => {
 
   const textClass = isDarkMode ? 'text-white' : 'text-zinc-900';
   const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
-  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-200';
+  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
   const appBg = isDarkMode ? 'bg-zinc-900' : 'bg-zinc-50';
 
   if (!categoryData || !topicData) {
@@ -54,7 +72,6 @@ export const LessonContentScreen: React.FC = () => {
   const items = topicData.items;
   const questions = topicData.quizQuestions;
 
-  // AI Explanation fetch logic
   const fetchAiExplanation = async (question: string, wrongAnswer: string, correctAnswer: string) => {
     setIsAiLoading(true);
     try {
@@ -74,7 +91,7 @@ export const LessonContentScreen: React.FC = () => {
       });
       const data = await response.json();
       setAiExplanation(data.choices[0].message.content);
-    } catch (error) {
+    } catch {
       setAiExplanation("Could not load explanation at this time. Focus on reviewing the correct answer!");
     } finally {
       setIsAiLoading(false);
@@ -83,19 +100,13 @@ export const LessonContentScreen: React.FC = () => {
 
   const handleQuizAnswer = (option: string) => {
     if (selectedOption !== null) return;
-    
     setSelectedOption(option);
     const isCorrect = option === questions[currentQuizIndex].correctAnswer;
-    
     if (isCorrect) {
       setQuizScore(s => s + 1);
     } else {
       setShowExplanation(true);
-      fetchAiExplanation(
-        questions[currentQuizIndex].question,
-        option,
-        questions[currentQuizIndex].correctAnswer
-      );
+      fetchAiExplanation(questions[currentQuizIndex].question, option, questions[currentQuizIndex].correctAnswer);
     }
   };
 
@@ -112,326 +123,381 @@ export const LessonContentScreen: React.FC = () => {
 
   const finishLesson = async () => {
     setPhase('RESULTS');
-    // Save progress to Supabase or LocalStorage if needed
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        // Minimal logic: Insert or update performance
-        const xpEarned = 50;
-        await supabase.from('users').update({ xp: xpEarned }).eq('id', user.id); // pseudo-logic for XP
+        const { data: profile } = await supabase.from('profiles').select('xp').eq('id', user.id).single();
+        if (profile) {
+          const newXP = (profile.xp || 0) + 50;
+          const newLevel = Math.floor(newXP / 500) + 1;
+          await supabase.from('profiles').update({ xp: newXP, level: newLevel }).eq('id', user.id);
+        }
+        await supabase.from('quiz_sessions').insert({
+          user_id: user.id,
+          score: quizScore,
+          is_pretest: false,
+          is_timed: false,
+          ended_at: new Date().toISOString(),
+        });
+        const { data: categories } = await supabase.from('categories').select('id, name');
+        const categoryId = categories?.find(c => c.name === categoryData?.title)?.id;
+        if (categoryId) {
+          const { data: existing } = await supabase.from('performance')
+            .select('total_answered, total_correct')
+            .eq('user_id', user.id)
+            .eq('category_id', categoryId)
+            .maybeSingle();
+          const newTotal = (existing?.total_answered || 0) + questions.length;
+          const newCorrect = (existing?.total_correct || 0) + quizScore;
+          await supabase.from('performance').upsert({
+            user_id: user.id,
+            category_id: categoryId,
+            accuracy_rate: (newCorrect / newTotal) * 100,
+            total_answered: newTotal,
+            total_correct: newCorrect,
+          }, { onConflict: 'user_id, category_id' });
+        }
       }
     } catch (e) {
-      console.error(e);
+      console.error('Error finishing lesson:', e);
     }
+  };
+
+  const toggleSection = (section: 'keyPoints' | 'simpleExplanation' | 'example') => {
+    setExpandedSection(prev => prev === section ? null : section);
   };
 
   return (
     <div className={`min-h-[85vh] flex flex-col ${appBg}`}>
-      {/* Global Header */}
-      <div className={`px-6 py-4 flex items-center border-b ${isDarkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>
-        <button 
+      {/* ── Header ── */}
+      <div className={`px-4 py-3 flex items-center border-b ${isDarkMode ? 'border-zinc-800' : 'border-zinc-300'}`}>
+        <button
           onClick={() => phase === 'INTRO' ? navigate(`/lessons/${encodeURIComponent(categoryData.title)}`) : setPhase('INTRO')}
-          className={`p-2 -ml-2 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors ${subtextClass}`}
+          className={`p-2 -ml-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors ${subtextClass}`}
         >
-          <ChevronLeft className="w-6 h-6" />
+          <ChevronLeft className="w-5 h-5" />
         </button>
-        <h1 className={`ml-2 text-xl font-bold ${textClass} flex-1 text-center pr-8`}>
-          {topicData.title}
+        <h1 className={`ml-2 text-base font-semibold ${textClass} flex-1 text-center pr-7`}>
+          {category}
         </h1>
       </div>
 
-      <div className="flex-1 w-full max-w-4xl mx-auto p-4 sm:p-6 md:p-8 flex flex-col">
+      <div className="flex-1 w-full max-w-2xl mx-auto flex flex-col">
         <AnimatePresence mode="wait">
-          
-          {/* --- INTRO PHASE --- */}
+
+          {/* ── INTRO ── */}
           {phase === 'INTRO' && (
-            <motion.div 
+            <motion.div
               key="intro"
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="flex-1 flex flex-col items-center justify-center text-center space-y-8"
+              exit={{ opacity: 0, y: -16 }}
+              className="flex-1 flex flex-col items-center justify-center text-center space-y-8 px-6 py-10"
             >
-              <div className={`w-24 h-24 rounded-3xl ${colors.bg} bg-opacity-20 flex items-center justify-center`}>
-                <Target className={`w-12 h-12 ${colors.text}`} />
+              <div className={`w-20 h-20 rounded-2xl ${colors.lightBg} flex items-center justify-center`}>
+                <Target className={`w-10 h-10 ${colors.text}`} />
               </div>
               <div>
-                <h2 className={`text-4xl font-bold ${textClass} mb-4`}>{topicData.title}</h2>
-                <p className={`text-lg ${subtextClass} max-w-2xl mx-auto`}>{topicData.description}</p>
+                <h2 className={`text-3xl font-bold ${textClass} mb-3`}>{topicData.title}</h2>
+                <p className={`text-base ${subtextClass} max-w-sm mx-auto leading-relaxed`}>{topicData.description}</p>
               </div>
-              
-              <div className="flex gap-8 py-6">
+              <div className="flex gap-10 py-4">
                 <div className="flex flex-col items-center">
-                  <span className={`text-2xl font-bold ${textClass}`}>{items.length}</span>
-                  <span className={`text-sm ${subtextClass} uppercase tracking-wider`}>Concepts</span>
+                  <span className={`text-3xl font-bold ${textClass}`}>{items.length}</span>
+                  <span className={`text-xs ${subtextClass} uppercase tracking-wider mt-1`}>Concepts</span>
                 </div>
-                <div className={`w-px h-12 ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`}></div>
+                <div className={`w-px h-10 self-center ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-300'}`} />
                 <div className="flex flex-col items-center">
-                  <span className={`text-2xl font-bold ${textClass}`}>{questions.length}</span>
-                  <span className={`text-sm ${subtextClass} uppercase tracking-wider`}>Questions</span>
+                  <span className={`text-3xl font-bold ${textClass}`}>{questions.length}</span>
+                  <span className={`text-xs ${subtextClass} uppercase tracking-wider mt-1`}>Questions</span>
                 </div>
               </div>
-
               <button
                 onClick={() => setPhase('CONTENT')}
-                className={`px-12 py-4 rounded-xl text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 ${colors.bg}`}
+                className={`px-10 py-3.5 rounded-xl text-white font-semibold text-base shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 ${colors.bg}`}
               >
                 Start Learning
               </button>
             </motion.div>
           )}
 
-          {/* --- CONTENT PHASE --- */}
+          {/* ── CONTENT (REDESIGNED) ── */}
           {phase === 'CONTENT' && items.length > 0 && (
-            <motion.div 
+            <motion.div
               key="content"
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+              exit={{ opacity: 0, x: -16 }}
               className="flex-1 flex flex-col"
             >
               {/* Progress */}
-              <div className="mb-8">
-                <div className="flex justify-between text-sm font-medium mb-2">
+              <div className="px-4 pt-4 pb-2">
+                <div className="flex justify-between text-xs font-medium mb-2">
                   <span className={subtextClass}>Concept {currentItemIndex + 1} of {items.length}</span>
                   <span className={colors.text}>{Math.round(((currentItemIndex + 1) / items.length) * 100)}%</span>
                 </div>
-                <div className={`w-full h-2 rounded-full ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-200'} overflow-hidden`}>
-                  <motion.div 
-                    className={`h-full ${colors.bg}`}
+                <div className={`w-full h-1.5 rounded-full ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'} overflow-hidden`}>
+                  <motion.div
+                    className={`h-full rounded-full ${colors.bg}`}
                     initial={{ width: 0 }}
                     animate={{ width: `${((currentItemIndex + 1) / items.length) * 100}%` }}
+                    transition={{ type: 'spring', stiffness: 120, damping: 20 }}
                   />
                 </div>
               </div>
 
-              {/* Card */}
-              <div className={`flex-1 ${cardBg} rounded-3xl border shadow-sm p-6 sm:p-10 flex flex-col`}>
-                <div className="text-center mb-8">
-                  <h2 className={`text-4xl sm:text-5xl font-extrabold ${textClass} mb-4`}>
-                    {items[currentItemIndex].word}
-                  </h2>
-                  <p className={`text-lg sm:text-xl ${colors.text} font-medium max-w-2xl mx-auto`}>
-                    {items[currentItemIndex].definition}
-                  </p>
-                </div>
+              {/* ── HERO: Topic + Meaning ── */}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentItemIndex}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.22 }}
+                  className="flex flex-col"
+                >
+                  {/* Category chip + word */}
+                  <div className={`mx-4 mt-3 rounded-2xl border px-5 pt-6 pb-5 ${cardBg}`}>
+                    {/* Difficulty chip */}
+                    <div className="flex justify-center mb-4">
+                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${colors.chip} ${colors.chipText} tracking-wide`}>
+                        {items[currentItemIndex].difficulty ?? 'Beginner'}
+                      </span>
+                    </div>
 
-                {/* Stacked Content Sections */}
-                <div className="flex-1 flex flex-col gap-6 bg-transparent min-h-[150px]">
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentItemIndex}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="flex flex-col gap-6"
-                    >
+                    {/* Topic word — the HERO */}
+                    <h2 className={`text-4xl sm:text-5xl font-bold text-center ${textClass} leading-none tracking-tight mb-3`}>
+                      {items[currentItemIndex].word}
+                    </h2>
+
+                    {/* Meaning — prominent tinted card */}
+                    <div className={`rounded-xl p-4 ${isDarkMode ? 'bg-zinc-700/50' : colors.lightBg}`}>
+                      <p className={`text-base sm:text-lg leading-relaxed font-medium ${textClass}`}>
+                        {items[currentItemIndex].definition}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* ── Learn More Accordions ── */}
+                  <div className="px-4 pt-4 pb-2">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className={`text-xs font-semibold uppercase tracking-widest ${subtextClass}`}>Learn more</span>
+                      <div className={`flex-1 h-px ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`} />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
                       {/* Key Points */}
-                      <div className={`p-5 rounded-2xl ${isDarkMode ? 'bg-zinc-900/50' : 'bg-zinc-50'}`}>
-                        <h3 className={`text-sm font-bold uppercase tracking-wider mb-4 ${colors.text}`}>Key Points</h3>
-                        <ul className="space-y-3">
-                          {items[currentItemIndex].keyPoints.slice(0, 3).map((pt, i) => (
-                            <li key={i} className={`flex gap-3 text-lg leading-relaxed ${textClass}`}>
-                              <CheckCircle2 className={`w-6 h-6 flex-shrink-0 ${colors.text} mt-0.5`} />
-                              <span>{pt}</span>
+                      <AccordionItem
+                        label="Key points"
+                        badge={`${items[currentItemIndex].keyPoints?.length ?? 0} points`}
+                        isOpen={expandedSection === 'keyPoints'}
+                        onToggle={() => toggleSection('keyPoints')}
+                        isDarkMode={isDarkMode}
+                        colors={colors}
+                      >
+                        <ul className="space-y-2.5">
+                          {items[currentItemIndex].keyPoints?.slice(0, 3).map((pt, i) => (
+                            <li key={i} className={`flex gap-2.5 text-sm leading-relaxed ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
+                              <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 mt-2 ${colors.bg}`} />
+                              {pt}
                             </li>
                           ))}
                         </ul>
-                      </div>
+                      </AccordionItem>
 
                       {/* Simple Explanation */}
-                      <div className={`p-5 rounded-2xl ${isDarkMode ? 'bg-zinc-900/50' : 'bg-zinc-50'}`}>
-                        <h3 className={`text-sm font-bold uppercase tracking-wider mb-2 ${colors.text}`}>Simple Explanation</h3>
-                        <p className={`text-lg leading-relaxed ${textClass}`}>
+                      <AccordionItem
+                        label="Simple explanation"
+                        isOpen={expandedSection === 'simpleExplanation'}
+                        onToggle={() => toggleSection('simpleExplanation')}
+                        isDarkMode={isDarkMode}
+                        colors={colors}
+                      >
+                        <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
                           {items[currentItemIndex].simpleExplanation}
                         </p>
-                      </div>
+                      </AccordionItem>
 
                       {/* Example */}
-                      <div className={`p-5 rounded-2xl border ${isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'}`}>
-                        <h3 className={`text-sm font-bold uppercase tracking-wider mb-2 ${colors.text}`}>Example</h3>
-                        <p className={`text-lg leading-relaxed italic ${textClass}`}>
+                      <AccordionItem
+                        label="Example sentence"
+                        isOpen={expandedSection === 'example'}
+                        onToggle={() => toggleSection('example')}
+                        isDarkMode={isDarkMode}
+                        colors={colors}
+                      >
+                        <p className={`text-sm leading-relaxed italic ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
                           "{items[currentItemIndex].example}"
                         </p>
-                      </div>
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
+                      </AccordionItem>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
 
-                {/* Nav Buttons */}
-                <div className="flex gap-4 mt-8 pt-6 border-t border-zinc-200 dark:border-zinc-800">
+              {/* ── Nav buttons ── */}
+              <div className={`mt-6 px-4 py-4 flex gap-3 border-t ${isDarkMode ? 'border-zinc-800' : 'border-zinc-300'}`}>
+                <button
+                  onClick={() => { setCurrentItemIndex(i => Math.max(0, i - 1)); setExpandedSection(null); }}
+                  disabled={currentItemIndex === 0}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl font-semibold text-sm border transition-colors ${
+                    currentItemIndex === 0
+                      ? 'opacity-40 cursor-not-allowed border-zinc-300 dark:border-zinc-700 text-zinc-400'
+                      : `border-zinc-300 dark:border-zinc-600 ${isDarkMode ? 'text-zinc-300 hover:bg-zinc-800' : 'text-zinc-700 hover:bg-zinc-50'}`
+                  }`}
+                >
+                  <ChevronLeft className="w-4 h-4" /> Previous
+                </button>
+
+                {currentItemIndex < items.length - 1 ? (
                   <button
-                    onClick={() => setCurrentItemIndex(i => Math.max(0, i - 1))}
-                    disabled={currentItemIndex === 0}
-                    className={`flex-1 py-4 rounded-xl font-bold transition-colors border ${
-                      currentItemIndex === 0
-                        ? 'opacity-50 cursor-not-allowed border-zinc-200 text-zinc-400 dark:border-zinc-700'
-                        : `border-zinc-300 text-zinc-700 hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800`
-                    }`}
+                    onClick={() => { setCurrentItemIndex(i => i + 1); setExpandedSection(null); }}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-3 rounded-xl font-semibold text-sm text-white transition-all ${colors.bg} hover:shadow-md hover:-translate-y-0.5`}
                   >
-                    Previous
+                    Next <ChevronRight className="w-4 h-4" />
                   </button>
-                  {currentItemIndex < items.length - 1 ? (
-                    <button
-                      onClick={() => setCurrentItemIndex(i => i + 1)}
-                      className={`flex-1 py-4 rounded-xl font-bold text-white transition-all hover:shadow-lg ${colors.bg}`}
-                    >
-                      Next Concept
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => setPhase('QUIZ')}
-                      className="flex-1 py-4 rounded-xl font-bold text-white bg-zinc-900 dark:bg-white dark:text-zinc-900 hover:scale-[1.02] transition-transform"
-                    >
-                      Start Quiz
-                    </button>
-                  )}
-                </div>
+                ) : (
+                  <button
+                    onClick={() => setPhase('QUIZ')}
+                    className="flex-1 flex items-center justify-center py-3 rounded-xl font-semibold text-sm text-white bg-zinc-900 dark:bg-zinc-700 hover:bg-zinc-800 dark:hover:bg-zinc-600 transition-colors"
+                  >
+                    Start Quiz →
+                  </button>
+                )}
               </div>
             </motion.div>
           )}
 
-          {/* --- QUIZ PHASE --- */}
+          {/* ── QUIZ ── (unchanged logic, minor polish) */}
           {phase === 'QUIZ' && questions.length > 0 && (
-             <motion.div 
-             key="quiz"
-             initial={{ opacity: 0, scale: 0.95 }}
-             animate={{ opacity: 1, scale: 1 }}
-             className="flex-1 flex flex-col"
-           >
-             <div className="mb-6">
-               <div className="flex justify-between text-sm font-medium mb-2">
-                 <span className={subtextClass}>Question {currentQuizIndex + 1} of {questions.length}</span>
-                 <span className={colors.text}>Score: {quizScore}</span>
-               </div>
-               <div className={`w-full h-2 rounded-full ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-200'} overflow-hidden`}>
-                 <motion.div 
-                   className={`h-full ${colors.bg}`}
-                   initial={{ width: 0 }}
-                   animate={{ width: `${((currentQuizIndex + 1) / questions.length) * 100}%` }}
-                 />
-               </div>
-             </div>
+            <motion.div
+              key="quiz"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex-1 flex flex-col px-4 py-4"
+            >
+              <div className="mb-5">
+                <div className="flex justify-between text-xs font-medium mb-2">
+                  <span className={subtextClass}>Question {currentQuizIndex + 1} of {questions.length}</span>
+                  <span className={colors.text}>Score: {quizScore}</span>
+                </div>
+                <div className={`w-full h-1.5 rounded-full ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'} overflow-hidden`}>
+                  <motion.div
+                    className={`h-full rounded-full ${colors.bg}`}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${((currentQuizIndex + 1) / questions.length) * 100}%` }}
+                  />
+                </div>
+              </div>
 
-             <div className={`flex-1 ${cardBg} rounded-3xl border shadow-sm p-6 sm:p-10 flex flex-col`}>
-               <h3 className={`text-2xl font-bold ${textClass} mb-8`}>
-                 {questions[currentQuizIndex].question}
-               </h3>
+              <div className={`flex-1 ${cardBg} rounded-2xl border shadow-sm p-5 sm:p-8 flex flex-col`}>
+                <h3 className={`text-xl font-bold ${textClass} mb-7 leading-snug`}>
+                  {questions[currentQuizIndex].question}
+                </h3>
 
-               <div className="space-y-4 flex-1">
-                 {questions[currentQuizIndex].options.map((opt, i) => {
-                   const isSelected = selectedOption === opt;
-                   const isCorrect = opt === questions[currentQuizIndex].correctAnswer;
-                   const showStatus = selectedOption !== null;
-                   
-                   let btnStyle = `border-2 ${isDarkMode ? 'border-zinc-700 bg-zinc-800 text-white hover:border-zinc-500' : 'border-zinc-200 bg-white text-zinc-900 hover:border-zinc-400'}`;
-                   
-                   if (showStatus) {
-                     if (isCorrect) {
-                       btnStyle = 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400';
-                     } else if (isSelected) {
-                       btnStyle = 'border-red-500 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400';
-                     } else {
-                       btnStyle = `opacity-50 border-zinc-200 dark:border-zinc-700 ${isDarkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`;
-                     }
-                   }
+                <div className="space-y-3 flex-1">
+                  {questions[currentQuizIndex].options.map((opt, i) => {
+                    const isSelected = selectedOption === opt;
+                    const isCorrect = opt === questions[currentQuizIndex].correctAnswer;
+                    const showStatus = selectedOption !== null;
 
-                   return (
-                     <button
-                       key={i}
-                       onClick={() => handleQuizAnswer(opt)}
-                       disabled={selectedOption !== null}
-                       className={`w-full p-5 rounded-2xl text-left text-lg font-medium transition-all ${btnStyle} flex justify-between items-center`}
-                     >
-                       <span>{opt}</span>
-                       {showStatus && isCorrect && <CheckCircle2 className="w-6 h-6 text-emerald-500" />}
-                       {showStatus && isSelected && !isCorrect && <XCircle className="w-6 h-6 text-red-500" />}
-                     </button>
-                   );
-                 })}
-               </div>
+                    let btnStyle = `border ${isDarkMode ? 'border-zinc-700 bg-zinc-900/50 text-white hover:border-zinc-3000' : 'border-zinc-400 bg-white text-zinc-900 hover:border-zinc-300'}`;
+                    if (showStatus) {
+                      if (isCorrect) btnStyle = 'border border-emerald-400 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300';
+                      else if (isSelected) btnStyle = 'border border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+                      else btnStyle = `opacity-40 border ${isDarkMode ? 'border-zinc-700 bg-zinc-900/50' : 'border-zinc-300 bg-zinc-50'}`;
+                    }
 
-               <AnimatePresence>
-                 {showExplanation && (
-                   <motion.div
-                     initial={{ opacity: 0, height: 0 }}
-                     animate={{ opacity: 1, height: 'auto' }}
-                     className="mt-6 overflow-hidden"
-                   >
-                     <div className={`p-5 rounded-2xl border border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800/50`}>
-                       <h4 className="font-bold text-blue-800 dark:text-blue-300 flex items-center gap-2 mb-2">
-                         <RefreshCw className={`w-4 h-4 ${isAiLoading ? 'animate-spin' : ''}`} />
-                         AI Explanation
-                       </h4>
-                       <p className="text-blue-900 dark:text-blue-100 leading-relaxed">
-                         {isAiLoading ? "Analyzing your answer..." : aiExplanation}
-                       </p>
-                     </div>
-                   </motion.div>
-                 )}
-               </AnimatePresence>
+                    return (
+                      <button
+                        key={i}
+                        onClick={() => handleQuizAnswer(opt)}
+                        disabled={selectedOption !== null}
+                        className={`w-full px-5 py-4 rounded-xl text-left text-sm font-medium transition-all ${btnStyle} flex justify-between items-center`}
+                      >
+                        <span>{opt}</span>
+                        {showStatus && isCorrect && <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />}
+                        {showStatus && isSelected && !isCorrect && <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
 
-               {selectedOption && (
-                 <motion.button
-                   initial={{ opacity: 0, y: 20 }}
-                   animate={{ opacity: 1, y: 0 }}
-                   onClick={nextQuizQuestion}
-                   className={`mt-8 w-full py-5 rounded-xl font-bold text-white text-lg ${colors.bg} hover:shadow-lg transition-all`}
-                 >
-                   {currentQuizIndex < questions.length - 1 ? 'Next Question' : 'View Results'}
-                 </motion.button>
-               )}
-             </div>
-           </motion.div>
+                <AnimatePresence>
+                  {showExplanation && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      className="mt-5 overflow-hidden"
+                    >
+                      <div className="p-4 rounded-xl border border-blue-200 dark:border-blue-800/50 bg-blue-50 dark:bg-blue-900/20">
+                        <h4 className="font-semibold text-blue-800 dark:text-blue-300 flex items-center gap-2 mb-1.5 text-sm">
+                          <RefreshCw className={`w-3.5 h-3.5 ${isAiLoading ? 'animate-spin' : ''}`} />
+                          AI Explanation
+                        </h4>
+                        <p className="text-blue-900 dark:text-blue-100 leading-relaxed text-sm">
+                          {isAiLoading ? "Analyzing your answer…" : aiExplanation}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {selectedOption && (
+                  <motion.button
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    onClick={nextQuizQuestion}
+                    className={`mt-6 w-full py-4 rounded-xl font-bold text-white text-base ${colors.bg} hover:shadow-lg transition-all`}
+                  >
+                    {currentQuizIndex < questions.length - 1 ? 'Next Question' : 'View Results'}
+                  </motion.button>
+                )}
+              </div>
+            </motion.div>
           )}
 
-          {/* --- RESULTS PHASE --- */}
+          {/* ── RESULTS ── */}
           {phase === 'RESULTS' && (
-            <motion.div 
+            <motion.div
               key="results"
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex-1 flex flex-col items-center justify-center text-center space-y-8"
+              className="flex-1 flex flex-col items-center justify-center text-center space-y-8 px-6"
             >
-              <div className={`w-32 h-32 rounded-full ${colors.bg} bg-opacity-20 flex items-center justify-center mb-4 relative`}>
-                <Trophy className={`w-16 h-16 ${colors.text}`} />
-                <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 font-bold px-3 py-1 rounded-full text-sm shadow-md border-2 border-white dark:border-zinc-900">
+              <div className={`w-28 h-28 rounded-full ${colors.lightBg} flex items-center justify-center relative`}>
+                <Trophy className={`w-14 h-14 ${colors.text}`} />
+                <div className="absolute -bottom-2 -right-2 bg-yellow-400 text-yellow-900 font-bold px-2.5 py-0.5 rounded-full text-xs shadow border-2 border-white dark:border-zinc-900">
                   +50 XP
                 </div>
               </div>
-              
+
               <div>
-                <h2 className={`text-4xl font-bold ${textClass} mb-2`}>Lesson Complete!</h2>
-                <p className={`text-xl ${subtextClass}`}>You mastered {topicData.title}</p>
+                <h2 className={`text-3xl font-bold ${textClass} mb-1`}>Lesson Complete!</h2>
+                <p className={`text-base ${subtextClass}`}>You mastered {topicData.title}</p>
               </div>
-              
-              <div className={`p-8 rounded-3xl ${cardBg} border shadow-sm w-full max-w-sm`}>
-                <div className="text-6xl font-extrabold mb-2" style={{ color: `var(--${colors.text.split('-')[1]}-500, #3b82f6)` }}>
+
+              <div className={`p-7 rounded-2xl ${cardBg} border shadow-sm w-full max-w-xs`}>
+                <div className={`text-6xl font-extrabold mb-1 ${colors.text}`}>
                   {Math.round((quizScore / questions.length) * 100)}%
                 </div>
-                <p className={`text-lg font-medium ${subtextClass}`}>
+                <p className={`text-base font-medium ${subtextClass}`}>
                   {quizScore} out of {questions.length} correct
                 </p>
               </div>
 
-              <div className="flex gap-4 w-full max-w-sm pt-4">
+              <div className="flex gap-3 w-full max-w-xs">
                 <button
-                  onClick={() => {
-                    setPhase('INTRO');
-                    setCurrentItemIndex(0);
-                    setCurrentQuizIndex(0);
-                    setQuizScore(0);
-                    setSelectedOption(null);
-                  }}
-                  className={`flex-1 py-4 rounded-xl font-bold border-2 border-zinc-200 dark:border-zinc-700 ${textClass} hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors`}
+                  onClick={() => { setPhase('INTRO'); setCurrentItemIndex(0); setCurrentQuizIndex(0); setQuizScore(0); setSelectedOption(null); }}
+                  className={`flex-1 py-3.5 rounded-xl font-semibold text-sm border ${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-400 text-zinc-700 hover:bg-zinc-50'} transition-colors`}
                 >
                   Review Again
                 </button>
                 <button
                   onClick={() => navigate(`/lessons/${encodeURIComponent(categoryData.title)}`)}
-                  className={`flex-1 py-4 rounded-xl font-bold text-white shadow-lg ${colors.bg} hover:shadow-xl hover:-translate-y-0.5 transition-all`}
+                  className={`flex-1 py-3.5 rounded-xl font-semibold text-sm text-white ${colors.bg} hover:shadow-md hover:-translate-y-0.5 transition-all`}
                 >
-                  Return to Topics
+                  All Topics
                 </button>
               </div>
             </motion.div>
@@ -439,6 +505,56 @@ export const LessonContentScreen: React.FC = () => {
 
         </AnimatePresence>
       </div>
+    </div>
+  );
+};
+
+/* ── Reusable Accordion Item ── */
+interface AccordionItemProps {
+  label: string;
+  badge?: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  isDarkMode: boolean;
+  colors: { text: string };
+  children: React.ReactNode;
+}
+
+const AccordionItem: React.FC<AccordionItemProps> = ({ label, badge, isOpen, onToggle, isDarkMode, colors, children }) => {
+  const rowBg = isDarkMode ? 'bg-zinc-800/60 border-zinc-700' : 'bg-zinc-50 border-zinc-300';
+  const openBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
+
+  return (
+    <div className={`rounded-xl border overflow-hidden transition-colors ${isOpen ? openBg : rowBg}`}>
+      <button
+        onClick={onToggle}
+        className="w-full flex items-center justify-between px-4 py-3 text-left"
+      >
+        <span className={`text-sm font-semibold ${isDarkMode ? 'text-zinc-200' : 'text-zinc-700'}`}>{label}</span>
+        <div className="flex items-center gap-2">
+          {badge && (
+            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${isDarkMode ? 'bg-zinc-700 text-zinc-400' : 'bg-zinc-100 text-zinc-500'}`}>
+              {badge}
+            </span>
+          )}
+          <ChevronDown className={`w-4 h-4 transition-transform ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'} ${isOpen ? 'rotate-180' : ''}`} />
+        </div>
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className={`px-4 pb-4 pt-1 border-t ${isDarkMode ? 'border-zinc-700' : 'border-zinc-300'}`}>
+              {children}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

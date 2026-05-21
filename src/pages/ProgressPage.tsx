@@ -50,7 +50,7 @@ const ProgressPage = () => {
     const weakest = sorted[0];
     const strongest = sorted[sorted.length - 1];
 
-    const cardBgClass = isDarkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-200";
+    const cardBgClass = isDarkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-zinc-300";
     const textClass = isDarkMode ? "text-white" : "text-zinc-900";
     const secondaryTextClass = isDarkMode ? "text-zinc-400" : "text-zinc-500";
     const barBg = isDarkMode ? "bg-zinc-800" : "bg-zinc-100";

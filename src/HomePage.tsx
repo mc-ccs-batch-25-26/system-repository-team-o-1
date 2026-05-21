@@ -7,6 +7,7 @@ import ProfileModal from './components/ProfileModal';
 import { supabase } from './supabase/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 
+
 const Confetti = () => {
   const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
   const pieces = Array.from({ length: 60 }, (_, i) => ({
@@ -38,9 +39,9 @@ function HomePage() {
   const { isDarkMode } = useOutletContext<any>();
   const navigate = useNavigate();
   const [previousLevel, setPreviousLevel] = useState(() => {
-  const saved = localStorage.getItem('civiquest_previous_level');
-  return saved ? parseInt(saved) : 1;
-});
+    const saved = localStorage.getItem('civiquest_previous_level');
+    return saved ? parseInt(saved) : 1;
+  });
   const [showLevelUp, setShowLevelUp] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -82,7 +83,6 @@ function HomePage() {
         }
         setPreviousLevel(newLevel);
         localStorage.setItem('civiquest_previous_level', String(newLevel));
-        setPreviousLevel(newLevel);
         setCiviquestUser({
           username: profile.username || user.email?.split('@')[0] || 'Aspirant',
           avatarUrl: profile.avatar_url || null,
@@ -96,12 +96,17 @@ function HomePage() {
         });
       }
 
+      // Fetch weak areas — fetch categories FIRST, then map
       if (perf && perf.length > 0) {
         const { data: categories } = await supabase.from('categories').select('id, name');
-        setWeakAreas(perf.slice(0, 3).map((p: any) => ({
+        const mapped = perf.slice(0, 3).map((p: any) => ({
           category: categories?.find(c => c.id === p.category_id)?.name || 'Unknown',
           accuracy: Math.round(p.accuracy_rate || 0),
-        })));
+        }));
+        setWeakAreas(mapped);
+      } else {
+        // Ensure weak areas is empty if no performance data
+        setWeakAreas([]);
       }
 
       const { data: lastSession } = sessionRes;
@@ -132,7 +137,7 @@ function HomePage() {
         {[...Array(4)].map((_, i) => (
           <div key={i} className={`${cardBgClass} rounded-2xl p-6 border ${borderClass} animate-pulse`}>
             <div className="h-6 bg-gray-300 dark:bg-zinc-700 rounded w-1/3 mb-4" />
-            <div className="h-4 bg-gray-200 dark:bg-zinc-600 rounded w-2/3" />
+            <div className="h-4 bg-zinc-300 dark:bg-zinc-600 rounded w-2/3" />
           </div>
         ))}
       </div>
@@ -156,12 +161,6 @@ function HomePage() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <div className={`sticky top-0 z-30 px-4 py-3 flex justify-end items-center gap-4 backdrop-blur-md border-b ${isDarkMode ? 'bg-zinc-900/70 border-zinc-800' : 'bg-white/70 border-zinc-200'}`}>
-        <button onClick={() => setIsProfileModalOpen(true)} className="hover:opacity-80 transition-opacity">
-          <UserAvatar avatarUrl={civiquestUser.avatarUrl} username={civiquestUser.username} size={40} className="w-10 h-10" />
-        </button>
-      </div>
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
         className={`${cardBgClass} rounded-2xl p-6 border ${borderClass} shadow-lg mx-4 mt-4 ${cardHover}`}>
@@ -210,16 +209,18 @@ function HomePage() {
           </div>
           <div className="flex flex-col gap-3 flex-1 text-center md:text-left">
             <h3 className={`text-xl font-bold ${textClass}`}>
-              {civiquestUser.pretestDone ? 'Continue Your Review' : 'Start Your Diagnostic Pre-Test'}
+              Exam Readiness
             </h3>
             <p className={`text-sm ${secondaryTextClass}`}>
-              {civiquestUser.pretestDone ? 'Daily adaptive quiz targets your weakest areas first.' : 'Identify your strengths and weaknesses across all exam categories.'}
+              {civiquestUser.pretestDone 
+                ? `You're ${civiquestUser.readiness}% ready — keep practicing to reach 100%.` 
+                : 'Complete the pre-test to see your exam readiness score.'}
             </p>
             <div className="flex gap-3 mt-2 justify-center md:justify-start">
-              <button onClick={() => navigate(civiquestUser.pretestDone ? '/quizzes' : '/pretest')} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition-all flex items-center gap-2 hover:scale-105">
+              <button onClick={() => navigate(civiquestUser.pretestDone ? '/quizzes?mode=daily' : '/pretest')} className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition-all flex items-center gap-2 hover:scale-105">
                 <Zap className="w-5 h-5" /> {civiquestUser.pretestDone ? 'Start Daily Quiz' : 'Take Pre-Test'}
               </button>
-              <button onClick={() => navigate('/lessons')} className={`border ${borderClass} ${textClass} px-6 py-3 rounded-xl font-semibold hover:bg-gray-100 dark:hover:bg-zinc-700 transition-all flex items-center gap-2`}>
+              <button onClick={() => navigate('/lessons')} className={`border ${isDarkMode ? 'border-zinc-700' : 'border-zinc-400'} ${textClass} px-6 py-3 rounded-xl font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-all flex items-center gap-2`}>
                 <BookOpen className="w-5 h-5" /> Lessons
               </button>
             </div>
