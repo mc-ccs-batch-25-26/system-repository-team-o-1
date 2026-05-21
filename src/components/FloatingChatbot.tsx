@@ -319,7 +319,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
         return;
       }
 
-      const openRouterApiKey = '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';
+      const openRouterApiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: {
