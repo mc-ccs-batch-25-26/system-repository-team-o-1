@@ -90,8 +90,12 @@ function HomePage() {
           streak: profile.streak_count || 0,
           pretestDone: profile.pretest_done || false,
           readiness: profile.pretest_done 
-            ? Math.round(((xp % 500) / 500) * 50 + avgAccuracy * 0.5)
-            : 0,
+           ? Math.round(
+           ((xp % 500) / 500) * 30 + 
+           (avgAccuracy * 0.5) + 
+           ((perf?.length || 0) / 3) * 20
+           )
+          : 0,
           created_at: profile.created_at || '',
         });
       }
@@ -177,7 +181,7 @@ function HomePage() {
               <div className={`text-xl font-bold ${textClass}`}>{civiquestUser.streak} days</div>
               <div className={`text-xs ${secondaryTextClass}`}>Current Streak</div>
             </div>
-          </div>
+          </div>  
         </div>
         <div className="mt-4">
           <div className="flex justify-between items-center mb-1">

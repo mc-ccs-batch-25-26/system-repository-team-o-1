@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, ArrowRight, FileText, AlertTriangle, Clock, Shield } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { ArrowLeft, ArrowRight, FileText, AlertTriangle, Clock, Shield, LayoutGrid } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../supabase/supabaseClient';
 import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES } from '../../data/mockQuestions';
 import QuizEngine from './QuizEngine';
@@ -9,8 +9,9 @@ import { saveMistake } from '../../data/mockQuestions';
 
 const CATEGORY_COLORS: Record<string, { pill: string; bar: string; score: string }> = {
   'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',     bar: 'bg-blue-500',    score: 'text-blue-600 dark:text-blue-400'    },
-  'Quantitative Ability': { pill: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', bar: 'bg-emerald-500', score: 'text-emerald-600 dark:text-emerald-400' },
-  'Logical Reasoning':    { pill: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',   bar: 'bg-violet-500',  score: 'text-violet-600 dark:text-violet-400'  },
+  'Numerical Ability':    { pill: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', bar: 'bg-emerald-500', score: 'text-emerald-600 dark:text-emerald-400' },
+  'Analytical Ability':   { pill: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',   bar: 'bg-violet-500',  score: 'text-violet-600 dark:text-violet-400'  },
+  'General Information':  { pill: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',       bar: 'bg-amber-500',   score: 'text-amber-600 dark:text-amber-400'    },
 };
 
 const getScoreColor = (correct: number, total: number) => {
@@ -42,6 +43,7 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
   const [timeLeft, setTimeLeft] = useState(EXAM_DURATION);
   const [score, setScore] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
+  const [showNavigator, setShowNavigator] = useState(false);
   const sessionRef = useRef<string | null>(null);
 
   const [categoryStats, setCategoryStats] = useState<Record<string, { correct: number; total: number }>>({});
@@ -428,6 +430,49 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
         </div>
       </div>
 
+      {/* Toggle Navigator Button */}
+      <div className="flex justify-between items-center px-1">
+        <button 
+          onClick={() => setShowNavigator(!showNavigator)}
+          className={`flex items-center gap-2 text-xs font-bold tracking-wider rounded-lg px-3 py-2 transition-colors ${isDarkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300' : 'bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700'} shadow-sm`}
+        >
+          <LayoutGrid className="w-4 h-4" />
+          <span>{answeredCount}/{questions.length} Answered</span>
+        </button>
+      </div>
+
+      {/* Expandable Grid */}
+      <AnimatePresence>
+        {showNavigator && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className={`p-4 rounded-2xl border shadow-sm ${cardBg}`}>
+              <div className="grid grid-cols-10 gap-1.5 w-full justify-items-center">
+                {questions.map((q, idx) => (
+                  <button
+                    key={q.id}
+                    onClick={() => setCurrentIndex(idx)}
+                    className={`w-7 h-7 flex items-center justify-center rounded text-[10px] font-bold transition-all ${
+                      idx === currentIndex
+                        ? 'bg-purple-600 text-white shadow-sm scale-110 z-10'
+                        : answers[q.id]
+                        ? isDarkMode ? 'bg-zinc-600 text-zinc-300' : 'bg-zinc-400 text-white'
+                        : isDarkMode ? 'border border-zinc-700 text-zinc-600 hover:bg-zinc-800' : 'border border-zinc-300 text-zinc-400 hover:bg-zinc-50'
+                    }`}
+                  >
+                    {idx + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* 5-min warning */}
       {showWarning && isTimeCritical && (
         <motion.div
@@ -462,10 +507,10 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
         <button
           onClick={prevQuestion}
           disabled={currentIndex === 0}
-          className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 border transition-all ${
+          className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all ${
             currentIndex === 0
-              ? 'opacity-40 cursor-not-allowed border-zinc-300 dark:border-zinc-800 text-zinc-400'
-              : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-400 text-zinc-700 hover:bg-zinc-50'}`
+              ? 'opacity-20 cursor-not-allowed text-zinc-400 border-transparent'
+              : `bg-transparent border ${isDarkMode ? 'border-zinc-700 text-zinc-400 hover:bg-zinc-800' : 'border-zinc-300 text-zinc-500 hover:bg-zinc-100'}`
           }`}
         >
           <ArrowLeft className="w-4 h-4" /> Previous
@@ -480,31 +525,6 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
             Submit Exam
           </button>
         )}
-      </div>
-
-      {/* Question navigator */}
-      <div className={`${cardBg} rounded-2xl p-5 border shadow-sm mt-8`}>
-        <div className="flex items-center justify-between mb-4">
-          <p className={`text-xs font-bold uppercase tracking-wider ${subtextClass}`}>Question Navigator</p>
-          <p className={`text-xs font-semibold ${subtextClass}`}>{answeredCount}/{questions.length} Done</p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {questions.map((q, idx) => (
-            <button
-              key={q.id}
-              onClick={() => setCurrentIndex(idx)}
-              className={`w-9 h-9 flex items-center justify-center rounded-xl text-xs font-bold transition-all ${
-                idx === currentIndex
-                  ? 'bg-purple-600 text-white ring-4 ring-purple-500/20 shadow-md'
-                  : answers[q.id]
-                  ? isDarkMode ? 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600' : 'bg-zinc-300 text-zinc-700 hover:bg-zinc-300'
-                  : isDarkMode ? 'bg-zinc-800 border border-zinc-700 text-zinc-500 hover:bg-zinc-700' : 'bg-white border border-zinc-300 text-zinc-400 hover:bg-zinc-50'
-              }`}
-            >
-              {idx + 1}
-            </button>
-          ))}
-        </div>
       </div>
     </div>
   );

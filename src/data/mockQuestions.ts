@@ -1,6 +1,7 @@
 import verbalAbility from './questions/verbal-ability.json';
-import quantitativeAbility from './questions/quantitative-ability.json';
-import logicalReasoning from './questions/logical-reasoning.json';
+import numericalAbility from './questions/numerical-ability.json';
+import analyticalAbility from './questions/analytical-ability.json';
+import generalInformation from './questions/general-information.json';
 
 export interface MockQuestion {
   id: string;
@@ -67,11 +68,12 @@ const normalizeQuestion = (q: any, category: string): MockQuestion => ({
 
 export const MOCK_QUESTIONS: Record<string, MockQuestion[]> = {
   'Verbal Ability': (verbalAbility as any).questions.map((q: any) => normalizeQuestion(q, 'Verbal Ability')),
-  'Quantitative Ability': (quantitativeAbility as any).questions.map((q: any) => normalizeQuestion(q, 'Quantitative Ability')),
-  'Logical Reasoning': (logicalReasoning as any).questions.map((q: any) => normalizeQuestion(q, 'Logical Reasoning')),
+  'Numerical Ability': (numericalAbility as any).questions.map((q: any) => normalizeQuestion(q, 'Numerical Ability')),
+  'Analytical Ability': (analyticalAbility as any).questions.map((q: any) => normalizeQuestion(q, 'Analytical Ability')),
+  'General Information': (generalInformation as any).questions.map((q: any) => normalizeQuestion(q, 'General Information')),
 };
 
-export const CATEGORIES = ['Verbal Ability', 'Quantitative Ability', 'Logical Reasoning'];
+export const CATEGORIES = ['Verbal Ability', 'Numerical Ability', 'Analytical Ability', 'General Information'];
 
 export const shuffleArray = <T>(array: T[]): T[] => {
   const shuffled = [...array];

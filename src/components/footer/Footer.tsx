@@ -9,13 +9,12 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
   const currentYear = new Date().getFullYear();
 
-  // Theme-based classes
-  const bgClass = isDarkMode ? "bg-zinc-950 border-t border-zinc-800" : "bg-zinc-50 border-t border-zinc-200";
+  const bgClass = isDarkMode ? "bg-zinc-950 border-t border-zinc-800" : "bg-zinc-50 border-t border-zinc-300";
   const textClass = isDarkMode ? "text-zinc-400" : "text-zinc-600";
   const headingClass = isDarkMode ? "text-zinc-100" : "text-zinc-900";
-  const linkHoverClass = isDarkMode ? "hover:text-green-400" : "hover:text-green-600";
+  const linkHoverClass = isDarkMode ? "hover:text-blue-400" : "hover:text-blue-600";
   const iconBgClass = isDarkMode ? "bg-zinc-900 hover:bg-zinc-800" : "bg-white hover:bg-zinc-100";
-  const dividerClass = isDarkMode ? "border-zinc-800" : "border-zinc-200";
+  const dividerClass = isDarkMode ? "border-zinc-800" : "border-zinc-300";
 
   return (
     <footer className={`${bgClass} transition-colors duration-300 w-full mt-auto`}>
@@ -28,7 +27,7 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
               <span className={`text-xl font-bold ${headingClass}`}>CiviQuest</span>
             </div>
             <p className={`text-sm leading-relaxed ${textClass}`}>
-              Empowering future Exam Taker with comprehensive preparation tools for the Civil Service Examination.
+              Empowering future civil service aspirants with comprehensive preparation tools for the Civil Service Examination.
             </p>
             <div className="flex gap-3">
               {[
@@ -52,17 +51,16 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
             <h3 className={`font-semibold mb-6 ${headingClass}`}>Platform</h3>
             <ul className="space-y-4">
               {[
-                { label: "Review Dashboard", to: "/" },
-                { label: "LessonsContent", to: "/LessonsPage" },
-                { label: "Mock Exams", to: "/QuizzesPage" },
-                { label: "Progress", to: "/ProgressPage" }
+                { label: "Dashboard", to: "/" },
+                { label: "Study Materials", to: "/lessons" },
+                { label: "Practice Test", to: "/quizzes" },
+                { label: "Progress", to: "/progress" }
               ].map((link, index) => (
                 <li key={index}>
                   <Link
                     to={link.to}
-                    className={`text-sm ${textClass} ${linkHoverClass} transition-colors duration-200 flex items-center gap-2`}
+                    className={`text-sm ${textClass} ${linkHoverClass} transition-colors duration-200`}
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity"></span>
                     {link.label}
                   </Link>
                 </li>
@@ -75,20 +73,13 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
             <h3 className={`font-semibold mb-6 ${headingClass}`}>Company</h3>
             <ul className="space-y-4">
               {[
-                { label: "About Us", to: "#" },
                 { label: "Terms of Service", to: "/terms-of-service" },
-                { label: "Privacy Policy", to: "#" }
+                { label: "Privacy Policy", to: "/privacy-policy" }
               ].map((link, index) => (
                 <li key={index}>
-                  {link.to.startsWith('/') ? (
-                    <Link to={link.to} className={`text-sm ${textClass} ${linkHoverClass} transition-colors duration-200`}>
-                      {link.label}
-                    </Link>
-                  ) : (
-                    <a href={link.to} className={`text-sm ${textClass} ${linkHoverClass} transition-colors duration-200`}>
-                      {link.label}
-                    </a>
-                  )}
+                  <Link to={link.to} className={`text-sm ${textClass} ${linkHoverClass} transition-colors duration-200`}>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -100,22 +91,22 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
                 <div className={`mt-1 p-2 rounded-md ${isDarkMode ? 'bg-zinc-900' : 'bg-white'} border ${dividerClass}`}>
-                  <FaEnvelope className="text-green-500" size={14} />
+                  <FaEnvelope className="text-blue-500" size={14} />
                 </div>
                 <div>
                   <p className={`text-xs font-medium mb-1 ${textClass}`}>Email us at</p>
-                  <a href="mailto:letreviewer148@gmail.com" className={`text-sm font-medium ${headingClass} ${linkHoverClass}`}>
+                  <a href="mailto:GamifiedCivilService@gmail.com" className={`text-sm font-medium ${headingClass} ${linkHoverClass}`}>
                     GamifiedCivilService@gmail.com
                   </a>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <div className={`mt-1 p-2 rounded-md ${isDarkMode ? 'bg-zinc-900' : 'bg-white'} border ${dividerClass}`}>
-                  <FaPhoneAlt className="text-green-500" size={14} />
+                  <FaPhoneAlt className="text-blue-500" size={14} />
                 </div>
                 <div>
                   <p className={`text-xs font-medium mb-1 ${textClass}`}>Call us</p>
-                  <a href="tel:+639610783789" className={`text-sm font-medium ${headingClass} ${linkHoverClass}`}>
+                  <a href="tel:+639519009913" className={`text-sm font-medium ${headingClass} ${linkHoverClass}`}>
                     +63 951 900 9913
                   </a>
                 </div>
@@ -131,8 +122,8 @@ const Footer: React.FC<FooterProps> = ({ isDarkMode }) => {
             © {currentYear} CiviQuest. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
-            <span className={`text-xs ${textClass} flex items-center gap-1`}>
-              Designed with <span className="text-red-500"></span> for Civil Service Aspirants
+            <span className={`text-xs ${textClass}`}>
+              Designed for Civil Service Aspirants
             </span>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
-import { BookOpen, Hash, Brain, Lightbulb, ChevronRight, CheckCircle2, Circle, TrendingUp, Library, Target } from 'lucide-react';
+import { BookOpen, Hash, Brain, Lightbulb, ChevronRight, CheckCircle2, Circle, TrendingUp, Library, Target, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from './supabase/supabaseClient';
 
@@ -13,8 +13,9 @@ interface CategoryProgress {
 
 const FLASHCARD_TOTALS: Record<string, number> = {
   'Verbal Ability': 50,
-  'Quantitative Ability': 50,
-  'Logical Reasoning': 50,
+  'Numerical Ability': 50,
+  'Analytical Ability': 50,
+  'General Information': 50,
 };
 
 const CATEGORY_CONFIG: Record<string, {
@@ -37,7 +38,7 @@ const CATEGORY_CONFIG: Record<string, {
     modules: ['Grammar rules', 'Vocabulary builder', 'Reading speed', 'Word analogies'],
     startLabel: 'Continue',
   },
-  'Quantitative Ability': {
+  'Numerical Ability': {
     icon: <Hash className="w-5 h-5" />,
     description: 'Arithmetic · Algebra · Number Series · Data Interpretation',
     accentBg: 'bg-emerald-50 dark:bg-emerald-900/30',
@@ -47,7 +48,7 @@ const CATEGORY_CONFIG: Record<string, {
     modules: ['Basic arithmetic', 'Word problems', 'Number series', 'Fractions & ratios'],
     startLabel: 'Start now',
   },
-  'Logical Reasoning': {
+  'Analytical Ability': {
     icon: <Brain className="w-5 h-5" />,
     description: 'Patterns · Deduction · Analogies · Critical Thinking',
     accentBg: 'bg-violet-50 dark:bg-violet-900/30',
@@ -57,6 +58,16 @@ const CATEGORY_CONFIG: Record<string, {
     modules: ['Pattern recognition', 'Syllogisms', 'Logical deduction', 'Critical analysis'],
     startLabel: 'Continue',
   },
+  'General Information': {
+    icon: <Globe className="w-5 h-5" />,
+    description: 'Philippine Constitution · RA 6713 · Environmental Laws',
+    accentBg: 'bg-amber-50 dark:bg-amber-900/30',
+    accentText: 'text-amber-600 dark:text-amber-400',
+    barColor: 'bg-amber-500',
+    borderAccent: 'border-l-amber-500',
+    modules: ['Constitution basics', 'Ethics across public service', 'Current events'],
+    startLabel: 'Start now',
+  }
 };
 
 const getStatus = (pct: number) => {
@@ -70,8 +81,9 @@ const LessonsPage: React.FC = () => {
   const navigate = useNavigate();
   const [categoryProgress, setCategoryProgress] = useState<CategoryProgress[]>([
     { name: 'Verbal Ability', total: 50, completed: 0, accuracy: 0 },
-    { name: 'Quantitative Ability', total: 50, completed: 0, accuracy: 0 },
-    { name: 'Logical Reasoning', total: 50, completed: 0, accuracy: 0 },
+    { name: 'Numerical Ability', total: 50, completed: 0, accuracy: 0 },
+    { name: 'Analytical Ability', total: 50, completed: 0, accuracy: 0 },
+    { name: 'General Information', total: 50, completed: 0, accuracy: 0 },
   ]);
   const [loading, setLoading] = useState(true);
 
@@ -81,7 +93,6 @@ const LessonsPage: React.FC = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) { setLoading(false); return; }
 
-        // Fetch from Supabase performance table (NOT localStorage)
         const { data: perf } = await supabase
           .from('performance')
           .select('accuracy_rate, total_answered, total_correct, category_id')
@@ -89,14 +100,13 @@ const LessonsPage: React.FC = () => {
 
         const { data: categories } = await supabase.from('categories').select('id, name');
 
-        // Map performance data to categories
         const updated = Object.entries(FLASHCARD_TOTALS).map(([name, total]) => {
           const category = categories?.find(c => c.name === name);
           const perfData = perf?.find(p => p.category_id === category?.id);
           return {
             name,
             total,
-            completed: perfData?.total_answered || 0,
+            completed: Math.min(perfData?.total_answered || 0, total),
             accuracy: Math.round(perfData?.accuracy_rate || 0),
           };
         });
@@ -154,7 +164,7 @@ const LessonsPage: React.FC = () => {
           { 
             label: 'Lessons done', 
             value: `${categoryProgress.filter(c => c.completed > 0).length}`, 
-            sub: 'across 3 subjects',
+            sub: 'across 4 subjects',
             colorClasses: isDarkMode ? 'bg-violet-900/10 border-violet-800/30' : 'bg-violet-50/50 border-violet-100',
             icon: (
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${isDarkMode ? 'bg-violet-900/40 text-violet-400' : 'bg-violet-100 text-violet-600'}`}>
@@ -225,7 +235,7 @@ const LessonsPage: React.FC = () => {
       )}
 
       {/* Subject Cards */}
-      <div className="space-y-4">
+      <div className="space-y-5">
         <p className={`text-xs font-bold uppercase tracking-wider ${subtextClass}`}>All subjects</p>
 
         {loading ? (
@@ -239,9 +249,11 @@ const LessonsPage: React.FC = () => {
             const cfg = CATEGORY_CONFIG[cat.name];
             const iconBg = cat.name === 'Verbal Ability'
               ? isDarkMode ? 'bg-blue-900/50 text-blue-400' : 'bg-blue-100 text-blue-600'
-              : cat.name === 'Quantitative Ability'
+              : cat.name === 'Numerical Ability'
               ? isDarkMode ? 'bg-emerald-900/50 text-emerald-400' : 'bg-emerald-100 text-emerald-600'
-              : isDarkMode ? 'bg-violet-900/50 text-violet-400' : 'bg-violet-100 text-violet-600';
+              : cat.name === 'Analytical Ability'
+              ? isDarkMode ? 'bg-violet-900/50 text-violet-400' : 'bg-violet-100 text-violet-600'
+              : isDarkMode ? 'bg-amber-900/50 text-amber-400' : 'bg-amber-100 text-amber-600';
 
             return (
               <motion.div
@@ -250,72 +262,41 @@ const LessonsPage: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + index * 0.08 }}
                 onClick={() => navigate(`/lessons/${encodeURIComponent(cat.name)}`)}
-                className={`${cardBg} rounded-xl border shadow-sm cursor-pointer group transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] overflow-hidden`}
+                className={`rounded-2xl border p-5 cursor-pointer group transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] ${
+                  isDarkMode ? 'bg-blue-900/10 border-blue-800/30' : 'bg-blue-50/50 border-blue-200'
+                }`}
               >
-                <div className="p-6 pb-4 flex items-start gap-4">
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
+                <div className="flex items-center gap-5">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
                     {cfg?.icon}
                   </div>
+                  
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-3 flex-wrap">
-                      <h3 className={`text-base font-bold ${textClass}`}>{cat.name}</h3>
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${status.cls}`}>
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className={`text-lg font-bold ${textClass} truncate`}>{cat.name}</h3>
+                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${status.cls} whitespace-nowrap`}>
                         {status.label}
                       </span>
                     </div>
-                    <p className={`text-xs mt-1 ${subtextClass}`}>{cfg?.description}</p>
-                  </div>
-                  <div className="flex-shrink-0 text-right">
-                    <p className={`text-xl font-bold ${textClass}`}>{pct}%</p>
-                  </div>
-                </div>
-
-                <div className="px-6 pb-4">
-                  <div className={`w-full ${trackBg} rounded-full h-1.5 overflow-hidden`}>
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${pct}%` }}
-                      transition={{ duration: 0.6, delay: 0.2 + index * 0.1, ease: 'easeOut' }}
-                      className={`h-1.5 rounded-full ${cfg?.barColor || 'bg-blue-500'}`}
-                    />
-                  </div>
-                </div>
-
-                <div className="px-6 pb-4 flex flex-wrap gap-2">
-                  {(cfg?.modules || []).map((mod, mi) => {
-                    const done = mi < Math.ceil((pct / 100) * (cfg?.modules.length || 4));
-                    return (
-                      <div
-                        key={mod}
-                        className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md border transition-colors ${
-                          done
-                            ? isDarkMode
-                              ? 'bg-zinc-700 border-zinc-600 text-zinc-300'
-                              : 'bg-zinc-50 border-zinc-300 text-zinc-600'
-                            : isDarkMode
-                            ? 'bg-zinc-800 border-zinc-700 text-zinc-500'
-                            : 'bg-white border-zinc-300 text-zinc-400'
-                        }`}
-                      >
-                        {done
-                          ? <CheckCircle2 className={`w-3 h-3 ${cfg?.accentText}`} />
-                          : <Circle className="w-3 h-3 text-zinc-300" />
-                        }
-                        {mod}
+                    
+                    <p className={`text-sm mb-3 truncate ${subtextClass}`}>{cfg?.description}</p>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className={`flex-1 ${trackBg} rounded-full h-2 overflow-hidden`}>
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${pct}%` }}
+                          transition={{ duration: 0.6, delay: 0.2 + index * 0.1, ease: 'easeOut' }}
+                          className={`h-full rounded-full ${cfg?.barColor || 'bg-blue-500'}`}
+                        />
                       </div>
-                    );
-                  })}
-                </div>
-
-                <div className={`px-6 py-3 flex items-center justify-between border-t ${isDarkMode ? 'border-zinc-700' : 'border-zinc-300'}`}>
-                  <p className={`text-xs ${subtextClass}`}>
-                    {cat.completed}/{cat.total} items
-                    {cat.accuracy > 0 && <span className="ml-2">· {cat.accuracy}% accuracy</span>}
-                  </p>
-                  <span className={`text-sm font-semibold flex items-center gap-1 transition-all group-hover:gap-2 ${cfg?.accentText}`}>
-                    {pct === 0 ? 'Start now' : pct >= 70 ? 'Review' : 'Continue'}
-                    <ChevronRight className="w-4 h-4" />
-                  </span>
+                      <span className={`text-xs font-bold ${textClass} w-9 text-right`}>{pct}%</span>
+                    </div>
+                  </div>
+                  
+                  <div className={`p-2 rounded-full flex-shrink-0 ml-2 ${isDarkMode ? 'bg-zinc-800 text-zinc-400 group-hover:bg-zinc-700 group-hover:text-white' : 'bg-zinc-50 text-zinc-400 group-hover:bg-zinc-100 group-hover:text-zinc-600'} transition-colors`}>
+                    <ChevronRight className="w-5 h-5" />
+                  </div>
                 </div>
               </motion.div>
             );

@@ -1,0 +1,45 @@
+{
+  "category": "General Information",
+  "questions": [
+    {
+      "id": "gen-info-1",
+      "text": "Under the 1987 Philippine Constitution, who has the sole power to declare the existence of a state of war?",
+      "options": ["The President", "The Armed Forces of the Philippines", "The Congress", "The Supreme Court"],
+      "correctAnswer": "The Congress",
+      "explanation": "Article VI, Section 23 of the 1987 Philippine Constitution provides that the Congress, by a vote of two-thirds of both Houses in joint session assembled, voting separately, shall have the sole power to declare the existence of a state of war.",
+      "source": "General Information — Philippine Constitution"
+    },
+    {
+      "id": "gen-info-2",
+      "text": "Republic Act No. 6713 is also known as:",
+      "options": ["The Anti-Graft and Corrupt Practices Act", "Code of Conduct and Ethical Standards for Public Officials and Employees", "The Philippine Clean Air Act", "The Local Government Code"],
+      "correctAnswer": "Code of Conduct and Ethical Standards for Public Officials and Employees",
+      "explanation": "RA 6713 is the Code of Conduct and Ethical Standards for Public Officials and Employees, which establishes rules promoting a high standard of ethics in public service.",
+      "source": "General Information — RA 6713"
+    },
+    {
+      "id": "gen-info-3",
+      "text": "Which principle in the Philippine Constitution ensures that no one branch of the government becomes too powerful?",
+      "options": ["Separation of Powers", "Checks and Balances", "Republicanism", "Social Justice"],
+      "correctAnswer": "Checks and Balances",
+      "explanation": "While 'Separation of Powers' divides the government into three branches, 'Checks and Balances' is the specific principle that allows each branch to monitor and limit the powers of the other branches.",
+      "source": "General Information — Philippine Constitution"
+    },
+    {
+      "id": "gen-info-4",
+      "text": "Complete the phrase from RA 6713: Public office is a public ______.",
+      "options": ["Right", "Property", "Privilege", "Trust"],
+      "correctAnswer": "Trust",
+      "explanation": "Public office is a public trust. Public officers and employees must at all times be accountable to the people, serve them with utmost responsibility, integrity, loyalty and efficiency. (Sec. 1, Art. XI, 1987 Constitution and adopted by RA 6713)",
+      "source": "General Information — RA 6713"
+    },
+    {
+      "id": "gen-info-5",
+      "text": "According to the Code of Conduct and Ethical Standards, public officials and employees shall at all times be loyal to the Republic and to the Filipino people. This means they must:",
+      "options": ["Defend the President at all times", "Promote the use of locally produced goods and resources", "Avoid any foreign travel", "Follow all orders from superiors blindly"],
+      "correctAnswer": "Promote the use of locally produced goods and resources",
+      "explanation": "Under RA 6713 Section 4(e) on 'Nationalism and patriotism', public officials and employees shall at all times be loyal to the Republic and the Filipino people, promote the use of locally produced goods, resources and technology.",
+      "source": "General Information — RA 6713"
+    }
+  ]
+}

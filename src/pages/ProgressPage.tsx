@@ -18,9 +18,10 @@ const ProgressPage = () => {
             setLoading(true);
             
             // Fetch category performance
-            const data = await getCategoryPerformanceData();
+            const data = await getCategoryPerformanceData();    
             const sortedData = [...data].sort((a, b) => b.accuracy - a.accuracy);
             setCategoryData(sortedData);
+            
 
             // Fetch user XP and streak
             try {

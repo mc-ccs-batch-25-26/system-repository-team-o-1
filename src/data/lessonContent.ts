@@ -119,10 +119,10 @@ export const lessonContent: Category[] = [
     ],
   },
 
-  // ── QUANTITATIVE ABILITY ──
+  // ── NUMERICAL ABILITY ──
   {
     id: 'quant',
-    title: 'Quantitative Ability',
+    title: 'Numerical Ability',
     topics: [
       {
         id: 'q-arithmetic',
@@ -151,10 +151,10 @@ export const lessonContent: Category[] = [
     ],
   },
 
-  // ── LOGICAL REASONING ──
+  // ── ANALYTICAL ABILITY ──
   {
     id: 'logic',
-    title: 'Logical Reasoning',
+    title: 'Analytical Ability',
     topics: [
       {
         id: 'l-analogies',
@@ -180,6 +180,18 @@ export const lessonContent: Category[] = [
       { id: 'l-syllogisms', title: 'Syllogisms', description: 'Evaluate logical arguments with two premises and a conclusion.', items: [], quizQuestions: [] },
       { id: 'l-pattern', title: 'Pattern Recognition', description: 'Spot visual or conceptual patterns in information.', items: [], quizQuestions: [] },
       { id: 'l-critical', title: 'Critical Analysis', description: 'Evaluate arguments, identify assumptions, and find flaws.', items: [], quizQuestions: [] },
+    ],
+  },
+  
+  // ── GENERAL INFORMATION ──
+  {
+    id: 'gen-info',
+    title: 'General Information',
+    topics: [
+      { id: 'g-constitution', title: 'Philippine Constitution', description: 'Study the fundamental law of the land.', items: [], quizQuestions: [] },
+      { id: 'g-ethics', title: 'RA 6713', description: 'Code of Conduct and Ethical Standards for Public Officials.', items: [], quizQuestions: [] },
+      { id: 'g-environment', title: 'Environmental Laws', description: 'Learn about major environmental protections in the PH.', items: [], quizQuestions: [] },
+      { id: 'g-current', title: 'Current Events', description: 'Stay updated on national issues and government programs.', items: [], quizQuestions: [] },
     ],
   },
 ];

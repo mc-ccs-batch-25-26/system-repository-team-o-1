@@ -1,16 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, ArrowRight, Zap, Target, Lightbulb } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Zap, Target, Lightbulb, Calendar, CheckCircle } from 'lucide-react';
 import { supabase } from '../../supabase/supabaseClient';
-import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES } from '../../data/mockQuestions';
+import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES, saveMistake } from '../../data/mockQuestions';
 import QuizEngine from './QuizEngine';
 import SmartRecommendation from './SmartRecommendation';
 import { motion } from 'framer-motion';
-import { saveMistake } from '../../data/mockQuestions';
 
 const CATEGORY_COLORS: Record<string, { pill: string; bar: string; score: string }> = {
   'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',     bar: 'bg-blue-500',    score: 'text-blue-600 dark:text-blue-400'    },
-  'Quantitative Ability': { pill: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', bar: 'bg-emerald-500', score: 'text-emerald-600 dark:text-emerald-400' },
-  'Logical Reasoning':    { pill: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',   bar: 'bg-violet-500',  score: 'text-violet-600 dark:text-violet-400'  },
+  'Numerical Ability':    { pill: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', bar: 'bg-emerald-500', score: 'text-emerald-600 dark:text-emerald-400' },
+  'Analytical Ability':   { pill: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',   bar: 'bg-violet-500',  score: 'text-violet-600 dark:text-violet-400'  },
+  'General Information':  { pill: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',       bar: 'bg-amber-500',   score: 'text-amber-600 dark:text-amber-400'    },
 };
 
 const getScoreColor = (correct: number, total: number) => {
@@ -43,9 +43,24 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
   const [loadingAI, setLoadingAI] = useState(false);
   const [earnedXP, setEarnedXP] = useState(0);
   const sessionRef = useRef<string | null>(null);
-
-  // Weak area stats for recommendation
   const [categoryStats, setCategoryStats] = useState<Record<string, { correct: number; total: number }>>({});
+  const [hasCompletedToday, setHasCompletedToday] = useState(false);
+  const [isCheckingStatus, setIsCheckingStatus] = useState(true);
+
+  useEffect(() => {
+    const checkCompletion = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const today = new Date().toLocaleDateString('en-CA');
+        const completedDate = localStorage.getItem(`daily_quiz_completed_${user.id}`);
+        if (completedDate === today) {
+          setHasCompletedToday(true);
+        }
+      }
+      setIsCheckingStatus(false);
+    };
+    checkCompletion();
+  }, []);
 
   const currentQuestion = questions[currentIndex];
   const progress = questions.length > 0 ? ((currentIndex + 1) / questions.length) * 100 : 0;
@@ -62,10 +77,13 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
         .order('accuracy_rate', { ascending: true });
 
       if (perf && perf.length > 0) {
-        weakCategories = perf.map((p: any) => p.categories?.name).filter(Boolean);
+        // Only include categories with accuracy below 70%
+        weakCategories = perf
+          .filter((p: any) => (p.accuracy_rate || 0) < 70)
+          .map((p: any) => p.categories?.name)
+          .filter(Boolean);
       }
 
-      // Create quiz session
       const { data: session } = await supabase.from('quiz_sessions').insert({
         user_id: user.id,
         is_pretest: false,
@@ -74,39 +92,27 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
       if (session) sessionRef.current = session.id;
     }
 
-    // Build weighted question pool: weak categories get more questions
     let selectedQuestions: MockQuestion[] = [];
 
     if (weakCategories.length > 0) {
-      // 6 questions from weakest categories
+      // All 5 questions from weak categories
       weakCategories.forEach(cat => {
         const catQuestions = (MOCK_QUESTIONS[cat] || [])
           .map(q => ({ ...q, category: cat }))
           .sort((a, b) => (Number(a.difficulty) || 1) - (Number(b.difficulty) || 1));
-        const take = Math.min(6, catQuestions.length);
-        selectedQuestions.push(...shuffleArray(catQuestions).slice(0, take));
-      });
-      
-      // 4 questions from other categories
-      const otherCats = CATEGORIES.filter(c => !weakCategories.includes(c));
-      otherCats.forEach(cat => {
-        const catQuestions = (MOCK_QUESTIONS[cat] || [])
-          .map(q => ({ ...q, category: cat }));
-        selectedQuestions.push(...shuffleArray(catQuestions).slice(0, 2));
+        selectedQuestions.push(...shuffleArray(catQuestions));
       });
     } else {
-      // No weak areas yet — take evenly from all categories
+      // No weak areas — 5 random from all categories
       CATEGORIES.forEach(cat => {
         const catQuestions = (MOCK_QUESTIONS[cat] || [])
           .map(q => ({ ...q, category: cat }));
-        selectedQuestions.push(...shuffleArray(catQuestions).slice(0, 4));
+        selectedQuestions.push(...shuffleArray(catQuestions));
       });
     }
 
-    // Shuffle final selection and take 10
-    selectedQuestions = shuffleArray(selectedQuestions).slice(0, 10);
-
-    // Sort by difficulty within the final 10
+    // Shuffle and limit to 5
+    selectedQuestions = shuffleArray(selectedQuestions).slice(0, 5);
     selectedQuestions.sort((a, b) => (Number(a.difficulty) || 1) - (Number(b.difficulty) || 1));
 
     setQuestions(selectedQuestions);
@@ -156,7 +162,6 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
     setAnswers(prev => ({ ...prev, [questionId]: selected }));
     if (isCorrect) setScore(prev => prev + 1);
 
-    // Save to Supabase
     if (sessionRef.current) {
       try {
         await supabase.from('quiz_session_answers').insert({
@@ -169,14 +174,12 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
         console.error('Failed to save answer:', err);
       }
     }
+
     if (!isCorrect) {
-  saveMistake(q, selected, q.category || 'Unknown');
-    }
-    if (!isCorrect) {
+      saveMistake(q, selected, q.category || 'Unknown');
       await getAIExplanation(q, selected);
     }
   };
-  
 
   const nextQuestion = () => {
     setShowAI(false);
@@ -189,7 +192,6 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
   };
 
   const finishQuiz = async () => {
-    // Calculate category stats
     const stats: Record<string, { correct: number; total: number }> = {};
     questions.forEach(q => {
       const cat = q.category;
@@ -209,7 +211,6 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
     const today = new Date().toLocaleDateString('en-CA');
     const yesterday = new Date(Date.now() - 86400000).toLocaleDateString('en-CA');
 
-    // Update profile
     const { data: profile } = await supabase.from('profiles').select('xp, level, streak_count, last_active_date').eq('id', user.id).single();
     if (profile) {
       const newXP = (profile.xp || 0) + xp;
@@ -229,7 +230,9 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
       }).eq('id', user.id);
     }
 
-    // Update quiz session
+    localStorage.setItem(`daily_quiz_completed_${user.id}`, today);
+    setHasCompletedToday(true);
+
     if (sessionRef.current) {
       await supabase.from('quiz_sessions').update({
         score,
@@ -237,12 +240,10 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
       }).eq('id', sessionRef.current);
     }
 
-    // Update performance per category
     const { data: categories } = await supabase.from('categories').select('id, name');
     for (const [catName, catStats] of Object.entries(stats)) {
       const catId = categories?.find(c => c.name === catName)?.id;
       if (catId) {
-        // Fetch existing performance for this category
         const { data: existingPerf } = await supabase
           .from('performance')
           .select('total_answered, total_correct')
@@ -252,7 +253,6 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
 
         const prevAnswered = existingPerf?.total_answered || 0;
         const prevCorrect = existingPerf?.total_correct || 0;
-
         const newTotalAnswered = prevAnswered + catStats.total;
         const newTotalCorrect = prevCorrect + catStats.correct;
         const newAccuracy = newTotalAnswered > 0 ? (newTotalCorrect / newTotalAnswered) * 100 : 0;
@@ -271,7 +271,6 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
     }
   };
 
-  // Find weakest category for recommendation
   const getWeakest = () => {
     let weakest = { category: '', accuracy: 100 };
     for (const [cat, stats] of Object.entries(categoryStats)) {
@@ -285,6 +284,50 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
 
   // START SCREEN
   if (phase === 'start') {
+    if (isCheckingStatus) {
+      return (
+        <div className="w-full max-w-3xl mx-auto px-4 py-9 flex justify-center items-center h-64">
+           <div className={`text-sm ${subtextClass}`}>Checking daily status...</div>
+        </div>
+      );
+    }
+
+    if (hasCompletedToday) {
+      return (
+        <div className="w-full max-w-3xl mx-auto px-4 py-9 space-y-6">
+          <button onClick={onBack} className={`flex items-center gap-2 text-sm font-medium ${subtextClass} hover:${textClass} transition-colors`}>
+            <ArrowLeft className="w-4 h-4" /> Back to Quiz Hub
+          </button>
+
+          <div className={`${cardBg} rounded-2xl p-8 md:p-11 border shadow-sm space-y-6 text-center`}>
+            <div className="flex flex-col items-center gap-3">
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-100'} ring-8 ${isDarkMode ? 'ring-zinc-800/50' : 'ring-zinc-50'}`}>
+                <CheckCircle className="w-8 h-8 text-emerald-500" />
+              </div>
+              <div>
+                <h1 className={`text-xl font-bold mt-2 ${textClass}`}>You're all done for today!</h1>
+                <p className={`text-sm mt-2 leading-relaxed ${subtextClass} max-w-md mx-auto`}>
+                  Great job answering your daily quiz. Check back tomorrow for a new set of personalized questions to keep your streak going!
+                </p>
+              </div>
+            </div>
+
+            <div className={`rounded-xl p-5 border ${isDarkMode ? 'bg-zinc-800/80 border-zinc-700/80' : 'bg-zinc-50 border-zinc-200'}`}>
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <Calendar className={`w-4 h-4 ${subtextClass}`} />
+                <span className={`text-sm font-semibold ${textClass}`}>Come back tomorrow</span>
+              </div>
+              <p className={`text-xs ${subtextClass}`}>Your next daily quiz will be available after midnight.</p>
+            </div>
+
+            <button onClick={onBack} className={`w-full py-3.5 rounded-xl font-semibold text-sm ${btnPrimary} transition-colors`}>
+              Return to Hub
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="w-full max-w-3xl mx-auto px-4 py-9 space-y-6">
         <button onClick={onBack} className={`flex items-center gap-2 text-sm font-medium ${subtextClass} hover:${textClass} transition-colors`}>
@@ -297,23 +340,20 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
               <Zap className="w-7 h-7 text-yellow-500" />
             </div>
             <div>
-              
               <h1 className={`text-xl font-bold ${textClass}`}>Daily Adaptive Quiz</h1>
               <p className={`text-sm mt-1 leading-relaxed ${subtextClass}`}>
-                10 questions prioritized from your weak areas
+                5 questions targeting your weak areas
               </p>
             </div>
           </div>
 
           <div className={`rounded-xl p-4 space-y-3 ${isDarkMode ? 'bg-zinc-800/60' : 'bg-zinc-50'}`}>
             <p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass}`}>What to expect</p>
-            {/* Weak Areas Focus */}
-           <WeakAreasFocus isDarkMode={isDarkMode} />
+            <WeakAreasFocus isDarkMode={isDarkMode} />
             {[
-            
-              { icon: Target, bg: isDarkMode ? 'bg-blue-900/30' : 'bg-blue-50', color: 'text-blue-500', text: 'Questions from Verbal, Quantitative & Logical Reasoning' },
+              { icon: Target, bg: isDarkMode ? 'bg-blue-900/30' : 'bg-blue-50', color: 'text-blue-500', text: 'Questions from Verbal, Numerical, Analytical & General Information' },
               { icon: Lightbulb, bg: isDarkMode ? 'bg-yellow-900/30' : 'bg-yellow-50', color: 'text-yellow-500', text: 'AI-powered explanations for wrong answers' },
-              { icon: Zap, bg: isDarkMode ? 'bg-green-900/30' : 'bg-green-50', color: 'text-green-500', text: 'Earn XP and track your progress' },
+              { icon: Zap, bg: isDarkMode ? 'bg-green-900/30' : 'bg-green-50', color: 'text-green-500', text: 'Earn XP and build your streak' },
             ].map(({ icon: Icon, bg, color, text }) => (
               <div key={text} className="flex items-center gap-3">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${bg}`}>
@@ -381,7 +421,6 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
           })}
         </div>
 
-        {/* Smart Recommendation */}
         {weakest.category && (
           <SmartRecommendation
             weakestCategory={weakest.category}
@@ -393,10 +432,7 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
         )}
 
         <div className="flex gap-3 pt-2">
-          <button onClick={() => { setPhase('start'); }} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm ${btnPrimary} transition-colors`}>
-            Take Another Quiz
-          </button>
-          <button onClick={onBack} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm border transition-colors ${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`}>
+          <button onClick={onBack} className={`w-full py-3.5 rounded-xl font-semibold text-sm ${btnPrimary} transition-colors`}>
             Back to Hub
           </button>
         </div>
@@ -411,7 +447,6 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
         <ArrowLeft className="w-5 h-5" /> Exit Quiz
       </button>
 
-      {/* Progress bar */}
       <div className="space-y-2">
         <div className={`flex justify-between text-xs font-medium ${subtextClass}`}>
           <span>Question {currentIndex + 1} of {questions.length}</span>
@@ -465,9 +500,10 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
     </div>
   );
 };
+
 const WeakAreasFocus = ({ isDarkMode }: { isDarkMode: boolean }) => {
   const [weakCats, setWeakCats] = useState<string[]>([]);
-  
+
   useEffect(() => {
     const fetch = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -478,7 +514,12 @@ const WeakAreasFocus = ({ isDarkMode }: { isDarkMode: boolean }) => {
         .eq('user_id', user.id)
         .order('accuracy_rate', { ascending: true });
       if (perf && perf.length > 0) {
-        setWeakCats(perf.slice(0, 2).map((p: any) => p.categories?.name).filter(Boolean));
+        setWeakCats(perf
+          .filter((p: any) => (p.accuracy_rate || 0) < 70)
+          .slice(0, 2)
+          .map((p: any) => p.categories?.name)
+          .filter(Boolean)
+        );
       }
     };
     fetch();
@@ -502,4 +543,4 @@ const WeakAreasFocus = ({ isDarkMode }: { isDarkMode: boolean }) => {
   );
 };
 
-export default DailyQuiz;
+export default DailyQuiz; 

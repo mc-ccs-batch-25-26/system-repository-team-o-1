@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Timer, Flame, Trophy, Zap, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Timer, Flame, Trophy, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../supabase/supabaseClient';
-import { MOCK_QUESTIONS, MockQuestion, shuffleArray } from '../../data/mockQuestions';
+import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES, saveMistake } from '../../data/mockQuestions';
 import QuizEngine from './QuizEngine';
-import { saveMistake } from '../../data/mockQuestions';
 
 interface TimedChallengeProps {
   isDarkMode: boolean;
@@ -21,6 +20,7 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
 
   const [phase, setPhase] = useState<'start' | 'challenge' | 'results'>('start');
   const [questions, setQuestions] = useState<MockQuestion[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('Verbal Ability');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [timeLeft, setTimeLeft] = useState(CHALLENGE_DURATION);
@@ -64,8 +64,9 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
       if (session) sessionRef.current = session.id;
     }
 
-    // Shuffle all questions — large pool for speed quiz
-    const allQs = shuffleArray(Object.values(MOCK_QUESTIONS).flat());
+    // Pick 50 questions from the selected category
+    const categoryQs = (MOCK_QUESTIONS as any)[selectedCategory] || [];
+    const allQs = shuffleArray([...categoryQs]).slice(0, 50);
     setQuestions(allQs);
     setPhase('challenge');
     setCurrentIndex(0);
@@ -121,15 +122,6 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
         console.error('Failed to save answer:', err);
       }
     }
-
-    // Auto-advance to next question
-    setTimeout(() => {
-      if (currentIndex < questions.length - 1) {
-        setCurrentIndex(prev => prev + 1);
-      } else {
-        finishChallenge();
-      }
-    }, 500);
   };
 
   const finishChallenge = async () => {
@@ -209,6 +201,25 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="space-y-3">
+            <p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass} text-center`}>Choose Category</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {CATEGORIES.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`py-3 px-4 rounded-xl text-sm font-semibold border transition-all ${
+                    selectedCategory === cat 
+                      ? 'border-rose-500 bg-rose-500/10 text-rose-600 dark:text-rose-400' 
+                      : `border-zinc-200 dark:border-zinc-700 ${isDarkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300' : 'bg-white hover:bg-zinc-50 text-zinc-700'}`
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           {personalBest && (
@@ -355,6 +366,32 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
           isDarkMode={isDarkMode}
         />
       )}
+
+      {/* Navigation Buttons */}
+      <div className="flex gap-3 pt-4">
+        <button
+          onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
+          disabled={currentIndex === 0}
+          className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 border transition-colors ${
+            currentIndex === 0
+              ? 'opacity-50 cursor-not-allowed border-zinc-200 text-zinc-400 dark:border-zinc-800 dark:text-zinc-600'
+              : isDarkMode 
+                ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' 
+                : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'
+          }`}
+        >
+          <ChevronLeft className="w-5 h-5" /> Previous
+        </button>
+        <button
+          onClick={() => {
+            if (currentIndex < questions.length - 1) setCurrentIndex(prev => prev + 1);
+            else finishChallenge();
+          }}
+          className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-colors ${btnPrimary}`}
+        >
+          {currentIndex < questions.length - 1 ? 'Next' : 'Finish'} <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
     </div>
   );
 };

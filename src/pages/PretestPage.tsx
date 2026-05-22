@@ -7,14 +7,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const PRETEST_QUESTIONS: MockQuestion[] = [
   ...shuffleArray(MOCK_QUESTIONS['Verbal Ability'] || []).slice(0, 5),
-  ...shuffleArray(MOCK_QUESTIONS['Quantitative Ability'] || []).slice(0, 5),
-  ...shuffleArray(MOCK_QUESTIONS['Logical Reasoning'] || []).slice(0, 5),
+  ...shuffleArray(MOCK_QUESTIONS['Numerical Ability'] || []).slice(0, 5),
+  ...shuffleArray(MOCK_QUESTIONS['Analytical Ability'] || []).slice(0, 5),
+  ...shuffleArray(MOCK_QUESTIONS['General Information'] || []).slice(0, 5),
 ];
 
 const CATEGORY_COLORS: Record<string, { pill: string; bar: string; score: string }> = {
-  'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',     bar: 'bg-blue-500',    score: 'text-blue-600 dark:text-blue-400'    },
-  'Quantitative Ability': { pill: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', bar: 'bg-emerald-500', score: 'text-emerald-600 dark:text-emerald-400' },
-  'Logical Reasoning':    { pill: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',   bar: 'bg-violet-500',  score: 'text-violet-600 dark:text-violet-400'  },
+  'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',         bar: 'bg-blue-500',    score: 'text-blue-600 dark:text-blue-400'     },
+  'Numerical Ability':    { pill: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', bar: 'bg-emerald-500', score: 'text-emerald-600 dark:text-emerald-400' },
+  'Analytical Ability':   { pill: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',   bar: 'bg-violet-500',  score: 'text-violet-600 dark:text-violet-400'  },
+  'General Information':  { pill: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',       bar: 'bg-amber-500',   score: 'text-amber-600 dark:text-amber-400'    },
 };
 
 const getScoreColor = (correct: number, total: number) => {
@@ -234,7 +236,7 @@ const PretestPage = () => {
             </div>
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-xl px-4 py-3 text-center text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
               <span className="font-semibold">{PRETEST_QUESTIONS.length} questions</span> across 3 categories<br />
-              Verbal Ability · Quantitative Ability · Logical Reasoning
+              Verbal Ability · Numerical Ability · Analytical Ability · General Information
             </div>
             <button
               onClick={() => setShowIntro(false)}

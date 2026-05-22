@@ -387,7 +387,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
               ) : (
                 <>
                   <div className="flex items-center space-x-2">
-                    <img src="/robot.png" alt="CiviQuest" className="w-7 h-7 object-contain brightness-100 invert rounded" />
+                    <img src="/robot.png" alt="CiviQuest" className="w-8 h-8 object-contain brightness-100 invert rounded" />
                     <h3 className="font-medium text-sm">CiviQuest Buddy</h3>
                   </div>
                   <div className="flex space-x-1">
@@ -521,10 +521,10 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
         whileHover={{ scale: 1.1}}
         whileTap={{ scale: 0.9 }}
         onClick={toggleChat}
-        className="bg-green-600 hover:bg-green-500 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-xl transition-colors"
+        className="bg-blue-800 hover:bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl transition-colors"
         aria-label="Open AI Chat"
       >
-        <img src="/robot.png" alt="Chat" className="w-18 h-12 object-contain brightness-100 invert" />
+        <img src="/robot.png" alt="Chat" className="w-14 h-11 object-contain brightness-100 invert" />
       </motion.button>
     </div>
   );

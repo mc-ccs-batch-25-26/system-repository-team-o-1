@@ -6,8 +6,9 @@ import { lessonContent } from '../../data/lessonContent';
 
 const CATEGORY_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   'Verbal Ability': { bg: 'bg-blue-500', text: 'text-blue-500', border: 'border-blue-500' },
-  'Quantitative Ability': { bg: 'bg-emerald-500', text: 'text-emerald-500', border: 'border-emerald-500' },
-  'Logical Reasoning': { bg: 'bg-violet-500', text: 'text-violet-500', border: 'border-violet-500' }
+  'Numerical Ability': { bg: 'bg-emerald-500', text: 'text-emerald-500', border: 'border-emerald-500' },
+  'Analytical Ability': { bg: 'bg-violet-500', text: 'text-violet-500', border: 'border-violet-500' },
+  'General Information': { bg: 'bg-amber-500', text: 'text-amber-500', border: 'border-amber-500' }
 };
 
 export const TopicsListScreen: React.FC = () => {

@@ -42,7 +42,7 @@ const TermsOfService: React.FC = () => {
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex items-center">
             <FaGraduationCap className={`w-10 h-10 ${isDarkMode ? 'text-zinc-100' : 'text-zinc-900'} mr-3`} />
-            <h1 className={`text-3xl font-bold ${isDarkMode ? 'dark-brand-text' : 'light-brand-text'}`}>LET Reviewer</h1>
+            <h1 className={`text-3xl font-bold ${isDarkMode ? 'dark-brand-text' : 'light-brand-text'}`}>CiviQuest</h1>
           </div>
           
           <div className="space-x-6 hidden md:flex items-center text-lg">
@@ -74,13 +74,13 @@ const TermsOfService: React.FC = () => {
             <p className="mb-4">Welcome to CiviQuest ("we," "our," or "us"). These Terms of Service ("Terms") govern your access to and use of the Civil Services application (the "Service"). By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the Terms, you do not have permission to access the Service.</p>
             
             <h2 className={`text-xl font-semibold mt-8 mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>2. Educational Purpose</h2>
-            <p className="mb-4">The LET Reviewer application is primarily designed for educational purposes, providing review materials and practice tests for the Civil ServiceS Examination for Aspirants (CSE) in the Philippines. While initially developed as a system project, we may offer commercial versions or premium features in the future.</p>
+            <p className="mb-4">The CiviQuest application is primarily designed for educational purposes, providing review materials and practice tests for the Civil ServiceS Examination for Aspirants (CSE) in the Philippines. While initially developed as a system project, we may offer commercial versions or premium features in the future.</p>
             
             <h2 className={`text-xl font-semibold mt-8 mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>3. User Accounts</h2>
             <p className="mb-4">To access certain features of the Service, you may be required to create an account. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You agree to provide accurate information during the registration process and to update such information to keep it accurate and current.</p>
             
             <h2 className={`text-xl font-semibold mt-8 mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>4. Intellectual Property Rights</h2>
-            <p className="mb-4">The Service and its original content, features, and functionality are owned by LET Reviewer and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws. You may not reproduce, distribute, modify, create derivative works of, publicly display, publicly perform, republish, download, store, or transmit any of the material on our Service without prior written consent.</p>
+            <p className="mb-4">The Service and its original content, features, and functionality are owned by CiviQuest and are protected by international copyright, trademark, patent, trade secret, and other intellectual property or proprietary rights laws. You may not reproduce, distribute, modify, create derivative works of, publicly display, publicly perform, republish, download, store, or transmit any of the material on our Service without prior written consent.</p>
             
             <h2 className={`text-xl font-semibold mt-8 mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>5. User Content</h2>
             <p className="mb-4">By submitting any content to the Service, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, and distribute your content in any existing or future media. You represent and warrant that you own or have the necessary rights to the content you submit and that it does not violate any third party's intellectual property rights.</p>
