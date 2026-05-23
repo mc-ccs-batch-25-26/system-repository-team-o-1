@@ -1,45 +1,941 @@
 {
-  "category": "General Information",
-  "questions": [
-    {
-      "id": "gen-info-1",
-      "text": "Under the 1987 Philippine Constitution, who has the sole power to declare the existence of a state of war?",
-      "options": ["The President", "The Armed Forces of the Philippines", "The Congress", "The Supreme Court"],
-      "correctAnswer": "The Congress",
-      "explanation": "Article VI, Section 23 of the 1987 Philippine Constitution provides that the Congress, by a vote of two-thirds of both Houses in joint session assembled, voting separately, shall have the sole power to declare the existence of a state of war.",
-      "source": "General Information — Philippine Constitution"
-    },
-    {
-      "id": "gen-info-2",
-      "text": "Republic Act No. 6713 is also known as:",
-      "options": ["The Anti-Graft and Corrupt Practices Act", "Code of Conduct and Ethical Standards for Public Officials and Employees", "The Philippine Clean Air Act", "The Local Government Code"],
-      "correctAnswer": "Code of Conduct and Ethical Standards for Public Officials and Employees",
-      "explanation": "RA 6713 is the Code of Conduct and Ethical Standards for Public Officials and Employees, which establishes rules promoting a high standard of ethics in public service.",
-      "source": "General Information — RA 6713"
-    },
-    {
-      "id": "gen-info-3",
-      "text": "Which principle in the Philippine Constitution ensures that no one branch of the government becomes too powerful?",
-      "options": ["Separation of Powers", "Checks and Balances", "Republicanism", "Social Justice"],
-      "correctAnswer": "Checks and Balances",
-      "explanation": "While 'Separation of Powers' divides the government into three branches, 'Checks and Balances' is the specific principle that allows each branch to monitor and limit the powers of the other branches.",
-      "source": "General Information — Philippine Constitution"
-    },
-    {
-      "id": "gen-info-4",
-      "text": "Complete the phrase from RA 6713: Public office is a public ______.",
-      "options": ["Right", "Property", "Privilege", "Trust"],
-      "correctAnswer": "Trust",
-      "explanation": "Public office is a public trust. Public officers and employees must at all times be accountable to the people, serve them with utmost responsibility, integrity, loyalty and efficiency. (Sec. 1, Art. XI, 1987 Constitution and adopted by RA 6713)",
-      "source": "General Information — RA 6713"
-    },
-    {
-      "id": "gen-info-5",
-      "text": "According to the Code of Conduct and Ethical Standards, public officials and employees shall at all times be loyal to the Republic and to the Filipino people. This means they must:",
-      "options": ["Defend the President at all times", "Promote the use of locally produced goods and resources", "Avoid any foreign travel", "Follow all orders from superiors blindly"],
-      "correctAnswer": "Promote the use of locally produced goods and resources",
-      "explanation": "Under RA 6713 Section 4(e) on 'Nationalism and patriotism', public officials and employees shall at all times be loyal to the Republic and the Filipino people, promote the use of locally produced goods, resources and technology.",
-      "source": "General Information — RA 6713"
-    }
-  ]
+    "category": "General Information",
+    "questions": [
+        {
+            "id": "GI_CON_001",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "easy",
+            "question": "What is the supreme law of the Philippines?",
+            "options": [
+                "Civil Code",
+                "1987 Philippine Constitution",
+                "Revised Penal Code",
+                "Local Government Code"
+            ],
+            "correctAnswer": "1987 Philippine Constitution",
+            "explanation": "The 1987 Constitution is the fundamental and supreme law of the land. All other laws must conform to it. It was ratified on February 2, 1987.",
+            "source": "1987 Philippine Constitution — Article II",
+            "tags": [
+                "constitution",
+                "philippine government"
+            ]
+        },
+        {
+            "id": "GI_CON_002",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "easy",
+            "question": "How many branches of government does the Philippines have?",
+            "options": [
+                "Two",
+                "Three",
+                "Four",
+                "Five"
+            ],
+            "correctAnswer": "Three",
+            "explanation": "The Philippine government has three co-equal branches: Executive (President), Legislative (Congress), and Judiciary (Supreme Court). This follows the principle of separation of powers.",
+            "source": "1987 Philippine Constitution — Article VI, VII, VIII",
+            "tags": [
+                "constitution",
+                "branches of government"
+            ]
+        },
+        {
+            "id": "GI_CON_003",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "easy",
+            "question": "What is the term of office of the President of the Philippines?",
+            "options": [
+                "4 years",
+                "5 years",
+                "6 years",
+                "8 years"
+            ],
+            "correctAnswer": "6 years",
+            "explanation": "Under the 1987 Constitution, the President serves a single term of 6 years without re-election. The Vice President serves the same term but may be re-elected for one additional term.",
+            "source": "1987 Philippine Constitution — Article VII, Section 4",
+            "tags": [
+                "constitution",
+                "president"
+            ]
+        },
+        {
+            "id": "GI_CON_004",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "easy",
+            "question": "Who has the power to declare martial law in the Philippines?",
+            "options": [
+                "Supreme Court",
+                "Senate President",
+                "President",
+                "Congress"
+            ],
+            "correctAnswer": "President",
+            "explanation": "The President may declare martial law in case of invasion or rebellion when public safety requires it. However, Congress may revoke it, and the Supreme Court may review its constitutionality.",
+            "source": "1987 Philippine Constitution — Article VII, Section 18",
+            "tags": [
+                "constitution",
+                "martial law"
+            ]
+        },
+        {
+            "id": "GI_CON_005",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "medium",
+            "question": "What is the minimum age requirement to become President of the Philippines?",
+            "options": [
+                "35 years old",
+                "40 years old",
+                "45 years old",
+                "50 years old"
+            ],
+            "correctAnswer": "40 years old",
+            "explanation": "Article VII, Section 2 of the 1987 Constitution states that the President must be at least 40 years of age on the day of the election, a natural-born citizen, and a resident of the Philippines for at least 10 years.",
+            "source": "1987 Philippine Constitution — Article VII, Section 2",
+            "tags": [
+                "constitution",
+                "qualifications"
+            ]
+        },
+        {
+            "id": "GI_CON_006",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "medium",
+            "question": "Which branch of government has the power to impeach the President?",
+            "options": [
+                "Supreme Court",
+                "Senate",
+                "House of Representatives",
+                "Both House and Senate"
+            ],
+            "correctAnswer": "Both House and Senate",
+            "explanation": "The House of Representatives has the exclusive power to initiate impeachment cases. The Senate has the sole power to try and decide impeachment cases. It's a two-step process involving both chambers.",
+            "source": "1987 Philippine Constitution — Article XI",
+            "tags": [
+                "constitution",
+                "impeachment"
+            ]
+        },
+        {
+            "id": "GI_CON_007",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "medium",
+            "question": "The Philippine Constitution guarantees the right to information on matters of:",
+            "options": [
+                "Private concern only",
+                "Public concern",
+                "National security only",
+                "Government secrets"
+            ],
+            "correctAnswer": "Public concern",
+            "explanation": "Article III, Section 7 of the Bill of Rights guarantees the right of the people to information on matters of public concern. This promotes transparency and accountability in government.",
+            "source": "1987 Philippine Constitution — Article III, Section 7",
+            "tags": [
+                "constitution",
+                "bill of rights",
+                "right to information"
+            ]
+        },
+        {
+            "id": "GI_CON_008",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "hard",
+            "question": "According to the Constitution, the State shall protect and promote the right of the people to a balanced and healthful:",
+            "options": [
+                "Economy",
+                "Education",
+                "Ecology",
+                "Employment"
+            ],
+            "correctAnswer": "Ecology",
+            "explanation": "Article II, Section 16 declares that 'The State shall protect and advance the right of the people to a balanced and healthful ecology in accord with the rhythm and harmony of nature.'",
+            "source": "1987 Philippine Constitution — Article II, Section 16",
+            "tags": [
+                "constitution",
+                "environment"
+            ]
+        },
+        {
+            "id": "GI_CON_009",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "medium",
+            "question": "How many senators comprise the Philippine Senate?",
+            "options": [
+                "12",
+                "24",
+                "50",
+                "100"
+            ],
+            "correctAnswer": "24",
+            "explanation": "The Senate is composed of 24 senators elected at large by qualified Filipino voters. They serve a term of 6 years and may not serve more than two consecutive terms.",
+            "source": "1987 Philippine Constitution — Article VI, Section 2",
+            "tags": [
+                "constitution",
+                "senate"
+            ]
+        },
+        {
+            "id": "GI_CON_010",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "hard",
+            "question": "Under the 1987 Constitution, who is the Commander-in-Chief of the Armed Forces of the Philippines?",
+            "options": [
+                "Secretary of National Defense",
+                "Chief of Staff of the AFP",
+                "President of the Philippines",
+                "Senate President"
+            ],
+            "correctAnswer": "President of the Philippines",
+            "explanation": "Article VII, Section 18 states: 'The President shall be the Commander-in-Chief of all armed forces of the Philippines.' The President holds supreme military authority.",
+            "source": "1987 Philippine Constitution — Article VII, Section 18",
+            "tags": [
+                "constitution",
+                "commander-in-chief"
+            ]
+        },
+        {
+            "id": "GI_RA6713_001",
+            "subcategory": "RA 6713 — Code of Conduct",
+            "difficulty": "easy",
+            "question": "RA 6713 is also known as:",
+            "options": [
+                "Local Government Code",
+                "Code of Conduct and Ethical Standards for Public Officials and Employees",
+                "Civil Service Law",
+                "Anti-Graft and Corrupt Practices Act"
+            ],
+            "correctAnswer": "Code of Conduct and Ethical Standards for Public Officials and Employees",
+            "explanation": "Republic Act No. 6713, enacted in 1989, establishes a code of conduct and ethical standards for public officials and employees to uphold public interest over personal interest.",
+            "source": "RA 6713 — Code of Conduct and Ethical Standards",
+            "tags": [
+                "ra 6713",
+                "code of conduct"
+            ]
+        },
+        {
+            "id": "GI_RA6713_002",
+            "subcategory": "RA 6713 — Code of Conduct",
+            "difficulty": "easy",
+            "question": "Under RA 6713, public officials and employees must always uphold what over personal interest?",
+            "options": [
+                "Political interest",
+                "Public interest",
+                "Family interest",
+                "Religious interest"
+            ],
+            "correctAnswer": "Public interest",
+            "explanation": "Section 4(a) of RA 6713 states that public officials shall always uphold the public interest over and above personal interest. This is a fundamental ethical principle in public service.",
+            "source": "RA 6713 — Section 4",
+            "tags": [
+                "ra 6713",
+                "public interest"
+            ]
+        },
+        {
+            "id": "GI_RA6713_003",
+            "subcategory": "RA 6713 — Code of Conduct",
+            "difficulty": "medium",
+            "question": "Which of the following is one of the eight norms of conduct under RA 6713?",
+            "options": [
+                "Political neutrality",
+                "Commitment to public interest",
+                "Professionalism",
+                "All of the above"
+            ],
+            "correctAnswer": "All of the above",
+            "explanation": "RA 6713 lists eight norms of conduct: commitment to public interest, professionalism, justness and sincerity, political neutrality, responsiveness to the public, nationalism and patriotism, commitment to democracy, and simple living.",
+            "source": "RA 6713 — Section 4",
+            "tags": [
+                "ra 6713",
+                "norms of conduct"
+            ]
+        },
+        {
+            "id": "GI_RA6713_004",
+            "subcategory": "RA 6713 — Code of Conduct",
+            "difficulty": "medium",
+            "question": "Under RA 6713, public officials are prohibited from accepting gifts valued above what amount?",
+            "options": [
+                "₱500",
+                "₱1,000",
+                "₱3,000",
+                "The law prohibits accepting any gift in connection with official duties"
+            ],
+            "correctAnswer": "The law prohibits accepting any gift in connection with official duties",
+            "explanation": "RA 6713 prohibits public officials from soliciting or accepting, directly or indirectly, any gift, gratuity, favor, entertainment, loan, or anything of monetary value in the course of their official duties.",
+            "source": "RA 6713 — Section 7(d)",
+            "tags": [
+                "ra 6713",
+                "gifts",
+                "prohibitions"
+            ]
+        },
+        {
+            "id": "GI_RA6713_005",
+            "subcategory": "RA 6713 — Code of Conduct",
+            "difficulty": "medium",
+            "question": "According to RA 6713, what must public officials file annually?",
+            "options": [
+                "Income tax return only",
+                "Statement of Assets, Liabilities, and Net Worth (SALN)",
+                "Certificate of employment",
+                "Medical certificate"
+            ],
+            "correctAnswer": "Statement of Assets, Liabilities, and Net Worth (SALN)",
+            "explanation": "Section 8 of RA 6713 requires all public officials and employees to file under oath their SALN and a disclosure of business interests and financial connections annually.",
+            "source": "RA 6713 — Section 8",
+            "tags": [
+                "ra 6713",
+                "SALN"
+            ]
+        },
+        {
+            "id": "GI_ENV_001",
+            "subcategory": "Environmental Laws",
+            "difficulty": "easy",
+            "question": "RA 9003 is also known as the:",
+            "options": [
+                "Clean Air Act",
+                "Ecological Solid Waste Management Act",
+                "Clean Water Act",
+                "Environmental Impact Assessment Law"
+            ],
+            "correctAnswer": "Ecological Solid Waste Management Act",
+            "explanation": "Republic Act No. 9003, enacted in 2001, provides the legal framework for systematic, comprehensive, and ecological solid waste management in the Philippines.",
+            "source": "RA 9003 — Ecological Solid Waste Management Act",
+            "tags": [
+                "environmental laws",
+                "RA 9003",
+                "solid waste"
+            ]
+        },
+        {
+            "id": "GI_ENV_002",
+            "subcategory": "Environmental Laws",
+            "difficulty": "easy",
+            "question": "RA 8749 is known as the Philippine:",
+            "options": [
+                "Clean Water Act",
+                "Clean Air Act",
+                "Toxic Substances Act",
+                "Environmental Awareness Act"
+            ],
+            "correctAnswer": "Clean Air Act",
+            "explanation": "Republic Act No. 8749, or the Philippine Clean Air Act of 1999, provides for a comprehensive air quality management policy and program to achieve and maintain healthy air.",
+            "source": "RA 8749 — Philippine Clean Air Act",
+            "tags": [
+                "environmental laws",
+                "clean air act"
+            ]
+        },
+        {
+            "id": "GI_ENV_003",
+            "subcategory": "Environmental Laws",
+            "difficulty": "medium",
+            "question": "RA 9275, the Philippine Clean Water Act, aims to protect:",
+            "options": [
+                "Air quality",
+                "Water bodies from pollution",
+                "Forest reserves",
+                "Endangered species"
+            ],
+            "correctAnswer": "Water bodies from pollution",
+            "explanation": "RA 9275 or the Philippine Clean Water Act of 2004 provides comprehensive water quality management to protect, preserve, and revive the quality of Philippine fresh, brackish, and marine waters.",
+            "source": "RA 9275 — Philippine Clean Water Act",
+            "tags": [
+                "environmental laws",
+                "clean water act"
+            ]
+        },
+        {
+            "id": "GI_ENV_004",
+            "subcategory": "Environmental Laws",
+            "difficulty": "medium",
+            "question": "What does the '3R' principle in solid waste management stand for?",
+            "options": [
+                "Remove, Replace, Reuse",
+                "Reduce, Reuse, Recycle",
+                "Recover, Reuse, Reduce",
+                "Recycle, Remove, Reduce"
+            ],
+            "correctAnswer": "Reduce, Reuse, Recycle",
+            "explanation": "RA 9003 promotes the 3Rs: Reduce (minimize waste generation), Reuse (use items repeatedly), and Recycle (process waste into new products). These form the foundation of ecological waste management.",
+            "source": "RA 9003 — Ecological Solid Waste Management Act",
+            "tags": [
+                "environmental laws",
+                "3R",
+                "solid waste"
+            ]
+        },
+        {
+            "id": "GI_ENV_005",
+            "subcategory": "Environmental Laws",
+            "difficulty": "hard",
+            "question": "Under RA 8749, what are the two major types of air pollutants?",
+            "options": [
+                "Primary and secondary pollutants",
+                "Natural and artificial pollutants",
+                "Toxic and non-toxic pollutants",
+                "Visible and invisible pollutants"
+            ],
+            "correctAnswer": "Primary and secondary pollutants",
+            "explanation": "Primary pollutants are emitted directly from sources (e.g., carbon monoxide). Secondary pollutants form when primary pollutants react in the atmosphere (e.g., ground-level ozone). The Clean Air Act regulates both types.",
+            "source": "RA 8749 — Philippine Clean Air Act",
+            "tags": [
+                "environmental laws",
+                "air pollutants"
+            ]
+        },
+        {
+            "id": "GI_HR_001",
+            "subcategory": "Human Rights",
+            "difficulty": "easy",
+            "question": "The Universal Declaration of Human Rights (UDHR) was adopted by the United Nations in:",
+            "options": [
+                "1945",
+                "1948",
+                "1950",
+                "1960"
+            ],
+            "correctAnswer": "1948",
+            "explanation": "The UDHR was adopted by the UN General Assembly on December 10, 1948. This date is now celebrated annually as International Human Rights Day.",
+            "source": "Universal Declaration of Human Rights",
+            "tags": [
+                "human rights",
+                "UDHR"
+            ]
+        },
+        {
+            "id": "GI_HR_002",
+            "subcategory": "Human Rights",
+            "difficulty": "easy",
+            "question": "Which article of the Philippine Constitution contains the Bill of Rights?",
+            "options": [
+                "Article II",
+                "Article III",
+                "Article IV",
+                "Article V"
+            ],
+            "correctAnswer": "Article III",
+            "explanation": "Article III of the 1987 Philippine Constitution enumerates the Bill of Rights, which guarantees fundamental civil and political rights to all persons in the Philippines.",
+            "source": "1987 Philippine Constitution — Article III",
+            "tags": [
+                "constitution",
+                "bill of rights"
+            ]
+        },
+        {
+            "id": "GI_HR_003",
+            "subcategory": "Human Rights",
+            "difficulty": "medium",
+            "question": "What right is protected by the writ of habeas corpus?",
+            "options": [
+                "Right to vote",
+                "Right against illegal detention",
+                "Right to free speech",
+                "Right to travel"
+            ],
+            "correctAnswer": "Right against illegal detention",
+            "explanation": "A writ of habeas corpus is a court order demanding that a person in custody be brought before the court to determine if the detention is lawful. It protects against arbitrary imprisonment.",
+            "source": "1987 Philippine Constitution — Article III, Section 15",
+            "tags": [
+                "human rights",
+                "habeas corpus"
+            ]
+        },
+        {
+            "id": "GI_HR_004",
+            "subcategory": "Human Rights",
+            "difficulty": "medium",
+            "question": "The Commission on Human Rights (CHR) in the Philippines was created by:",
+            "options": [
+                "Presidential Decree",
+                "The 1987 Constitution",
+                "Republic Act",
+                "Supreme Court decision"
+            ],
+            "correctAnswer": "The 1987 Constitution",
+            "explanation": "Article XIII, Section 17 of the 1987 Constitution created the Commission on Human Rights as an independent office to investigate human rights violations involving civil and political rights.",
+            "source": "1987 Philippine Constitution — Article XIII",
+            "tags": [
+                "human rights",
+                "CHR"
+            ]
+        },
+        {
+            "id": "GI_GOV_001",
+            "subcategory": "Philippine Government",
+            "difficulty": "easy",
+            "question": "The Philippines is what type of government?",
+            "options": [
+                "Monarchy",
+                "Parliamentary",
+                "Democratic and Republican",
+                "Communist"
+            ],
+            "correctAnswer": "Democratic and Republican",
+            "explanation": "Article II, Section 1 of the 1987 Constitution states: 'The Philippines is a democratic and republican State. Sovereignty resides in the people and all government authority emanates from them.'",
+            "source": "1987 Philippine Constitution — Article II, Section 1",
+            "tags": [
+                "government",
+                "democracy"
+            ]
+        },
+        {
+            "id": "GI_GOV_002",
+            "subcategory": "Philippine Government",
+            "difficulty": "easy",
+            "question": "What is the highest court in the Philippines?",
+            "options": [
+                "Court of Appeals",
+                "Sandiganbayan",
+                "Supreme Court",
+                "Regional Trial Court"
+            ],
+            "correctAnswer": "Supreme Court",
+            "explanation": "The Supreme Court is the highest judicial body in the Philippines, composed of a Chief Justice and 14 Associate Justices. It is the court of last resort for all cases.",
+            "source": "1987 Philippine Constitution — Article VIII",
+            "tags": [
+                "government",
+                "supreme court"
+            ]
+        },
+        {
+            "id": "GI_GOV_003",
+            "subcategory": "Philippine Government",
+            "difficulty": "medium",
+            "question": "How many justices comprise the Supreme Court of the Philippines?",
+            "options": [
+                "9",
+                "12",
+                "15",
+                "21"
+            ],
+            "correctAnswer": "15",
+            "explanation": "The Supreme Court is composed of 1 Chief Justice and 14 Associate Justices, totaling 15 members. They serve until age 70 or until they become incapacitated.",
+            "source": "1987 Philippine Constitution — Article VIII, Section 4",
+            "tags": [
+                "government",
+                "supreme court"
+            ]
+        },
+        {
+            "id": "GI_GOV_004",
+            "subcategory": "Philippine Government",
+            "difficulty": "medium",
+            "question": "What is the Sandiganbayan?",
+            "options": [
+                "A trial court for criminal cases",
+                "A special court that tries graft and corruption cases against public officials",
+                "An appellate court for civil cases",
+                "A local government court"
+            ],
+            "correctAnswer": "A special court that tries graft and corruption cases against public officials",
+            "explanation": "The Sandiganbayan is a special appellate collegial court that has jurisdiction over criminal and civil cases involving graft and corrupt practices committed by public officers and employees.",
+            "source": "1987 Philippine Constitution — Article XI & PD 1606",
+            "tags": [
+                "government",
+                "sandiganbayan"
+            ]
+        },
+        {
+            "id": "GI_CSC_001",
+            "subcategory": "Civil Service Commission",
+            "difficulty": "easy",
+            "question": "The Civil Service Commission (CSC) is responsible for:",
+            "options": [
+                "Conducting elections",
+                "Overseeing the civil service and government employees",
+                "Collecting taxes",
+                "Enforcing criminal laws"
+            ],
+            "correctAnswer": "Overseeing the civil service and government employees",
+            "explanation": "The CSC is the central personnel agency of the Philippine government, responsible for establishing a career service and promoting morale, efficiency, integrity, and responsiveness in the civil service.",
+            "source": "1987 Philippine Constitution — Article IX-B",
+            "tags": [
+                "civil service",
+                "CSC"
+            ]
+        },
+        {
+            "id": "GI_CSC_002",
+            "subcategory": "Civil Service Commission",
+            "difficulty": "medium",
+            "question": "Under the Constitution, appointments in the civil service shall be made based on:",
+            "options": [
+                "Political affiliation",
+                "Merit and fitness",
+                "Recommendation of politicians",
+                "Seniority"
+            ],
+            "correctAnswer": "Merit and fitness",
+            "explanation": "Article IX-B, Section 2(2) of the Constitution states: 'Appointments in the civil service shall be made only according to merit and fitness to be determined, as far as practicable, by competitive examination.'",
+            "source": "1987 Philippine Constitution — Article IX-B",
+            "tags": [
+                "civil service",
+                "merit system"
+            ]
+        },
+        {
+            "id": "GI_CSC_003",
+            "subcategory": "Civil Service Commission",
+            "difficulty": "hard",
+            "question": "Which of the following is NOT within the coverage of the Civil Service?",
+            "options": [
+                "Government-owned and controlled corporations (GOCCs) with original charters",
+                "All branches of government including constitutional commissions",
+                "Private companies with government contracts",
+                "Local government units"
+            ],
+            "correctAnswer": "Private companies with government contracts",
+            "explanation": "The civil service covers all branches and agencies of government, including GOCCs with original charters. Private companies, even those with government contracts, are not part of the civil service.",
+            "source": "1987 Philippine Constitution — Article IX-B, Section 2(1)",
+            "tags": [
+                "civil service",
+                "coverage"
+            ]
+        },
+        {
+            "id": "GI_FLAG_001",
+            "subcategory": "Philippine Symbols",
+            "difficulty": "easy",
+            "question": "What do the three stars on the Philippine flag represent?",
+            "options": [
+                "The three branches of government",
+                "Luzon, Visayas, and Mindanao",
+                "The three original provinces that revolted against Spain",
+                "The three national heroes"
+            ],
+            "correctAnswer": "Luzon, Visayas, and Mindanao",
+            "explanation": "The three stars represent the three main geographical island groups of the Philippines: Luzon, Visayas, and Mindanao.",
+            "source": "Republic Act 8491 — Flag and Heraldic Code of the Philippines",
+            "tags": [
+                "philippine flag",
+                "national symbols"
+            ]
+        },
+        {
+            "id": "GI_FLAG_002",
+            "subcategory": "Philippine Symbols",
+            "difficulty": "medium",
+            "question": "What do the eight rays of the sun on the Philippine flag represent?",
+            "options": [
+                "Eight original cabinet positions",
+                "Eight provinces that first revolted against Spain",
+                "Eight major islands",
+                "Eight founding fathers"
+            ],
+            "correctAnswer": "Eight provinces that first revolted against Spain",
+            "explanation": "The eight rays represent the eight provinces that were placed under martial law by the Spanish colonial government for revolting: Manila, Cavite, Bulacan, Pampanga, Nueva Ecija, Tarlac, Laguna, and Batangas.",
+            "source": "Republic Act 8491 — Flag and Heraldic Code of the Philippines",
+            "tags": [
+                "philippine flag",
+                "national symbols"
+            ]
+        },
+        {
+            "id": "GI_FLAG_003",
+            "subcategory": "Philippine Symbols",
+            "difficulty": "easy",
+            "question": "Who composed the Philippine national anthem?",
+            "options": [
+                "Jose Palma",
+                "Julian Felipe",
+                "Andres Bonifacio",
+                "Emilio Aguinaldo"
+            ],
+            "correctAnswer": "Julian Felipe",
+            "explanation": "Julian Felipe composed the music of the Philippine national anthem 'Lupang Hinirang' in 1898. The lyrics were written by Jose Palma in 1899, originally as a poem titled 'Filipinas.'",
+            "source": "Republic Act 8491 — Flag and Heraldic Code of the Philippines",
+            "tags": [
+                "national anthem",
+                "national symbols"
+            ]
+        },
+        {
+            "id": "GI_LAW_001",
+            "subcategory": "Important Laws",
+            "difficulty": "medium",
+            "question": "RA 9485, also known as the Anti-Red Tape Act, aims to:",
+            "options": [
+                "Eliminate corruption",
+                "Reduce bureaucratic red tape and improve efficiency in government service delivery",
+                "Increase government revenue",
+                "Privatize government services"
+            ],
+            "correctAnswer": "Reduce bureaucratic red tape and improve efficiency in government service delivery",
+            "explanation": "RA 9485 (Anti-Red Tape Act of 2007), now amended by RA 11032 (Ease of Doing Business Act), requires government agencies to process transactions within specified timeframes to reduce bureaucratic delays.",
+            "source": "RA 11032 — Ease of Doing Business and Efficient Government Service Delivery Act",
+            "tags": [
+                "laws",
+                "anti-red tape"
+            ]
+        },
+        {
+            "id": "GI_LAW_002",
+            "subcategory": "Important Laws",
+            "difficulty": "medium",
+            "question": "RA 6713 requires public officials to perform their duties with:",
+            "options": [
+                "Political consideration",
+                "Highest degree of excellence, professionalism, intelligence, and skill",
+                "Minimum effort",
+                "Religious conviction"
+            ],
+            "correctAnswer": "Highest degree of excellence, professionalism, intelligence, and skill",
+            "explanation": "Section 4(b) of RA 6713 mandates that public officials shall perform and discharge their duties with the highest degree of excellence, professionalism, intelligence, and skill.",
+            "source": "RA 6713 — Section 4(b)",
+            "tags": [
+                "laws",
+                "ra 6713"
+            ]
+        },
+        {
+            "id": "GI_GOV_005",
+            "subcategory": "Philippine Government",
+            "difficulty": "hard",
+            "question": "The principle that government funds must be spent only for public purposes is called:",
+            "options": [
+                "Separation of powers",
+                "Checks and balances",
+                "Public purpose doctrine",
+                "Equal protection clause"
+            ],
+            "correctAnswer": "Public purpose doctrine",
+            "explanation": "The public purpose doctrine holds that government may only use public funds for public purposes. This prevents the use of taxpayer money for private benefit and is a fundamental principle in public finance.",
+            "source": "1987 Philippine Constitution — Article IX-D & jurisprudence",
+            "tags": [
+                "government",
+                "public finance"
+            ]
+        },
+        {
+            "id": "GI_HR_005",
+            "subcategory": "Human Rights",
+            "difficulty": "hard",
+            "question": "The constitutional right against self-incrimination means:",
+            "options": [
+                "A person can refuse to testify in any proceeding",
+                "A person cannot be compelled to testify against himself in a criminal case",
+                "A person cannot be arrested without a warrant",
+                "A person has the right to remain silent only during trial"
+            ],
+            "correctAnswer": "A person cannot be compelled to testify against himself in a criminal case",
+            "explanation": "Article III, Section 17 of the Constitution states: 'No person shall be compelled to be a witness against himself.' This right applies specifically in criminal proceedings.",
+            "source": "1987 Philippine Constitution — Article III, Section 17",
+            "tags": [
+                "human rights",
+                "self-incrimination"
+            ]
+        },
+        {
+            "id": "GI_ENV_006",
+            "subcategory": "Environmental Laws",
+            "difficulty": "medium",
+            "question": "PD 1151 requires government agencies to prepare what document for projects affecting the environment?",
+            "options": [
+                "Business permit",
+                "Environmental Impact Statement (EIS)",
+                "Annual budget report",
+                "Project proposal"
+            ],
+            "correctAnswer": "Environmental Impact Statement (EIS)",
+            "explanation": "Presidential Decree 1151 (Philippine Environmental Policy) requires all government agencies to prepare an Environmental Impact Statement for any action that may significantly affect the quality of the environment.",
+            "source": "PD 1151 — Philippine Environmental Policy",
+            "tags": [
+                "environmental laws",
+                "EIS"
+            ]
+        },
+        {
+            "id": "GI_CURR_001",
+            "subcategory": "Current Events & Programs",
+            "difficulty": "easy",
+            "question": "Which government agency is primarily responsible for disaster response in the Philippines?",
+            "options": [
+                "Department of Health",
+                "National Disaster Risk Reduction and Management Council (NDRRMC)",
+                "Department of Social Welfare and Development",
+                "Philippine National Police"
+            ],
+            "correctAnswer": "National Disaster Risk Reduction and Management Council (NDRRMC)",
+            "explanation": "The NDRRMC, created under RA 10121, is the primary government agency responsible for disaster preparedness, response, and rehabilitation. It is headed by the Secretary of National Defense.",
+            "source": "RA 10121 — Philippine Disaster Risk Reduction and Management Act",
+            "tags": [
+                "current events",
+                "disaster management"
+            ]
+        },
+        {
+            "id": "GI_CURR_002",
+            "subcategory": "Current Events & Programs",
+            "difficulty": "easy",
+            "question": "RA 10931, the Universal Access to Quality Tertiary Education Act, provides:",
+            "options": [
+                "Scholarships only for honor students",
+                "Free tuition in state universities and colleges (SUCs)",
+                "Free tuition in private universities",
+                "Free elementary education"
+            ],
+            "correctAnswer": "Free tuition in state universities and colleges (SUCs)",
+            "explanation": "RA 10931, enacted in 2017, provides free tuition and other school fees for students enrolled in SUCs, local universities and colleges (LUCs), and state-run technical-vocational institutions.",
+            "source": "RA 10931 — Universal Access to Quality Tertiary Education Act",
+            "tags": [
+                "current events",
+                "free tuition"
+            ]
+        },
+        {
+            "id": "GI_CURR_003",
+            "subcategory": "Current Events & Programs",
+            "difficulty": "medium",
+            "question": "The 4Ps (Pantawid Pamilyang Pilipino Program) is a government program that provides:",
+            "options": [
+                "Free housing for all Filipinos",
+                "Conditional cash grants to poor households for health, nutrition, and education",
+                "Free healthcare for senior citizens",
+                "Employment assistance for OFWs"
+            ],
+            "correctAnswer": "Conditional cash grants to poor households for health, nutrition, and education",
+            "explanation": "The 4Ps is a poverty reduction strategy that provides conditional cash transfers to extremely poor households to improve health, nutrition, and education of children aged 0-18.",
+            "source": "RA 11310 — Pantawid Pamilyang Pilipino Program Act",
+            "tags": [
+                "current events",
+                "4Ps"
+            ]
+        },
+        {
+            "id": "GI_CURR_004",
+            "subcategory": "Current Events & Programs",
+            "difficulty": "medium",
+            "question": "Which constitutional commission is responsible for auditing all government funds?",
+            "options": [
+                "Civil Service Commission",
+                "Commission on Elections",
+                "Commission on Audit (COA)",
+                "Commission on Human Rights"
+            ],
+            "correctAnswer": "Commission on Audit (COA)",
+            "explanation": "The Commission on Audit is an independent constitutional commission that examines, audits, and settles all accounts pertaining to government revenue, expenditures, and property use.",
+            "source": "1987 Philippine Constitution — Article IX-D",
+            "tags": [
+                "constitutional commissions",
+                "COA"
+            ]
+        },
+        {
+            "id": "GI_GOV_006",
+            "subcategory": "Philippine Government",
+            "difficulty": "medium",
+            "question": "The local government units in the Philippines include:",
+            "options": [
+                "Provinces, cities, municipalities, and barangays",
+                "Regions, provinces, and cities only",
+                "Barangays and sitios only",
+                "States and counties"
+            ],
+            "correctAnswer": "Provinces, cities, municipalities, and barangays",
+            "explanation": "Under the Local Government Code (RA 7160), the territorial and political subdivisions of the Philippines are provinces, cities, municipalities, and barangays. Regions are administrative groupings, not separate LGUs.",
+            "source": "RA 7160 — Local Government Code of 1991",
+            "tags": [
+                "government",
+                "LGUs"
+            ]
+        },
+        {
+            "id": "GI_CON_011",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "hard",
+            "question": "According to the Constitution, the State shall promote a just and dynamic social order that will ensure the prosperity and independence of the nation through policies that provide:",
+            "options": [
+                "Political dynasties",
+                "Adequate social services, full employment, a rising standard of living, and an improved quality of life for all",
+                "Free trade with all nations",
+                "Military expansion"
+            ],
+            "correctAnswer": "Adequate social services, full employment, a rising standard of living, and an improved quality of life for all",
+            "explanation": "Article II, Section 9 declares this as a state policy. The Constitution mandates the State to promote social justice and ensure the welfare of all Filipinos.",
+            "source": "1987 Philippine Constitution — Article II, Section 9",
+            "tags": [
+                "constitution",
+                "social justice"
+            ]
+        },
+        {
+            "id": "GI_RA6713_006",
+            "subcategory": "RA 6713 — Code of Conduct",
+            "difficulty": "hard",
+            "question": "Under RA 6713, how long must a public official wait before accepting employment in a private enterprise that had official business with their former office?",
+            "options": [
+                "6 months",
+                "1 year",
+                "2 years",
+                "No waiting period"
+            ],
+            "correctAnswer": "1 year",
+            "explanation": "Section 9(b) of RA 6713 prohibits public officials, for one year after resignation or separation from service, from accepting employment in any private enterprise regulated or having official transactions with their former office.",
+            "source": "RA 6713 — Section 9(b)",
+            "tags": [
+                "ra 6713",
+                "prohibition",
+                "revolving door"
+            ]
+        },
+        {
+            "id": "GI_HR_006",
+            "subcategory": "Human Rights",
+            "difficulty": "medium",
+            "question": "What does the constitutional right to 'equal protection of the laws' mean?",
+            "options": [
+                "Everyone must be treated exactly the same in all situations",
+                "Persons similarly situated should be treated alike under the law",
+                "The government cannot pass any laws",
+                "Only citizens have rights"
+            ],
+            "correctAnswer": "Persons similarly situated should be treated alike under the law",
+            "explanation": "Equal protection means that all persons or things similarly situated should be treated alike, both as to rights conferred and responsibilities imposed. It allows reasonable classification but prohibits arbitrary discrimination.",
+            "source": "1987 Philippine Constitution — Article III, Section 1",
+            "tags": [
+                "human rights",
+                "equal protection"
+            ]
+        },
+        {
+            "id": "GI_CURR_005",
+            "subcategory": "Current Events & Programs",
+            "difficulty": "medium",
+            "question": "Which Philippine law mandates the establishment of a national identification system?",
+            "options": [
+                "RA 10173 (Data Privacy Act)",
+                "RA 11055 (PhilSys Act)",
+                "RA 10931 (Free Tuition Act)",
+                "RA 11469 (Bayanihan Act)"
+            ],
+            "correctAnswer": "RA 11055 (PhilSys Act)",
+            "explanation": "RA 11055, or the Philippine Identification System (PhilSys) Act, established a single national identification system for all citizens and resident aliens. It is implemented by the Philippine Statistics Authority (PSA).",
+            "source": "RA 11055 — Philippine Identification System Act",
+            "tags": [
+                "current events",
+                "national ID"
+            ]
+        },
+        {
+            "id": "GI_CON_012",
+            "subcategory": "Philippine Constitution",
+            "difficulty": "hard",
+            "question": "The legislative power in the Philippines is vested in:",
+            "options": [
+                "The President",
+                "The Congress of the Philippines",
+                "The Supreme Court",
+                "The Cabinet"
+            ],
+            "correctAnswer": "The Congress of the Philippines",
+            "explanation": "Article VI, Section 1 states: 'The legislative power shall be vested in the Congress of the Philippines which shall consist of a Senate and a House of Representatives.' Congress makes, amends, and repeals laws.",
+            "source": "1987 Philippine Constitution — Article VI, Section 1",
+            "tags": [
+                "constitution",
+                "legislative power"
+            ]
+        }
+    ]
 }

@@ -1,8 +1,8 @@
 {
-    "category": "Quantitative Ability",
+    "category": "Numerical Ability",
     "questions": [
         {
-            "id": "QA_AR_001",
+            "id": "NA_AR_001",
             "subcategory": "Basic Arithmetic",
             "difficulty": "easy",
             "question": "What is 25% of 200?",
@@ -14,14 +14,14 @@
             ],
             "correctAnswer": "50",
             "explanation": "25% = 25/100 = 0.25. Multiply 0.25 × 200 = 50. To find a percentage of a number, convert the percentage to a decimal and multiply.",
-            "source": "Khan Academy — Percentages",
+            "source": "Civil Service Exam — Percentages",
             "tags": [
                 "arithmetic",
                 "percentages"
             ]
         },
         {
-            "id": "QA_AR_002",
+            "id": "NA_AR_002",
             "subcategory": "Basic Arithmetic",
             "difficulty": "easy",
             "question": "What is 1/4 + 1/2?",
@@ -33,14 +33,14 @@
             ],
             "correctAnswer": "3/4",
             "explanation": "Convert to a common denominator: 1/2 = 2/4. Then add: 1/4 + 2/4 = 3/4. Always find the least common denominator before adding fractions.",
-            "source": "Khan Academy — Fractions",
+            "source": "Civil Service Exam — Fractions",
             "tags": [
                 "arithmetic",
                 "fractions"
             ]
         },
         {
-            "id": "QA_AR_003",
+            "id": "NA_AR_003",
             "subcategory": "Basic Arithmetic",
             "difficulty": "easy",
             "question": "What is 15% of 300?",
@@ -52,14 +52,14 @@
             ],
             "correctAnswer": "45",
             "explanation": "15% = 0.15. 0.15 × 300 = 45. Alternatively: 10% of 300 = 30, and 5% of 300 = 15. 30 + 15 = 45.",
-            "source": "Khan Academy — Percentages",
+            "source": "Civil Service Exam — Percentages",
             "tags": [
                 "arithmetic",
                 "percentages"
             ]
         },
         {
-            "id": "QA_AR_004",
+            "id": "NA_AR_004",
             "subcategory": "Basic Arithmetic",
             "difficulty": "easy",
             "question": "What is the value of 12 × 8?",
@@ -71,14 +71,14 @@
             ],
             "correctAnswer": "96",
             "explanation": "12 × 8 = 96. This can be calculated as (10 × 8) + (2 × 8) = 80 + 16 = 96.",
-            "source": "Khan Academy — Multiplication",
+            "source": "Civil Service Exam — Multiplication",
             "tags": [
                 "arithmetic",
                 "multiplication"
             ]
         },
         {
-            "id": "QA_AR_005",
+            "id": "NA_AR_005",
             "subcategory": "Basic Arithmetic",
             "difficulty": "easy",
             "question": "What is 30% of 90?",
@@ -90,14 +90,14 @@
             ],
             "correctAnswer": "27",
             "explanation": "30% = 0.30. 0.30 × 90 = 27. Or: 10% of 90 = 9, so 30% = 9 × 3 = 27.",
-            "source": "Khan Academy — Percentages",
+            "source": "Civil Service Exam — Percentages",
             "tags": [
                 "arithmetic",
                 "percentages"
             ]
         },
         {
-            "id": "QA_AR_006",
+            "id": "NA_AR_006",
             "subcategory": "Basic Arithmetic",
             "difficulty": "medium",
             "question": "A store offers a 20% discount on a ₱500 item. What is the sale price?",
@@ -109,14 +109,14 @@
             ],
             "correctAnswer": "₱400",
             "explanation": "20% of ₱500 = 0.20 × 500 = ₱100 discount. Sale price = ₱500 - ₱100 = ₱400.",
-            "source": "Khan Academy — Discounts",
+            "source": "Civil Service Exam — Discounts",
             "tags": [
                 "arithmetic",
                 "discounts"
             ]
         },
         {
-            "id": "QA_AR_007",
+            "id": "NA_AR_007",
             "subcategory": "Basic Arithmetic",
             "difficulty": "medium",
             "question": "What is the least common multiple (LCM) of 6 and 8?",
@@ -128,14 +128,14 @@
             ],
             "correctAnswer": "24",
             "explanation": "Multiples of 6: 6, 12, 18, 24, 30... Multiples of 8: 8, 16, 24, 32... The smallest common multiple is 24.",
-            "source": "Khan Academy — LCM",
+            "source": "Civil Service Exam — LCM",
             "tags": [
                 "arithmetic",
                 "LCM"
             ]
         },
         {
-            "id": "QA_AR_008",
+            "id": "NA_AR_008",
             "subcategory": "Basic Arithmetic",
             "difficulty": "medium",
             "question": "If 3/5 of a number is 30, what is the number?",
@@ -147,14 +147,14 @@
             ],
             "correctAnswer": "50",
             "explanation": "Let the number be n. (3/5)n = 30. n = 30 × (5/3) = 150/3 = 50. To find the whole when given a fraction, divide by the fraction.",
-            "source": "Khan Academy — Fractions",
+            "source": "Civil Service Exam — Fractions",
             "tags": [
                 "arithmetic",
                 "fractions"
             ]
         },
         {
-            "id": "QA_AR_009",
+            "id": "NA_AR_009",
             "subcategory": "Basic Arithmetic",
             "difficulty": "hard",
             "question": "A shirt originally priced at ₱800 is on sale for ₱600. What is the percentage discount?",
@@ -166,14 +166,14 @@
             ],
             "correctAnswer": "25%",
             "explanation": "Discount = ₱800 - ₱600 = ₱200. Percentage discount = (200/800) × 100 = 0.25 × 100 = 25%.",
-            "source": "Khan Academy — Percentage Change",
+            "source": "Civil Service Exam — Percentage Change",
             "tags": [
                 "arithmetic",
                 "percentage change"
             ]
         },
         {
-            "id": "QA_AR_010",
+            "id": "NA_AR_010",
             "subcategory": "Basic Arithmetic",
             "difficulty": "medium",
             "question": "What is 0.75 expressed as a fraction in simplest form?",
@@ -185,7 +185,7 @@
             ],
             "correctAnswer": "3/4",
             "explanation": "0.75 = 75/100. Divide numerator and denominator by 25: 75÷25 / 100÷25 = 3/4.",
-            "source": "Khan Academy — Decimals to Fractions",
+            "source": "Civil Service Exam — Decimals to Fractions",
             "tags": [
                 "arithmetic",
                 "decimals",
@@ -193,7 +193,7 @@
             ]
         },
         {
-            "id": "QA_AL_001",
+            "id": "NA_AL_001",
             "subcategory": "Algebra",
             "difficulty": "easy",
             "question": "If x + 5 = 12, what is the value of x?",
@@ -205,14 +205,14 @@
             ],
             "correctAnswer": "7",
             "explanation": "Subtract 5 from both sides: x + 5 - 5 = 12 - 5. x = 7. This is a basic one-step linear equation.",
-            "source": "Khan Academy — Algebra Basics",
+            "source": "Civil Service Exam — Algebra Basics",
             "tags": [
                 "algebra",
                 "linear equations"
             ]
         },
         {
-            "id": "QA_AL_002",
+            "id": "NA_AL_002",
             "subcategory": "Algebra",
             "difficulty": "easy",
             "question": "Solve for x: 3x = 21",
@@ -224,14 +224,14 @@
             ],
             "correctAnswer": "7",
             "explanation": "Divide both sides by 3: 3x/3 = 21/3. x = 7. When solving, perform the inverse operation on both sides.",
-            "source": "Khan Academy — Algebra Basics",
+            "source": "Civil Service Exam — Algebra Basics",
             "tags": [
                 "algebra",
                 "linear equations"
             ]
         },
         {
-            "id": "QA_AL_003",
+            "id": "NA_AL_003",
             "subcategory": "Algebra",
             "difficulty": "medium",
             "question": "Solve for x: 2x - 5 = 11",
@@ -243,14 +243,14 @@
             ],
             "correctAnswer": "8",
             "explanation": "Add 5 to both sides: 2x = 16. Divide by 2: x = 8. Check: 2(8) - 5 = 16 - 5 = 11 ✓",
-            "source": "Khan Academy — Two-Step Equations",
+            "source": "Civil Service Exam — Two-Step Equations",
             "tags": [
                 "algebra",
                 "two-step equations"
             ]
         },
         {
-            "id": "QA_AL_004",
+            "id": "NA_AL_004",
             "subcategory": "Algebra",
             "difficulty": "medium",
             "question": "If 5x + 3 = 2x + 12, what is x?",
@@ -262,14 +262,14 @@
             ],
             "correctAnswer": "3",
             "explanation": "5x + 3 = 2x + 12 → 5x - 2x = 12 - 3 → 3x = 9 → x = 3. Combine like terms on one side.",
-            "source": "Khan Academy — Equations with Variables on Both Sides",
+            "source": "Civil Service Exam — Equations with Variables on Both Sides",
             "tags": [
                 "algebra",
                 "variables both sides"
             ]
         },
         {
-            "id": "QA_AL_005",
+            "id": "NA_AL_005",
             "subcategory": "Algebra",
             "difficulty": "hard",
             "question": "The sum of two consecutive even numbers is 34. What is the smaller number?",
@@ -281,14 +281,14 @@
             ],
             "correctAnswer": "16",
             "explanation": "Let the smaller number be x. The next even number is x + 2. x + (x + 2) = 34 → 2x + 2 = 34 → 2x = 32 → x = 16. Check: 16 + 18 = 34 ✓",
-            "source": "Khan Academy — Word Problems",
+            "source": "Civil Service Exam — Word Problems",
             "tags": [
                 "algebra",
                 "word problems"
             ]
         },
         {
-            "id": "QA_AL_006",
+            "id": "NA_AL_006",
             "subcategory": "Algebra",
             "difficulty": "medium",
             "question": "Simplify: 3(x + 4) - 2x",
@@ -300,14 +300,14 @@
             ],
             "correctAnswer": "x + 12",
             "explanation": "Distribute: 3x + 12 - 2x. Combine like terms: (3x - 2x) + 12 = x + 12.",
-            "source": "Khan Academy — Simplifying Expressions",
+            "source": "Civil Service Exam — Simplifying Expressions",
             "tags": [
                 "algebra",
                 "simplifying"
             ]
         },
         {
-            "id": "QA_AL_007",
+            "id": "NA_AL_007",
             "subcategory": "Algebra",
             "difficulty": "hard",
             "question": "If a = 3 and b = -2, what is the value of 2a² - 3b?",
@@ -319,14 +319,14 @@
             ],
             "correctAnswer": "24",
             "explanation": "a² = 3² = 9. 2a² = 2(9) = 18. -3b = -3(-2) = 6. 18 + 6 = 24.",
-            "source": "Khan Academy — Evaluating Expressions",
+            "source": "Civil Service Exam — Evaluating Expressions",
             "tags": [
                 "algebra",
                 "substitution"
             ]
         },
         {
-            "id": "QA_AL_008",
+            "id": "NA_AL_008",
             "subcategory": "Algebra",
             "difficulty": "easy",
             "question": "What is the value of 4² + 3²?",
@@ -338,14 +338,14 @@
             ],
             "correctAnswer": "25",
             "explanation": "4² = 16, 3² = 9. 16 + 9 = 25. Exponents are evaluated before addition (order of operations: PEMDAS).",
-            "source": "Khan Academy — Exponents",
+            "source": "Civil Service Exam — Exponents",
             "tags": [
                 "algebra",
                 "exponents"
             ]
         },
         {
-            "id": "QA_AL_009",
+            "id": "NA_AL_009",
             "subcategory": "Algebra",
             "difficulty": "medium",
             "question": "The product of a number and 5, decreased by 8, is 27. What is the number?",
@@ -357,7 +357,7 @@
             ],
             "correctAnswer": "7",
             "explanation": "Let n be the number. 5n - 8 = 27 → 5n = 35 → n = 7. Translate 'product of a number and 5' as 5n, 'decreased by 8' as -8.",
-            "source": "Khan Academy — Translating Word Problems",
+            "source": "Civil Service Exam — Translating Word Problems",
             "tags": [
                 "algebra",
                 "word problems",
@@ -365,7 +365,7 @@
             ]
         },
         {
-            "id": "QA_AL_010",
+            "id": "NA_AL_010",
             "subcategory": "Algebra",
             "difficulty": "hard",
             "question": "If 2(x + 3) = 3(x - 1), what is x?",
@@ -377,204 +377,52 @@
             ],
             "correctAnswer": "9",
             "explanation": "2x + 6 = 3x - 3 → 6 + 3 = 3x - 2x → 9 = x. Check: 2(9+3) = 2(12) = 24; 3(9-1) = 3(8) = 24 ✓",
-            "source": "Khan Academy — Solving Linear Equations",
+            "source": "Civil Service Exam — Solving Linear Equations",
             "tags": [
                 "algebra",
                 "equations"
             ]
         },
         {
-            "id": "QA_DI_001",
-            "subcategory": "Data Interpretation",
-            "difficulty": "easy",
-            "question": "A table shows the following sales: Monday=₱200, Tuesday=₱300, Wednesday=₱250. What is the average daily sales?",
-            "options": [
-                "₱200",
-                "₱250",
-                "₱300",
-                "₱350"
-            ],
-            "correctAnswer": "₱250",
-            "explanation": "Average = (200 + 300 + 250) / 3 = 750/3 = ₱250. To find the average, sum all values and divide by the count.",
-            "source": "Khan Academy — Averages",
-            "tags": [
-                "data interpretation",
-                "averages"
-            ]
-        },
-        {
-            "id": "QA_DI_002",
-            "subcategory": "Data Interpretation",
+            "id": "NA_DS_001",
+            "subcategory": "Data Sufficiency",
             "difficulty": "medium",
-            "question": "In a class of 40 students, 25 are female. What percentage of the class is male?",
+            "question": "Question: What is the value of x?\nStatement 1: x + 5 = 12\nStatement 2: 2x = 14",
             "options": [
-                "37.5%",
-                "40%",
-                "50%",
-                "62.5%"
+                "Statement 1 alone is sufficient",
+                "Statement 2 alone is sufficient",
+                "Both statements together are sufficient",
+                "Each statement alone is sufficient"
             ],
-            "correctAnswer": "37.5%",
-            "explanation": "Males = 40 - 25 = 15. Percentage = (15/40) × 100 = 37.5%. Always identify the part and the whole before calculating.",
-            "source": "Khan Academy — Data Interpretation",
+            "correctAnswer": "Each statement alone is sufficient",
+            "explanation": "From Statement 1: x = 7. From Statement 2: x = 7. Either statement alone gives the answer.",
+            "source": "Civil Service Exam — Data Sufficiency",
             "tags": [
-                "data interpretation",
-                "percentages"
+                "data sufficiency",
+                "algebra"
             ]
         },
         {
-            "id": "QA_DI_003",
-            "subcategory": "Data Interpretation",
-            "difficulty": "medium",
-            "question": "If the ratio of boys to girls in a school is 3:2 and there are 240 boys, how many girls are there?",
-            "options": [
-                "120",
-                "160",
-                "200",
-                "360"
-            ],
-            "correctAnswer": "160",
-            "explanation": "Ratio 3:2 means for every 3 boys, there are 2 girls. If 3 parts = 240 boys, then 1 part = 80. Girls = 2 parts = 160.",
-            "source": "Khan Academy — Ratios",
-            "tags": [
-                "data interpretation",
-                "ratios"
-            ]
-        },
-        {
-            "id": "QA_DI_004",
-            "subcategory": "Data Interpretation",
+            "id": "NA_DS_002",
+            "subcategory": "Data Sufficiency",
             "difficulty": "hard",
-            "question": "A company's profit increased from ₱500,000 to ₱650,000. What is the percentage increase?",
+            "question": "Question: Is x greater than 10?\nStatement 1: x > 8\nStatement 2: x < 15",
             "options": [
-                "20%",
-                "25%",
-                "30%",
-                "35%"
+                "Statement 1 alone is sufficient",
+                "Statement 2 alone is sufficient",
+                "Both statements together are sufficient",
+                "Statements together are NOT sufficient"
             ],
-            "correctAnswer": "30%",
-            "explanation": "Increase = 650,000 - 500,000 = 150,000. % increase = (150,000/500,000) × 100 = 0.30 × 100 = 30%.",
-            "source": "Khan Academy — Percentage Change",
+            "correctAnswer": "Statements together are NOT sufficient",
+            "explanation": "Statement 1: x > 8 (could be 9 or 11 — not sufficient). Statement 2: x < 15 (could be 9 or 11 — not sufficient). Together: 8 < x < 15. x could be 9 (not >10) or 11 (>10). Still not sufficient.",
+            "source": "Civil Service Exam — Data Sufficiency",
             "tags": [
-                "data interpretation",
-                "percentage increase"
+                "data sufficiency",
+                "inequalities"
             ]
         },
         {
-            "id": "QA_DI_005",
-            "subcategory": "Data Interpretation",
-            "difficulty": "medium",
-            "question": "In a survey, 60% of 200 respondents preferred coffee over tea. How many preferred coffee?",
-            "options": [
-                "60",
-                "100",
-                "120",
-                "140"
-            ],
-            "correctAnswer": "120",
-            "explanation": "60% of 200 = 0.60 × 200 = 120. When interpreting survey data, multiply the percentage by the total.",
-            "source": "Khan Academy — Survey Analysis",
-            "tags": [
-                "data interpretation",
-                "percentages"
-            ]
-        },
-        {
-            "id": "QA_GM_001",
-            "subcategory": "Geometry",
-            "difficulty": "easy",
-            "question": "What is the area of a rectangle with length 8 cm and width 3 cm?",
-            "options": [
-                "11 cm²",
-                "22 cm²",
-                "24 cm²",
-                "48 cm²"
-            ],
-            "correctAnswer": "24 cm²",
-            "explanation": "Area of a rectangle = length × width = 8 × 3 = 24 cm². Remember to include square units (cm²) for area.",
-            "source": "Khan Academy — Geometry",
-            "tags": [
-                "geometry",
-                "area"
-            ]
-        },
-        {
-            "id": "QA_GM_002",
-            "subcategory": "Geometry",
-            "difficulty": "easy",
-            "question": "What is the perimeter of a square with side length 6 cm?",
-            "options": [
-                "12 cm",
-                "18 cm",
-                "24 cm",
-                "36 cm"
-            ],
-            "correctAnswer": "24 cm",
-            "explanation": "Perimeter of a square = 4 × side = 4 × 6 = 24 cm. The perimeter is the distance around the shape.",
-            "source": "Khan Academy — Geometry",
-            "tags": [
-                "geometry",
-                "perimeter"
-            ]
-        },
-        {
-            "id": "QA_GM_003",
-            "subcategory": "Geometry",
-            "difficulty": "medium",
-            "question": "A right triangle has legs of 3 cm and 4 cm. What is the length of the hypotenuse?",
-            "options": [
-                "5 cm",
-                "6 cm",
-                "7 cm",
-                "8 cm"
-            ],
-            "correctAnswer": "5 cm",
-            "explanation": "By the Pythagorean theorem: a² + b² = c². 3² + 4² = 9 + 16 = 25. c = √25 = 5 cm. This is the 3-4-5 right triangle.",
-            "source": "Khan Academy — Pythagorean Theorem",
-            "tags": [
-                "geometry",
-                "pythagorean theorem"
-            ]
-        },
-        {
-            "id": "QA_GM_004",
-            "subcategory": "Geometry",
-            "difficulty": "medium",
-            "question": "What is the area of a circle with radius 7 cm? (Use π = 3.14)",
-            "options": [
-                "43.96 cm²",
-                "87.92 cm²",
-                "153.86 cm²",
-                "307.72 cm²"
-            ],
-            "correctAnswer": "153.86 cm²",
-            "explanation": "Area = πr² = 3.14 × 7² = 3.14 × 49 = 153.86 cm². Remember the formula: A = πr².",
-            "source": "Khan Academy — Circle Area",
-            "tags": [
-                "geometry",
-                "circle area"
-            ]
-        },
-        {
-            "id": "QA_GM_005",
-            "subcategory": "Geometry",
-            "difficulty": "medium",
-            "question": "What is the volume of a cube with edge length 4 cm?",
-            "options": [
-                "16 cm³",
-                "32 cm³",
-                "64 cm³",
-                "128 cm³"
-            ],
-            "correctAnswer": "64 cm³",
-            "explanation": "Volume of a cube = side³ = 4³ = 4 × 4 × 4 = 64 cm³. Use cubic units (cm³) for volume.",
-            "source": "Khan Academy — Volume",
-            "tags": [
-                "geometry",
-                "volume"
-            ]
-        },
-        {
-            "id": "QA_WP_001",
+            "id": "NA_WP_001",
             "subcategory": "Word Problems",
             "difficulty": "medium",
             "question": "A car travels 180 km in 3 hours. What is its average speed in kilometers per hour?",
@@ -586,14 +434,14 @@
             ],
             "correctAnswer": "60 kph",
             "explanation": "Speed = Distance ÷ Time = 180 km ÷ 3 hours = 60 kph. The formula is: Speed = D/T.",
-            "source": "Khan Academy — Speed, Distance, Time",
+            "source": "Civil Service Exam — Speed, Distance, Time",
             "tags": [
                 "word problems",
                 "speed"
             ]
         },
         {
-            "id": "QA_WP_002",
+            "id": "NA_WP_002",
             "subcategory": "Word Problems",
             "difficulty": "medium",
             "question": "Juan has ₱200. He spends ₱35 on lunch and ₱45 on transportation. How much money does he have left?",
@@ -605,14 +453,14 @@
             ],
             "correctAnswer": "₱120",
             "explanation": "Total spent = ₱35 + ₱45 = ₱80. Remaining = ₱200 - ₱80 = ₱120. Solve step by step: find total expenses, then subtract.",
-            "source": "Khan Academy — Multi-Step Word Problems",
+            "source": "Civil Service Exam — Multi-Step Word Problems",
             "tags": [
                 "word problems",
                 "subtraction"
             ]
         },
         {
-            "id": "QA_WP_003",
+            "id": "NA_WP_003",
             "subcategory": "Word Problems",
             "difficulty": "hard",
             "question": "A pipe can fill a tank in 4 hours. Another pipe can fill the same tank in 6 hours. How long will it take to fill the tank if both pipes are used together?",
@@ -624,14 +472,14 @@
             ],
             "correctAnswer": "2.4 hours",
             "explanation": "Rate of pipe 1 = 1/4 tank per hour. Rate of pipe 2 = 1/6 tank per hour. Combined rate = 1/4 + 1/6 = 3/12 + 2/12 = 5/12. Time = 1 ÷ (5/12) = 12/5 = 2.4 hours.",
-            "source": "Khan Academy — Work Problems",
+            "source": "Civil Service Exam — Work Problems",
             "tags": [
                 "word problems",
                 "work rate"
             ]
         },
         {
-            "id": "QA_WP_004",
+            "id": "NA_WP_004",
             "subcategory": "Word Problems",
             "difficulty": "easy",
             "question": "Maria bought 5 notebooks at ₱25 each. How much did she pay in total?",
@@ -643,14 +491,14 @@
             ],
             "correctAnswer": "₱125",
             "explanation": "Total = 5 × ₱25 = ₱125. Multiply the unit price by the quantity to find the total cost.",
-            "source": "Khan Academy — Multiplication Word Problems",
+            "source": "Civil Service Exam — Multiplication Word Problems",
             "tags": [
                 "word problems",
                 "multiplication"
             ]
         },
         {
-            "id": "QA_WP_005",
+            "id": "NA_WP_005",
             "subcategory": "Word Problems",
             "difficulty": "hard",
             "question": "The sum of three consecutive integers is 72. What is the largest integer?",
@@ -662,684 +510,393 @@
             ],
             "correctAnswer": "25",
             "explanation": "Let the integers be n, n+1, n+2. n + (n+1) + (n+2) = 72 → 3n + 3 = 72 → 3n = 69 → n = 23. Integers: 23, 24, 25. Largest = 25.",
-            "source": "Khan Academy — Consecutive Integer Problems",
+            "source": "Civil Service Exam — Consecutive Integer Problems",
             "tags": [
                 "word problems",
                 "consecutive integers"
             ]
         },
         {
-                "id": "QA_AR_011",
-                "subcategory": "Basic Arithmetic",
-                "difficulty": "medium",
-                "question": "What is the greatest common divisor (GCD) of 24 and 36?",
-                "options": [
-                    "6",
-                    "8",
-                    "12",
-                    "18"
-                ],
-                "correctAnswer": "12",
-                "explanation": "Factors of 24: 1, 2, 3, 4, 6, 8, 12, 24. Factors of 36: 1, 2, 3, 4, 6, 9, 12, 18, 36. The greatest common factor is 12.",
-                "source": "Khan Academy — GCD",
-                "tags": [
-                    "arithmetic",
-                    "GCD"
-                ]
-            },
-            {
-                "id": "QA_AR_012",
-                "subcategory": "Basic Arithmetic",
-                "difficulty": "medium",
-                "question": "Express 0.125 as a fraction in simplest form.",
-                "options": [
-                    "1/5",
-                    "1/6",
-                    "1/8",
-                    "1/10"
-                ],
-                "correctAnswer": "1/8",
-                "explanation": "0.125 = 125/1000. Divide numerator and denominator by 125: 125÷125 / 1000÷125 = 1/8.",
-                "source": "Khan Academy — Decimals to Fractions",
-                "tags": [
-                    "arithmetic",
-                    "decimals"
-                ]
-            },
-            {
-                "id": "QA_AR_013",
-                "subcategory": "Basic Arithmetic",
-                "difficulty": "hard",
-                "question": "A jacket originally priced at ₱1,200 is marked down by 15%, then an additional 10% off the reduced price. What is the final price?",
-                "options": [
-                    "₱900",
-                    "₱918",
-                    "₱930",
-                    "₱956"
-                ],
-                "correctAnswer": "₱918",
-                "explanation": "First discount: 15% of ₱1,200 = ₱180. Price = ₱1,020. Second discount: 10% of ₱1,020 = ₱102. Final = ₱1,020 - ₱102 = ₱918. Successive discounts are calculated sequentially, not added.",
-                "source": "Khan Academy — Successive Discounts",
-                "tags": [
-                    "arithmetic",
-                    "successive discounts"
-                ]
-            },
-            {
-                "id": "QA_AR_014",
-                "subcategory": "Basic Arithmetic",
-                "difficulty": "easy",
-                "question": "What is the result of 144 ÷ 12?",
-                "options": [
-                    "10",
-                    "11",
-                    "12",
-                    "13"
-                ],
-                "correctAnswer": "12",
-                "explanation": "144 ÷ 12 = 12. Since 12 × 12 = 144, the division result is 12. This is a basic division fact.",
-                "source": "Khan Academy — Division",
-                "tags": [
-                    "arithmetic",
-                    "division"
-                ]
-            },
-            {
-                "id": "QA_AR_015",
-                "subcategory": "Basic Arithmetic",
-                "difficulty": "hard",
-                "question": "If the price of rice increases from ₱40/kg to ₱48/kg, what is the percentage increase?",
-                "options": [
-                    "15%",
-                    "18%",
-                    "20%",
-                    "25%"
-                ],
-                "correctAnswer": "20%",
-                "explanation": "Increase = ₱48 - ₱40 = ₱8. Percentage increase = (8/40) × 100 = 0.20 × 100 = 20%.",
-                "source": "Khan Academy — Percentage Change",
-                "tags": [
-                    "arithmetic",
-                    "percentage increase"
-                ]
-            },
-            {
-                "id": "QA_AL_011",
-                "subcategory": "Algebra",
-                "difficulty": "easy",
-                "question": "Solve: x - 7 = 15",
-                "options": [
-                    "8",
-                    "15",
-                    "22",
-                    "28"
-                ],
-                "correctAnswer": "22",
-                "explanation": "Add 7 to both sides: x - 7 + 7 = 15 + 7. x = 22. One-step equation using inverse operations.",
-                "source": "Khan Academy — One-Step Equations",
-                "tags": [
-                    "algebra",
-                    "one-step equations"
-                ]
-            },
-            {
-                "id": "QA_AL_012",
-                "subcategory": "Algebra",
-                "difficulty": "medium",
-                "question": "What is the slope of the line passing through points (2, 3) and (6, 11)?",
-                "options": [
-                    "1",
-                    "2",
-                    "3",
-                    "4"
-                ],
-                "correctAnswer": "2",
-                "explanation": "Slope = (y₂ - y₁)/(x₂ - x₁) = (11 - 3)/(6 - 2) = 8/4 = 2. The slope represents the rate of change.",
-                "source": "Khan Academy — Slope",
-                "tags": [
-                    "algebra",
-                    "slope"
-                ]
-            },
-            {
-                "id": "QA_AL_013",
-                "subcategory": "Algebra",
-                "difficulty": "hard",
-                "question": "If f(x) = 2x² - 3x + 1, what is f(3)?",
-                "options": [
-                    "8",
-                    "10",
-                    "12",
-                    "16"
-                ],
-                "correctAnswer": "10",
-                "explanation": "f(3) = 2(3²) - 3(3) + 1 = 2(9) - 9 + 1 = 18 - 9 + 1 = 10. Substitute the value and evaluate using order of operations.",
-                "source": "Khan Academy — Functions",
-                "tags": [
-                    "algebra",
-                    "functions"
-                ]
-            },
-            {
-                "id": "QA_AL_014",
-                "subcategory": "Algebra",
-                "difficulty": "medium",
-                "question": "Solve the inequality: 2x + 5 > 13",
-                "options": [
-                    "x > 4",
-                    "x > 6",
-                    "x > 8",
-                    "x > 9"
-                ],
-                "correctAnswer": "x > 4",
-                "explanation": "2x + 5 > 13 → 2x > 8 → x > 4. The inequality sign stays the same when dividing by a positive number.",
-                "source": "Khan Academy — Inequalities",
-                "tags": [
-                    "algebra",
-                    "inequalities"
-                ]
-            },
-            {
-                "id": "QA_AL_015",
-                "subcategory": "Algebra",
-                "difficulty": "medium",
-                "question": "What is the value of x in the proportion: 3/5 = x/20?",
-                "options": [
-                    "8",
-                    "10",
-                    "12",
-                    "15"
-                ],
-                "correctAnswer": "12",
-                "explanation": "Cross multiply: 3 × 20 = 5 × x → 60 = 5x → x = 12. Proportions can be solved using cross multiplication.",
-                "source": "Khan Academy — Proportions",
-                "tags": [
-                    "algebra",
-                    "proportions"
-                ]
-            },
-            {
-                "id": "QA_AL_016",
-                "subcategory": "Algebra",
-                "difficulty": "hard",
-                "question": "Factor: x² - 9",
-                "options": [
-                    "(x-3)(x-3)",
-                    "(x+3)(x-3)",
-                    "(x+9)(x-1)",
-                    "(x-9)(x+1)"
-                ],
-                "correctAnswer": "(x+3)(x-3)",
-                "explanation": "x² - 9 is a difference of squares: a² - b² = (a+b)(a-b). Here, a=x and b=3, so x² - 9 = (x+3)(x-3).",
-                "source": "Khan Academy — Factoring",
-                "tags": [
-                    "algebra",
-                    "factoring",
-                    "difference of squares"
-                ]
-            },
-            {
-                "id": "QA_AL_017",
-                "subcategory": "Algebra",
-                "difficulty": "easy",
-                "question": "Simplify: 5a + 3a - 2a",
-                "options": [
-                    "4a",
-                    "6a",
-                    "8a",
-                    "10a"
-                ],
-                "correctAnswer": "6a",
-                "explanation": "Combine like terms: 5a + 3a - 2a = (5+3-2)a = 6a. Only combine terms with the same variable and exponent.",
-                "source": "Khan Academy — Combining Like Terms",
-                "tags": [
-                    "algebra",
-                    "like terms"
-                ]
-            },
-            {
-                "id": "QA_AL_018",
-                "subcategory": "Algebra",
-                "difficulty": "hard",
-                "question": "The sum of two numbers is 30 and their difference is 6. What is the product of the two numbers?",
-                "options": [
-                    "180",
-                    "200",
-                    "216",
-                    "225"
-                ],
-                "correctAnswer": "216",
-                "explanation": "Let x and y be the numbers. x + y = 30, x - y = 6. Add: 2x = 36 → x = 18, y = 12. Product = 18 × 12 = 216.",
-                "source": "Khan Academy — Systems of Equations",
-                "tags": [
-                    "algebra",
-                    "systems",
-                    "word problems"
-                ]
-            },
-            {
-                "id": "QA_AL_019",
-                "subcategory": "Algebra",
-                "difficulty": "medium",
-                "question": "What is the y-intercept of the line y = 2x + 5?",
-                "options": [
-                    "2",
-                    "5",
-                    "7",
-                    "0"
-                ],
-                "correctAnswer": "5",
-                "explanation": "In the slope-intercept form y = mx + b, b is the y-intercept. Here, b = 5. The line crosses the y-axis at (0, 5).",
-                "source": "Khan Academy — Linear Equations",
-                "tags": [
-                    "algebra",
-                    "y-intercept"
-                ]
-            },
-            {
-                "id": "QA_AL_020",
-                "subcategory": "Algebra",
-                "difficulty": "hard",
-                "question": "Solve for x: |2x - 3| = 7",
-                "options": [
-                    "x = 5 or x = -2",
-                    "x = 5 only",
-                    "x = -2 only",
-                    "x = 2 or x = -5"
-                ],
-                "correctAnswer": "x = 5 or x = -2",
-                "explanation": "|2x-3| = 7 means 2x-3 = 7 OR 2x-3 = -7. Case 1: 2x = 10 → x = 5. Case 2: 2x = -4 → x = -2. Absolute value equations have two solutions.",
-                "source": "Khan Academy — Absolute Value Equations",
-                "tags": [
-                    "algebra",
-                    "absolute value"
-                ]
-            },
-            {
-                "id": "QA_DI_006",
-                "subcategory": "Data Interpretation",
-                "difficulty": "medium",
-                "question": "A bar graph shows monthly sales: Jan=₱500, Feb=₱600, Mar=₱450. What is the total sales for the first quarter?",
-                "options": [
-                    "₱1,450",
-                    "₱1,550",
-                    "₱1,650",
-                    "₱1,750"
-                ],
-                "correctAnswer": "₱1,550",
-                "explanation": "Total = 500 + 600 + 450 = ₱1,550. When interpreting graphs, carefully read each data point and sum them.",
-                "source": "Khan Academy — Reading Graphs",
-                "tags": [
-                    "data interpretation",
-                    "graphs"
-                ]
-            },
-            {
-                "id": "QA_DI_007",
-                "subcategory": "Data Interpretation",
-                "difficulty": "hard",
-                "question": "The mean of five numbers is 12. Four of the numbers are 8, 10, 14, and 15. What is the fifth number?",
-                "options": [
-                    "11",
-                    "13",
-                    "15",
-                    "17"
-                ],
-                "correctAnswer": "13",
-                "explanation": "Sum = mean × count = 12 × 5 = 60. Sum of four known = 8 + 10 + 14 + 15 = 47. Fifth = 60 - 47 = 13.",
-                "source": "Khan Academy — Mean",
-                "tags": [
-                    "data interpretation",
-                    "mean",
-                    "missing value"
-                ]
-            },
-            {
-                "id": "QA_DI_008",
-                "subcategory": "Data Interpretation",
-                "difficulty": "easy",
-                "question": "In a pie chart, a category representing 25% of the data should have a central angle of:",
-                "options": [
-                    "25°",
-                    "45°",
-                    "60°",
-                    "90°"
-                ],
-                "correctAnswer": "90°",
-                "explanation": "A full circle = 360°. 25% of 360° = 0.25 × 360° = 90°. Central angle = percentage × 360°.",
-                "source": "Khan Academy — Pie Charts",
-                "tags": [
-                    "data interpretation",
-                    "pie charts"
-                ]
-            },
-            {
-                "id": "QA_DI_009",
-                "subcategory": "Data Interpretation",
-                "difficulty": "medium",
-                "question": "The ratio of basketball to volleyball to chess players is 5:3:2. If there are 40 chess players, how many basketball players are there?",
-                "options": [
-                    "60",
-                    "80",
-                    "100",
-                    "120"
-                ],
-                "correctAnswer": "100",
-                "explanation": "Chess = 2 parts = 40, so 1 part = 20. Basketball = 5 parts = 5 × 20 = 100. Use the known quantity to find the unit value.",
-                "source": "Khan Academy — Extended Ratios",
-                "tags": [
-                    "data interpretation",
-                    "ratios"
-                ]
-            },
-            {
-                "id": "QA_DI_010",
-                "subcategory": "Data Interpretation",
-                "difficulty": "hard",
-                "question": "The median of the numbers 3, 7, 9, 12, 15, 18, 20 is:",
-                "options": [
-                    "9",
-                    "12",
-                    "15",
-                    "18"
-                ],
-                "correctAnswer": "12",
-                "explanation": "The numbers are already ordered. With 7 numbers, the median is the 4th value: 12. Median = middle value when data is arranged in order.",
-                "source": "Khan Academy — Median",
-                "tags": [
-                    "data interpretation",
-                    "median"
-                ]
-            },
-            {
-                "id": "QA_GM_006",
-                "subcategory": "Geometry",
-                "difficulty": "easy",
-                "question": "What is the circumference of a circle with radius 10 cm? (Use π = 3.14)",
-                "options": [
-                    "31.4 cm",
-                    "62.8 cm",
-                    "78.5 cm",
-                    "314 cm"
-                ],
-                "correctAnswer": "62.8 cm",
-                "explanation": "Circumference = 2πr = 2 × 3.14 × 10 = 62.8 cm. The formula is C = 2πr.",
-                "source": "Khan Academy — Circle Circumference",
-                "tags": [
-                    "geometry",
-                    "circumference"
-                ]
-            },
-            {
-                "id": "QA_GM_007",
-                "subcategory": "Geometry",
-                "difficulty": "medium",
-                "question": "Two angles of a triangle are 45° and 65°. What is the measure of the third angle?",
-                "options": [
-                    "60°",
-                    "70°",
-                    "75°",
-                    "80°"
-                ],
-                "correctAnswer": "70°",
-                "explanation": "Sum of angles in a triangle = 180°. Third angle = 180° - 45° - 65° = 70°.",
-                "source": "Khan Academy — Triangle Angles",
-                "tags": [
-                    "geometry",
-                    "triangles"
-                ]
-            },
-            {
-                "id": "QA_GM_008",
-                "subcategory": "Geometry",
-                "difficulty": "hard",
-                "question": "A cylinder has a radius of 3 cm and height of 10 cm. What is its volume? (Use π = 3.14)",
-                "options": [
-                    "94.2 cm³",
-                    "188.4 cm³",
-                    "282.6 cm³",
-                    "376.8 cm³"
-                ],
-                "correctAnswer": "282.6 cm³",
-                "explanation": "Volume of cylinder = πr²h = 3.14 × 3² × 10 = 3.14 × 9 × 10 = 282.6 cm³.",
-                "source": "Khan Academy — Cylinder Volume",
-                "tags": [
-                    "geometry",
-                    "volume",
-                    "cylinder"
-                ]
-            },
-            {
-                "id": "QA_GM_009",
-                "subcategory": "Geometry",
-                "difficulty": "medium",
-                "question": "What is the area of a triangle with base 12 cm and height 8 cm?",
-                "options": [
-                    "24 cm²",
-                    "40 cm²",
-                    "48 cm²",
-                    "96 cm²"
-                ],
-                "correctAnswer": "48 cm²",
-                "explanation": "Area of triangle = (1/2) × base × height = 0.5 × 12 × 8 = 48 cm². The formula is A = ½bh.",
-                "source": "Khan Academy — Triangle Area",
-                "tags": [
-                    "geometry",
-                    "area",
-                    "triangle"
-                ]
-            },
-            {
-                "id": "QA_GM_010",
-                "subcategory": "Geometry",
-                "difficulty": "easy",
-                "question": "What is the perimeter of a rectangle with length 15 m and width 7 m?",
-                "options": [
-                    "22 m",
-                    "44 m",
-                    "52 m",
-                    "105 m"
-                ],
-                "correctAnswer": "44 m",
-                "explanation": "Perimeter = 2(length + width) = 2(15 + 7) = 2(22) = 44 m. The formula is P = 2(l + w).",
-                "source": "Khan Academy — Rectangle Perimeter",
-                "tags": [
-                    "geometry",
-                    "perimeter"
-                ]
-            },
-            {
-                "id": "QA_WP_006",
-                "subcategory": "Word Problems",
-                "difficulty": "medium",
-                "question": "Ana is twice as old as Ben. In 5 years, the sum of their ages will be 40. How old is Ana now?",
-                "options": [
-                    "15",
-                    "18",
-                    "20",
-                    "25"
-                ],
-                "correctAnswer": "20",
-                "explanation": "Let Ben = x, Ana = 2x. In 5 years: (x+5) + (2x+5) = 40 → 3x + 10 = 40 → 3x = 30 → x = 10. Ana = 2(10) = 20.",
-                "source": "Khan Academy — Age Problems",
-                "tags": [
-                    "word problems",
-                    "age problems"
-                ]
-            },
-            {
-                "id": "QA_WP_007",
-                "subcategory": "Word Problems",
-                "difficulty": "easy",
-                "question": "A baker made 240 cookies. He packs them in boxes of 12. How many boxes does he need?",
-                "options": [
-                    "12",
-                    "18",
-                    "20",
-                    "24"
-                ],
-                "correctAnswer": "20",
-                "explanation": "Number of boxes = 240 ÷ 12 = 20. This is a straightforward division word problem.",
-                "source": "Khan Academy — Division Word Problems",
-                "tags": [
-                    "word problems",
-                    "division"
-                ]
-            },
-            {
-                "id": "QA_WP_008",
-                "subcategory": "Word Problems",
-                "difficulty": "hard",
-                "question": "A train leaves Station A at 8:00 AM traveling at 60 kph. Another train leaves Station A at 9:30 AM traveling at 90 kph in the same direction. At what time will the second train catch up?",
-                "options": [
-                    "11:30 AM",
-                    "12:00 PM",
-                    "12:30 PM",
-                    "1:00 PM"
-                ],
-                "correctAnswer": "12:30 PM",
-                "explanation": "First train head start = 1.5 hrs × 60 = 90 km. Relative speed = 90 - 60 = 30 kph. Time to catch up = 90/30 = 3 hrs. 9:30 + 3 hrs = 12:30 PM.",
-                "source": "Khan Academy — Catch-Up Problems",
-                "tags": [
-                    "word problems",
-                    "speed",
-                    "catch-up"
-                ]
-            },
-            {
-                "id": "QA_WP_009",
-                "subcategory": "Word Problems",
-                "difficulty": "medium",
-                "question": "A fruit vendor bought 50 mangoes for ₱500. He sold each mango for ₱15. What is his total profit?",
-                "options": [
-                    "₱150",
-                    "₱200",
-                    "₱250",
-                    "₱300"
-                ],
-                "correctAnswer": "₱250",
-                "explanation": "Revenue = 50 × ₱15 = ₱750. Cost = ₱500. Profit = ₱750 - ₱500 = ₱250. Profit = Revenue - Cost.",
-                "source": "Khan Academy — Profit Problems",
-                "tags": [
-                    "word problems",
-                    "profit"
-                ]
-            },
-            {
-                "id": "QA_WP_010",
-                "subcategory": "Word Problems",
-                "difficulty": "hard",
-                "question": "A tank contains 120 liters of water. Water leaks at a rate of 2 liters per hour. How many hours until the tank is half full?",
-                "options": [
-                    "20",
-                    "25",
-                    "30",
-                    "35"
-                ],
-                "correctAnswer": "30",
-                "explanation": "Half full = 60 liters. Amount to leak = 120 - 60 = 60 liters. Time = 60 ÷ 2 = 30 hours. Set up: remaining = initial - rate × time.",
-                "source": "Khan Academy — Rate Problems",
-                "tags": [
-                    "word problems",
-                    "rate",
-                    "linear decay"
-                ]
-            },
-            {
-                "id": "QA_WP_011",
-                "subcategory": "Word Problems",
-                "difficulty": "medium",
-                "question": "A classroom has 18 boys and 12 girls. What is the ratio of boys to total students in simplest form?",
-                "options": [
-                    "3:2",
-                    "3:5",
-                    "2:3",
-                    "18:30"
-                ],
-                "correctAnswer": "3:5",
-                "explanation": "Total = 18 + 12 = 30. Ratio = 18:30 = 3:5 (divide both by 6). Always simplify ratios to lowest terms.",
-                "source": "Khan Academy — Ratios",
-                "tags": [
-                    "word problems",
-                    "ratios"
-                ]
-            },
-            {
-                "id": "QA_WP_012",
-                "subcategory": "Word Problems",
-                "difficulty": "easy",
-                "question": "A pencil costs ₱8. How many pencils can you buy with ₱200?",
-                "options": [
-                    "20",
-                    "22",
-                    "25",
-                    "28"
-                ],
-                "correctAnswer": "25",
-                "explanation": "Number = 200 ÷ 8 = 25 pencils. Check: 25 × ₱8 = ₱200 ✓. Simple division with money context.",
-                "source": "Khan Academy — Money Word Problems",
-                "tags": [
-                    "word problems",
-                    "money"
-                ]
-            },
-            {
-                "id": "QA_WP_013",
-                "subcategory": "Word Problems",
-                "difficulty": "hard",
-                "question": "It takes 6 workers 8 days to complete a project. How many days would it take 12 workers to complete the same project?",
-                "options": [
-                    "2",
-                    "3",
-                    "4",
-                    "5"
-                ],
-                "correctAnswer": "4",
-                "explanation": "Total work = 6 × 8 = 48 worker-days. With 12 workers: days = 48 ÷ 12 = 4. This is an inverse proportion: more workers, fewer days.",
-                "source": "Khan Academy — Work Problems",
-                "tags": [
-                    "word problems",
-                    "inverse proportion"
-                ]
-            },
-            {
-                "id": "QA_WP_014",
-                "subcategory": "Word Problems",
-                "difficulty": "medium",
-                "question": "A shirt costs ₱400 after a 20% discount. What was the original price?",
-                "options": [
-                    "₱450",
-                    "₱480",
-                    "₱500",
-                    "₱520"
-                ],
-                "correctAnswer": "₱500",
-                "explanation": "If 80% = ₱400, then 100% = ₱400 ÷ 0.80 = ₱500. Check: 20% off ₱500 = ₱100. ₱500 - ₱100 = ₱400 ✓",
-                "source": "Khan Academy — Reverse Percentage",
-                "tags": [
-                    "word problems",
-                    "reverse percentage"
-                ]
-            },
-            {
-                "id": "QA_WP_015",
-                "subcategory": "Word Problems",
-                "difficulty": "medium",
-                "question": "A rectangular garden has a perimeter of 36 meters. If the length is 12 meters, what is the width?",
-                "options": [
-                    "4 m",
-                    "6 m",
-                    "8 m",
-                    "10 m"
-                ],
-                "correctAnswer": "6 m",
-                "explanation": "P = 2(l + w) = 36. l + w = 18. w = 18 - 12 = 6 meters. Use the perimeter formula and solve for the unknown.",
-                "source": "Khan Academy — Geometry Word Problems",
-                "tags": [
-                    "word problems",
-                    "geometry",
-                    "perimeter"
-                ]
-            }
-        ]
-    }
+            "id": "NA_GM_001",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "easy",
+            "question": "What is the area of a rectangle with length 8 cm and width 3 cm?",
+            "options": [
+                "11 cm²",
+                "22 cm²",
+                "24 cm²",
+                "48 cm²"
+            ],
+            "correctAnswer": "24 cm²",
+            "explanation": "Area of a rectangle = length × width = 8 × 3 = 24 cm². Remember to include square units (cm²) for area.",
+            "source": "Civil Service Exam — Geometry",
+            "tags": [
+                "geometry",
+                "area"
+            ]
+        },
+        {
+            "id": "NA_GM_002",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "easy",
+            "question": "What is the perimeter of a square with side length 6 cm?",
+            "options": [
+                "12 cm",
+                "18 cm",
+                "24 cm",
+                "36 cm"
+            ],
+            "correctAnswer": "24 cm",
+            "explanation": "Perimeter of a square = 4 × side = 4 × 6 = 24 cm. The perimeter is the distance around the shape.",
+            "source": "Civil Service Exam — Geometry",
+            "tags": [
+                "geometry",
+                "perimeter"
+            ]
+        },
+        {
+            "id": "NA_GM_003",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "medium",
+            "question": "A right triangle has legs of 3 cm and 4 cm. What is the length of the hypotenuse?",
+            "options": [
+                "5 cm",
+                "6 cm",
+                "7 cm",
+                "8 cm"
+            ],
+            "correctAnswer": "5 cm",
+            "explanation": "By the Pythagorean theorem: a² + b² = c². 3² + 4² = 9 + 16 = 25. c = √25 = 5 cm. This is the 3-4-5 right triangle.",
+            "source": "Civil Service Exam — Pythagorean Theorem",
+            "tags": [
+                "geometry",
+                "pythagorean theorem"
+            ]
+        },
+        {
+            "id": "NA_GM_004",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "medium",
+            "question": "What is the area of a circle with radius 7 cm? (Use π = 3.14)",
+            "options": [
+                "43.96 cm²",
+                "87.92 cm²",
+                "153.86 cm²",
+                "307.72 cm²"
+            ],
+            "correctAnswer": "153.86 cm²",
+            "explanation": "Area = πr² = 3.14 × 7² = 3.14 × 49 = 153.86 cm². Remember the formula: A = πr².",
+            "source": "Civil Service Exam — Circle Area",
+            "tags": [
+                "geometry",
+                "circle area"
+            ]
+        },
+        {
+            "id": "NA_GM_005",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "medium",
+            "question": "What is the volume of a cube with edge length 4 cm?",
+            "options": [
+                "16 cm³",
+                "32 cm³",
+                "64 cm³",
+                "128 cm³"
+            ],
+            "correctAnswer": "64 cm³",
+            "explanation": "Volume of a cube = side³ = 4³ = 4 × 4 × 4 = 64 cm³. Use cubic units (cm³) for volume.",
+            "source": "Civil Service Exam — Volume",
+            "tags": [
+                "geometry",
+                "volume"
+            ]
+        },
+        {
+            "id": "NA_DI_001",
+            "subcategory": "Data Interpretation",
+            "difficulty": "easy",
+            "question": "A table shows the following sales: Monday=₱200, Tuesday=₱300, Wednesday=₱250. What is the average daily sales?",
+            "options": [
+                "₱200",
+                "₱250",
+                "₱300",
+                "₱350"
+            ],
+            "correctAnswer": "₱250",
+            "explanation": "Average = (200 + 300 + 250) / 3 = 750/3 = ₱250. To find the average, sum all values and divide by the count.",
+            "source": "Civil Service Exam — Averages",
+            "tags": [
+                "data interpretation",
+                "averages"
+            ]
+        },
+        {
+            "id": "NA_DI_002",
+            "subcategory": "Data Interpretation",
+            "difficulty": "medium",
+            "question": "In a class of 40 students, 25 are female. What percentage of the class is male?",
+            "options": [
+                "37.5%",
+                "40%",
+                "50%",
+                "62.5%"
+            ],
+            "correctAnswer": "37.5%",
+            "explanation": "Males = 40 - 25 = 15. Percentage = (15/40) × 100 = 37.5%. Always identify the part and the whole before calculating.",
+            "source": "Civil Service Exam — Data Interpretation",
+            "tags": [
+                "data interpretation",
+                "percentages"
+            ]
+        },
+        {
+            "id": "NA_DI_003",
+            "subcategory": "Data Interpretation",
+            "difficulty": "medium",
+            "question": "If the ratio of boys to girls in a school is 3:2 and there are 240 boys, how many girls are there?",
+            "options": [
+                "120",
+                "160",
+                "200",
+                "360"
+            ],
+            "correctAnswer": "160",
+            "explanation": "Ratio 3:2 means for every 3 boys, there are 2 girls. If 3 parts = 240 boys, then 1 part = 80. Girls = 2 parts = 160.",
+            "source": "Civil Service Exam — Ratios",
+            "tags": [
+                "data interpretation",
+                "ratios"
+            ]
+        },
+        {
+            "id": "NA_DI_004",
+            "subcategory": "Data Interpretation",
+            "difficulty": "hard",
+            "question": "A company's profit increased from ₱500,000 to ₱650,000. What is the percentage increase?",
+            "options": [
+                "20%",
+                "25%",
+                "30%",
+                "35%"
+            ],
+            "correctAnswer": "30%",
+            "explanation": "Increase = 650,000 - 500,000 = 150,000. % increase = (150,000/500,000) × 100 = 0.30 × 100 = 30%.",
+            "source": "Civil Service Exam — Percentage Change",
+            "tags": [
+                "data interpretation",
+                "percentage increase"
+            ]
+        },
+        {
+            "id": "NA_DI_005",
+            "subcategory": "Data Interpretation",
+            "difficulty": "medium",
+            "question": "In a survey, 60% of 200 respondents preferred coffee over tea. How many preferred coffee?",
+            "options": [
+                "60",
+                "100",
+                "120",
+                "140"
+            ],
+            "correctAnswer": "120",
+            "explanation": "60% of 200 = 0.60 × 200 = 120. When interpreting survey data, multiply the percentage by the total.",
+            "source": "Civil Service Exam — Survey Analysis",
+            "tags": [
+                "data interpretation",
+                "percentages"
+            ]
+        },
+        {
+            "id": "NA_AR_011",
+            "subcategory": "Basic Arithmetic",
+            "difficulty": "medium",
+            "question": "What is the greatest common divisor (GCD) of 24 and 36?",
+            "options": [
+                "6",
+                "8",
+                "12",
+                "18"
+            ],
+            "correctAnswer": "12",
+            "explanation": "Factors of 24: 1, 2, 3, 4, 6, 8, 12, 24. Factors of 36: 1, 2, 3, 4, 6, 9, 12, 18, 36. The greatest common factor is 12.",
+            "source": "Civil Service Exam — GCD",
+            "tags": [
+                "arithmetic",
+                "GCD"
+            ]
+        },
+        {
+            "id": "NA_AR_012",
+            "subcategory": "Basic Arithmetic",
+            "difficulty": "medium",
+            "question": "Express 0.125 as a fraction in simplest form.",
+            "options": [
+                "1/5",
+                "1/6",
+                "1/8",
+                "1/10"
+            ],
+            "correctAnswer": "1/8",
+            "explanation": "0.125 = 125/1000. Divide numerator and denominator by 125: 125÷125 / 1000÷125 = 1/8.",
+            "source": "Civil Service Exam — Decimals to Fractions",
+            "tags": [
+                "arithmetic",
+                "decimals"
+            ]
+        },
+        {
+            "id": "NA_AR_013",
+            "subcategory": "Basic Arithmetic",
+            "difficulty": "hard",
+            "question": "A jacket originally priced at ₱1,200 is marked down by 15%, then an additional 10% off the reduced price. What is the final price?",
+            "options": [
+                "₱900",
+                "₱918",
+                "₱930",
+                "₱956"
+            ],
+            "correctAnswer": "₱918",
+            "explanation": "First discount: 15% of ₱1,200 = ₱180. Price = ₱1,020. Second discount: 10% of ₱1,020 = ₱102. Final = ₱1,020 - ₱102 = ₱918. Successive discounts are calculated sequentially, not added.",
+            "source": "Civil Service Exam — Successive Discounts",
+            "tags": [
+                "arithmetic",
+                "successive discounts"
+            ]
+        },
+        {
+            "id": "NA_AR_014",
+            "subcategory": "Basic Arithmetic",
+            "difficulty": "easy",
+            "question": "What is the result of 144 ÷ 12?",
+            "options": [
+                "10",
+                "11",
+                "12",
+                "13"
+            ],
+            "correctAnswer": "12",
+            "explanation": "144 ÷ 12 = 12. Since 12 × 12 = 144, the division result is 12. This is a basic division fact.",
+            "source": "Civil Service Exam — Division",
+            "tags": [
+                "arithmetic",
+                "division"
+            ]
+        },
+        {
+            "id": "NA_AR_015",
+            "subcategory": "Basic Arithmetic",
+            "difficulty": "hard",
+            "question": "If the price of rice increases from ₱40/kg to ₱48/kg, what is the percentage increase?",
+            "options": [
+                "15%",
+                "18%",
+                "20%",
+                "25%"
+            ],
+            "correctAnswer": "20%",
+            "explanation": "Increase = ₱48 - ₱40 = ₱8. Percentage increase = (8/40) × 100 = 0.20 × 100 = 20%.",
+            "source": "Civil Service Exam — Percentage Change",
+            "tags": [
+                "arithmetic",
+                "percentage increase"
+            ]
+        },
+        {
+            "id": "NA_GM_006",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "easy",
+            "question": "What is the circumference of a circle with radius 10 cm? (Use π = 3.14)",
+            "options": [
+                "31.4 cm",
+                "62.8 cm",
+                "78.5 cm",
+                "314 cm"
+            ],
+            "correctAnswer": "62.8 cm",
+            "explanation": "Circumference = 2πr = 2 × 3.14 × 10 = 62.8 cm. The formula is C = 2πr.",
+            "source": "Civil Service Exam — Circle Circumference",
+            "tags": [
+                "geometry",
+                "circumference"
+            ]
+        },
+        {
+            "id": "NA_GM_007",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "medium",
+            "question": "Two angles of a triangle are 45° and 65°. What is the measure of the third angle?",
+            "options": [
+                "60°",
+                "70°",
+                "75°",
+                "80°"
+            ],
+            "correctAnswer": "70°",
+            "explanation": "Sum of angles in a triangle = 180°. Third angle = 180° - 45° - 65° = 70°.",
+            "source": "Civil Service Exam — Triangle Angles",
+            "tags": [
+                "geometry",
+                "triangles"
+            ]
+        },
+        {
+            "id": "NA_GM_008",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "hard",
+            "question": "A cylinder has a radius of 3 cm and height of 10 cm. What is its volume? (Use π = 3.14)",
+            "options": [
+                "94.2 cm³",
+                "188.4 cm³",
+                "282.6 cm³",
+                "376.8 cm³"
+            ],
+            "correctAnswer": "282.6 cm³",
+            "explanation": "Volume of cylinder = πr²h = 3.14 × 3² × 10 = 3.14 × 9 × 10 = 282.6 cm³.",
+            "source": "Civil Service Exam — Cylinder Volume",
+            "tags": [
+                "geometry",
+                "volume",
+                "cylinder"
+            ]
+        },
+        {
+            "id": "NA_GM_009",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "medium",
+            "question": "What is the area of a triangle with base 12 cm and height 8 cm?",
+            "options": [
+                "24 cm²",
+                "40 cm²",
+                "48 cm²",
+                "96 cm²"
+            ],
+            "correctAnswer": "48 cm²",
+            "explanation": "Area of triangle = (1/2) × base × height = 0.5 × 12 × 8 = 48 cm². The formula is A = ½bh.",
+            "source": "Civil Service Exam — Triangle Area",
+            "tags": [
+                "geometry",
+                "area",
+                "triangle"
+            ]
+        },
+        {
+            "id": "NA_GM_010",
+            "subcategory": "Geometry & Measurement",
+            "difficulty": "easy",
+            "question": "What is the perimeter of a rectangle with length 15 m and width 7 m?",
+            "options": [
+                "22 m",
+                "44 m",
+                "52 m",
+                "105 m"
+            ],
+            "correctAnswer": "44 m",
+            "explanation": "Perimeter = 2(length + width) = 2(15 + 7) = 2(22) = 44 m. The formula is P = 2(l + w).",
+            "source": "Civil Service Exam — Rectangle Perimeter",
+            "tags": [
+                "geometry",
+                "perimeter"
+            ]
+        }
+    ]
+}
