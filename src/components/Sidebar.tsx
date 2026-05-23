@@ -55,10 +55,10 @@ const Sidebar = ({ isDarkMode, isOpen, setIsOpen, isCollapsed, setIsCollapsed, o
           ${sidebarBg} flex flex-col`}
       >
         {/* Header */}
-        <div className="h-20 flex items-center justify-between px-3">
-          <div className={`flex items-center gap-3 overflow-hidden transition-all duration-300 ${isCollapsed ? 'w-0 opacity-0' : 'w-full opacity-100'}`}>
-            <div className={`p-1.5 rounded-lg flex-shrink-0 ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-100'}`}>
-              <GraduationCap className={`w-7 h-7 ${iconColor}`} />
+        <div className="h-20 flex items-center justify-between px-7">
+          <div className={`flex items-center gap-1 overflow-hidden transition-all duration-300 ${isCollapsed ? 'w-0 opacity-0' : 'w-full opacity-100'}`}>
+            <div className={`p-1.5 rounded-3xl flex-shrink-0 ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-100'}`}>
+             <img src="/system logo.png" alt="CiviQuest Logo" className="w-10 h-10 sm:w-10 sm:h-8 md:w-9 md:h-8 lg:w-8 lg:h-8 object-contain" />
             </div>
             <h1 className={`text-xl font-bold tracking-tight whitespace-nowrap ${isDarkMode ? 'text-white' : 'text-black'}`}>
               CiviQuest

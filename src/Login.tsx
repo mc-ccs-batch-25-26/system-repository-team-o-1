@@ -80,7 +80,7 @@ const Login = () => {
                 <div className='w-full md:w-1/2 mb-8 md:mb-0 flex flex-col items-center justify-center text-center md:text-left md:pr-4 lg:pr-10'>
                     {/* Logo and tagline - responsive sizing */}
                     <div className="flex flex-col items-center md:items-start">
-                        <img src="/CiviQuest.png" alt="CiviQuest Logo" className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain" />
+                        <img src="/system logo.png" alt="CiviQuest Logo" className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain" />
                         <h1 className="text-3xl sm:text-4xl font-bold text-white mt-4 sm:mt-6 mb-2 sm:mb-3">CiviQuest</h1>
                         <p className="text-gray-300 text-base sm:text-lg max-w-md px-4 md:px-0">Your ultimate companion for Civil Service Examinations preparation</p>
                     </div>
