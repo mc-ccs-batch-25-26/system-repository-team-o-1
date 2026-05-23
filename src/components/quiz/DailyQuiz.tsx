@@ -70,20 +70,40 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
     let weakCategories: string[] = [];
 
     if (user) {
-      const { data: perf } = await supabase
-        .from('performance')
-        .select('accuracy_rate, categories:category_id(name)')
+      // FIRST: Check pretest_results for weak categories
+      const { data: pretestData } = await supabase
+        .from('pretest_results')
+        .select(`
+          score,
+          total_questions,
+          categories:category_id(name)
+        `)
         .eq('user_id', user.id)
-        .order('accuracy_rate', { ascending: true });
+        .eq('weak_category', true);
 
-      if (perf && perf.length > 0) {
-        // Only include categories with accuracy below 70%
-        weakCategories = perf
-          .filter((p: any) => (p.accuracy_rate || 0) < 70)
+      if (pretestData && pretestData.length > 0) {
+        // Use pretest weak categories
+        weakCategories = pretestData
           .map((p: any) => p.categories?.name)
           .filter(Boolean);
+      } else {
+        // FALLBACK: Check performance table for weak areas from regular quizzes
+        const { data: perf } = await supabase
+          .from('performance')
+          .select('accuracy_rate, categories:category_id(name)')
+          .eq('user_id', user.id)
+          .order('accuracy_rate', { ascending: true });
+
+        if (perf && perf.length > 0) {
+          // Only include categories with accuracy below 70%
+          weakCategories = perf
+            .filter((p: any) => (p.accuracy_rate || 0) < 70)
+            .map((p: any) => p.categories?.name)
+            .filter(Boolean);
+        }
       }
 
+      // Create quiz session
       const { data: session } = await supabase.from('quiz_sessions').insert({
         user_id: user.id,
         is_pretest: false,
@@ -95,7 +115,7 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
     let selectedQuestions: MockQuestion[] = [];
 
     if (weakCategories.length > 0) {
-      // All 5 questions from weak categories
+      // Pull questions from weak categories (up to 5)
       weakCategories.forEach(cat => {
         const catQuestions = (MOCK_QUESTIONS[cat] || [])
           .map(q => ({ ...q, category: cat }))
@@ -508,18 +528,42 @@ const WeakAreasFocus = ({ isDarkMode }: { isDarkMode: boolean }) => {
     const fetch = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
-      const { data: perf } = await supabase
-        .from('performance')
-        .select('accuracy_rate, categories:category_id(name)')
+
+      // FIRST: Check pretest_results for weak categories
+      const { data: pretestData } = await supabase
+        .from('pretest_results')
+        .select(`
+          score,
+          total_questions,
+          categories:category_id(name)
+        `)
         .eq('user_id', user.id)
-        .order('accuracy_rate', { ascending: true });
-      if (perf && perf.length > 0) {
-        setWeakCats(perf
-          .filter((p: any) => (p.accuracy_rate || 0) < 70)
-          .slice(0, 2)
-          .map((p: any) => p.categories?.name)
-          .filter(Boolean)
+        .eq('weak_category', true);
+
+      if (pretestData && pretestData.length > 0) {
+        // Use pretest weak categories (already flagged as weak)
+        setWeakCats(
+          pretestData
+            .map((p: any) => p.categories?.name)
+            .filter(Boolean)
         );
+      } else {
+        // FALLBACK: Check performance table for weak areas from regular quizzes
+        const { data: perf } = await supabase
+          .from('performance')
+          .select('accuracy_rate, categories:category_id(name)')
+          .eq('user_id', user.id)
+          .order('accuracy_rate', { ascending: true });
+
+        if (perf && perf.length > 0) {
+          setWeakCats(
+            perf
+              .filter((p: any) => (p.accuracy_rate || 0) < 70)
+              .slice(0, 2)
+              .map((p: any) => p.categories?.name)
+              .filter(Boolean)
+          );
+        }
       }
     };
     fetch();

@@ -101,7 +101,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
           'X-Title': 'CiviQuest'
         },
         body: JSON.stringify({
-          model: 'openrouter/free',
+          model: 'google/gemini-2.0-flash-001',
           messages: [{
             role: 'system',
             content: 'You are a Civil Service Exam tutor. Explain in 2-3 sentences why the answer is correct and why the user\'s choice was wrong. Be concise and helpful.'
@@ -172,8 +172,8 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // Update profile XP (no streak update for practice)
-    const { data: profile } = await supabase.from('profiles').select('xp, level').eq('id', user.id).single();
+   
+    const { data: profile } = await supabase.from('profiles').select('xp, level').eq('id', user.id).maybeSingle();
     if (profile) {
       const newXP = (profile.xp || 0) + earnedXP;
       const newLevel = Math.floor(newXP / 500) + 1;

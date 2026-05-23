@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Timer, Flame, Trophy, Zap, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Timer, Flame, Trophy, Zap, ChevronLeft, ChevronRight, Filter } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '../../supabase/supabaseClient';
 import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES, saveMistake } from '../../data/mockQuestions';
@@ -11,6 +11,7 @@ interface TimedChallengeProps {
 }
 
 const CHALLENGE_DURATION = 5 * 60; // 5 minutes
+const QUESTIONS_PER_CATEGORY = 50;
 
 const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
   const textClass = isDarkMode ? 'text-white' : 'text-zinc-900';
@@ -18,9 +19,9 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
   const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
   const btnPrimary = 'bg-rose-600 hover:bg-rose-700 text-white';
 
-  const [phase, setPhase] = useState<'start' | 'challenge' | 'results'>('start');
+  const [phase, setPhase] = useState<'config' | 'challenge' | 'results'>('config');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [questions, setQuestions] = useState<MockQuestion[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('Verbal Ability');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [timeLeft, setTimeLeft] = useState(CHALLENGE_DURATION);
@@ -31,8 +32,7 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
   const [showComboEffect, setShowComboEffect] = useState(false);
   const sessionRef = useRef<string | null>(null);
 
-  // Personal best from localStorage
-  const [personalBest, setPersonalBest] = useState<{ score: number; questions: number } | null>(null);
+  const [personalBest, setPersonalBest] = useState<{ score: number; questions: number; category: string } | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('civiquest_timed_challenge_best');
@@ -40,6 +40,7 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
   }, []);
 
   const currentQuestion = questions[currentIndex];
+  const progress = questions.length > 0 ? ((currentIndex + 1) / questions.length) * 100 : 0;
 
   // Timer
   useEffect(() => {
@@ -64,10 +65,16 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
       if (session) sessionRef.current = session.id;
     }
 
-    // Pick 50 questions from the selected category
-    const categoryQs = (MOCK_QUESTIONS as any)[selectedCategory] || [];
-    const allQs = shuffleArray([...categoryQs]).slice(0, 50);
-    setQuestions(allQs);
+    let pool: MockQuestion[] = [];
+    if (selectedCategory === 'All') {
+      CATEGORIES.forEach(cat => {
+        pool.push(...shuffleArray(MOCK_QUESTIONS[cat] || []).slice(0, Math.floor(QUESTIONS_PER_CATEGORY / 3)));
+      });
+    } else {
+      pool = shuffleArray(MOCK_QUESTIONS[selectedCategory] || []).slice(0, QUESTIONS_PER_CATEGORY);
+    }
+
+    setQuestions(shuffleArray(pool));
     setPhase('challenge');
     setCurrentIndex(0);
     setAnswers({});
@@ -90,26 +97,20 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
       if (newCombo > maxCombo) setMaxCombo(newCombo);
       setCorrectCount(prev => prev + 1);
 
-      if (!isCorrect) {
-  saveMistake(q, selected, q.category || 'Unknown');
-      }
-
-      // Points: base 100 + speed bonus + combo multiplier
-      const speedBonus = Math.floor(timeLeft / 30) * 10; // More time left = more bonus
-      const comboMultiplier = Math.min(newCombo, 5); // Max 5x
+      const speedBonus = Math.floor(timeLeft / 30) * 10;
+      const comboMultiplier = Math.min(newCombo, 5);
       const earned = (100 + speedBonus) * comboMultiplier;
       setPoints(prev => prev + earned);
 
-      // Visual combo effect
       if (newCombo >= 3) {
         setShowComboEffect(true);
         setTimeout(() => setShowComboEffect(false), 1000);
       }
     } else {
       setCombo(0);
+      saveMistake(q, selected, q.category || 'Unknown');
     }
 
-    // Save to Supabase
     if (sessionRef.current) {
       try {
         await supabase.from('quiz_session_answers').insert({
@@ -124,24 +125,36 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
     }
   };
 
+  const goToNext = () => {
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      finishChallenge();
+    }
+  };
+
+  const goToPrevious = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+    }
+  };
+
   const finishChallenge = async () => {
     const questionsAttempted = Object.keys(answers).length;
     setPhase('results');
 
-    // Check personal best
     const currentBest = personalBest;
     if (!currentBest || points > currentBest.score) {
-      const newBest = { score: points, questions: questionsAttempted };
+      const newBest = { score: points, questions: questionsAttempted, category: selectedCategory };
       localStorage.setItem('civiquest_timed_challenge_best', JSON.stringify(newBest));
       setPersonalBest(newBest);
     }
 
-    // Update XP
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    const earnedXP = Math.floor(points / 50);
-    const { data: profile } = await supabase.from('profiles').select('xp, level').eq('id', user.id).single();
+    const earnedXP = Math.floor(points / 100);
+    const { data: profile } = await supabase.from('profiles').select('xp, level').eq('id', user.id).maybeSingle();
     if (profile) {
       const newXP = (profile.xp || 0) + earnedXP;
       const newLevel = Math.floor(newXP / 500) + 1;
@@ -164,8 +177,8 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
 
   const questionsAttempted = Object.keys(answers).length;
 
-  // START SCREEN
-  if (phase === 'start') {
+  // CONFIG SCREEN
+  if (phase === 'config') {
     return (
       <div className="w-full max-w-2xl mx-auto px-4 py-8 space-y-6">
         <button onClick={onBack} className={`flex items-center gap-2 text-sm font-medium ${subtextClass} hover:${textClass} transition-colors`}>
@@ -180,8 +193,31 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
             <div>
               <h1 className={`text-xl font-bold ${textClass}`}>Timed Challenge</h1>
               <p className={`text-sm mt-1 leading-relaxed ${subtextClass}`}>
-                Answer as many questions as you can in 5 minutes!
+                Choose a category and answer as many as you can in 5 minutes!
               </p>
+            </div>
+          </div>
+
+          {/* Category Selection */}
+          <div className={`rounded-xl p-4 space-y-3 ${isDarkMode ? 'bg-zinc-800/60' : 'bg-zinc-50'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              <Filter className="w-4 h-4 text-rose-500" />
+              <p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass}`}>Select Category</p>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {['All', ...CATEGORIES].map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-4 py-3 rounded-xl text-sm font-medium border transition-all ${
+                    selectedCategory === cat
+                      ? 'bg-rose-600 text-white border-rose-600 shadow-md'
+                      : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-700' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`
+                  }`}
+                >
+                  {cat === 'All' ? 'All Categories' : cat}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -190,7 +226,7 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
             {[
               { icon: Zap, bg: isDarkMode ? 'bg-yellow-900/30' : 'bg-yellow-50', color: 'text-yellow-500', text: 'Speed bonus — faster answers earn more points' },
               { icon: Flame, bg: isDarkMode ? 'bg-orange-900/30' : 'bg-orange-50', color: 'text-orange-500', text: 'Combo multiplier — consecutive correct answers multiply score' },
-              { icon: Trophy, bg: isDarkMode ? 'bg-amber-900/30' : 'bg-amber-50', color: 'text-amber-500', text: 'Beat your personal best!' },
+              { icon: Trophy, bg: isDarkMode ? 'bg-amber-900/30' : 'bg-amber-50', color: 'text-amber-500', text: 'Beat your personal best for each category!' },
             ].map(({ icon: Icon, bg, color, text }) => (
               <div key={text} className="flex items-center gap-3">
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${bg}`}>
@@ -203,35 +239,16 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
             ))}
           </div>
 
-          <div className="space-y-3">
-            <p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass} text-center`}>Choose Category</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-              {CATEGORIES.map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`py-3 px-4 rounded-xl text-sm font-semibold border transition-all ${
-                    selectedCategory === cat 
-                      ? 'border-rose-500 bg-rose-500/10 text-rose-600 dark:text-rose-400' 
-                      : `border-zinc-200 dark:border-zinc-700 ${isDarkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300' : 'bg-white hover:bg-zinc-50 text-zinc-700'}`
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {personalBest && (
             <div className={`p-4 rounded-xl border text-center ${isDarkMode ? 'bg-amber-900/20 border-amber-700/30' : 'bg-amber-50 border-amber-200'}`}>
-              <p className={`text-xs font-semibold uppercase tracking-wider ${subtextClass}`}>Your Personal Best</p>
+              <p className={`text-xs font-semibold uppercase tracking-wider ${subtextClass}`}>Personal Best ({personalBest.category})</p>
               <p className={`text-3xl font-bold text-amber-500 mt-1`}>{personalBest.score.toLocaleString()} pts</p>
               <p className={`text-xs ${subtextClass} mt-1`}>{personalBest.questions} questions in 5 min</p>
             </div>
           )}
 
           <button onClick={startChallenge} className={`w-full py-3.5 rounded-xl font-semibold text-sm ${btnPrimary} transition-colors`}>
-            Start Challenge
+            Start Challenge ({selectedCategory === 'All' ? '~50' : QUESTIONS_PER_CATEGORY} questions)
           </button>
         </div>
       </div>
@@ -247,7 +264,7 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
           <h1 className={`text-2xl font-bold ${textClass}`}>
             {isNewBest ? 'New Personal Best! 🏆' : 'Challenge Over! ⏱️'}
           </h1>
-          <p className={`text-sm ${subtextClass}`}>Here's your performance</p>
+          <p className={`text-sm ${subtextClass}`}>{selectedCategory} • Here's your performance</p>
         </div>
 
         <div className={`${cardBg} rounded-2xl border p-7 text-center shadow-sm`}>
@@ -269,18 +286,11 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
             </div>
           </div>
 
-          <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-4">+{Math.floor(points / 50)} XP earned</p>
+          <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-4">+{Math.floor(points / 100)} XP earned</p>
         </div>
 
-        {personalBest && !isNewBest && (
-          <div className={`p-4 rounded-xl border text-center ${isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50' : 'bg-zinc-50 border-zinc-300'}`}>
-            <p className={`text-xs font-semibold uppercase tracking-wider ${subtextClass}`}>Personal Best</p>
-            <p className={`text-xl font-bold text-amber-500 mt-1`}>{personalBest.score.toLocaleString()} pts</p>
-          </div>
-        )}
-
         <div className="flex gap-3 pt-2">
-          <button onClick={() => setPhase('start')} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm ${btnPrimary} transition-colors`}>
+          <button onClick={() => setPhase('config')} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm ${btnPrimary} transition-colors`}>
             Try Again
           </button>
           <button onClick={onBack} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm border transition-colors ${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`}>
@@ -351,7 +361,21 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
         </motion.div>
       )}
 
-      {/* Question — instant feedback, no AI explanation */}
+      {/* Progress bar */}
+      <div className="space-y-2">
+        <div className={`flex justify-between text-xs font-medium ${subtextClass}`}>
+          <span>Question {currentIndex + 1} of {questions.length}</span>
+        </div>
+        <div className={`w-full rounded-full h-1.5 overflow-hidden ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-300'}`}>
+          <motion.div
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.3 }}
+            className="h-1.5 rounded-full bg-rose-500"
+          />
+        </div>
+      </div>
+
+      {/* Question */}
       {currentQuestion && (
         <QuizEngine
           question={currentQuestion}
@@ -367,30 +391,38 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
         />
       )}
 
-      {/* Navigation Buttons */}
-      <div className="flex gap-3 pt-4">
+      {/* Navigation */}
+      <div className="flex gap-3">
         <button
-          onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
+          onClick={goToPrevious}
           disabled={currentIndex === 0}
-          className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 border transition-colors ${
+          className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 border transition-all ${
             currentIndex === 0
-              ? 'opacity-50 cursor-not-allowed border-zinc-200 text-zinc-400 dark:border-zinc-800 dark:text-zinc-600'
-              : isDarkMode 
-                ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' 
-                : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'
+              ? 'opacity-40 cursor-not-allowed border-zinc-300 dark:border-zinc-700 text-zinc-400'
+              : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`
           }`}
         >
-          <ChevronLeft className="w-5 h-5" /> Previous
+          <ChevronLeft className="w-4 h-4" /> Previous
         </button>
-        <button
-          onClick={() => {
-            if (currentIndex < questions.length - 1) setCurrentIndex(prev => prev + 1);
-            else finishChallenge();
-          }}
-          className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-colors ${btnPrimary}`}
-        >
-          {currentIndex < questions.length - 1 ? 'Next' : 'Finish'} <ChevronRight className="w-5 h-5" />
-        </button>
+
+        {currentIndex < questions.length - 1 ? (
+          <button
+            onClick={goToNext}
+            disabled={!answers[currentQuestion?.id]}
+            className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 ${btnPrimary} transition-all ${
+              !answers[currentQuestion?.id] ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            Next <ChevronRight className="w-4 h-4" />
+          </button>
+        ) : (
+          <button
+            onClick={finishChallenge}
+            className="flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white transition-all"
+          >
+            <Trophy className="w-4 h-4" /> Finish
+          </button>
+        )}
       </div>
     </div>
   );

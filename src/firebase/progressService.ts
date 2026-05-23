@@ -1,10 +1,5 @@
 import { supabase } from '../supabase/supabaseClient';
 
-// ============================================
-// CIVIQUEST PROGRESS SERVICE
-// ============================================
-
-// Save user progress after quiz completion
 export const saveUserProgress = async (progressData: {
   topicId: number;
   topicTitle: string;

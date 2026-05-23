@@ -521,7 +521,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
         whileHover={{ scale: 1.1}}
         whileTap={{ scale: 0.9 }}
         onClick={toggleChat}
-        className="bg-blue-800 hover:bg-blue-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl transition-colors"
+        className="bg-green-500 hover:bg-green-600 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-xl transition-colors"
         aria-label="Open AI Chat"
       >
         <img src="/robot.png" alt="Chat" className="w-14 h-11 object-contain brightness-100 invert" />

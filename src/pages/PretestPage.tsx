@@ -70,10 +70,10 @@ const PretestPage = () => {
       if (session?.user) {
         const categoryPerformance = getResults();
         
-        // Mark pretest as done
+        // 1. Mark pretest as done in profiles
         await supabase.from('profiles').update({ pretest_done: true }).eq('id', session.user.id);
         
-        // Award XP
+        // 2. Award XP for completing pretest
         const pretestXP = 100;
         const { data: profile } = await supabase.from('profiles').select('xp, level').eq('id', session.user.id).single();
         if (profile) {
@@ -81,48 +81,42 @@ const PretestPage = () => {
           await supabase.from('profiles').update({ xp: newXP, level: Math.floor(newXP / 500) + 1 }).eq('id', session.user.id);
         }
 
-        // Fetch categories for mapping
+        // 3. Get categories for mapping
         const { data: categories } = await supabase.from('categories').select('id, name');
         
-        // Save performance per category
-        for (const [categoryName, stats] of Object.entries(categoryPerformance)) {
-          const categoryId = categories?.find(c => c.name === categoryName)?.id;
-          if (!categoryId) {
+        // 4. Save results to new pretest_results table (one row per category)
+        const pretestInserts = Object.entries(categoryPerformance).map(async ([categoryName, stats]) => {
+          const category = categories?.find(c => c.name === categoryName);
+          if (!category) {
             console.warn(`Category not found: ${categoryName}`);
-            continue;
+            return;
           }
-
-          // Fetch existing performance
-          const { data: existingPerf } = await supabase
-            .from('performance')
-            .select('total_answered, total_correct')
-            .eq('user_id', session.user.id)
-            .eq('category_id', categoryId)
-            .maybeSingle();
-
-          const prevAnswered = existingPerf?.total_answered || 0;
-          const prevCorrect = existingPerf?.total_correct || 0;
-          const newTotalAnswered = prevAnswered + stats.total;
-          const newTotalCorrect = prevCorrect + stats.correct;
-          const newAccuracy = newTotalAnswered > 0 ? (newTotalCorrect / newTotalAnswered) * 100 : 0;
-
-          const { error: upsertErr } = await supabase.from('performance').upsert(
-            {
-              user_id: session.user.id,
-              category_id: categoryId,
-              accuracy_rate: newAccuracy,
-              total_answered: newTotalAnswered,
-              total_correct: newTotalCorrect,
-            },
-            { onConflict: 'user_id, category_id' }
-          );
+          
+          const accuracy = (stats.correct / stats.total) * 100;
+          const isWeakCategory = accuracy < 50; // Below 50% is considered weak
+          
+          const { error: upsertErr } = await supabase
+            .from('pretest_results')
+            .upsert(
+              {
+                user_id: session.user.id,
+                category_id: category.id,
+                score: stats.correct,
+                total_questions: stats.total,
+                weak_category: isWeakCategory,
+                completed_at: new Date().toISOString(),
+              },
+              { onConflict: 'user_id, category_id' }
+            );
 
           if (upsertErr) {
-            console.error(`Failed to upsert performance for ${categoryName}:`, upsertErr);
+            console.error(`Failed to save pretest result for ${categoryName}:`, upsertErr);
           }
-        }
+        });
 
-        // Save quiz session
+        await Promise.all(pretestInserts);
+
+        // 5. Save quiz session record (for history, NOT for progress)
         const totalScore = Object.values(categoryPerformance).reduce((s, c) => s + c.correct, 0);
         await supabase.from('quiz_sessions').insert({
           user_id: session.user.id,
@@ -131,6 +125,10 @@ const PretestPage = () => {
           is_timed: false,
           ended_at: new Date().toISOString(),
         });
+
+        // IMPORTANT: DO NOT update the 'performance' table here!
+        // Pretest results should NOT affect lesson progress.
+        
       }
     } catch (err) {
       console.error('Error submitting pretest:', err);
@@ -139,12 +137,14 @@ const PretestPage = () => {
     }
   };
 
-  const handleContinue = () => { window.location.href = '/'; };                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+  const handleContinue = () => { 
+    window.location.href = '/'; 
+  };
 
   const results = showResults ? getResults() : null;
   const totalCorrect = results ? Object.values(results).reduce((s, c) => s + c.correct, 0) : 0;
 
-  // ── RESULTS ──
+  // ── RESULTS VIEW ──
   if (showResults && results) {
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex flex-col items-center py-12 px-4">
@@ -200,7 +200,7 @@ const PretestPage = () => {
     );
   }
 
-  // ── INTRO ──
+  // ── INTRO VIEW ──
   if (showIntro) {
     return (
       <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex flex-col items-center justify-center py-12 px-4">
@@ -235,7 +235,7 @@ const PretestPage = () => {
               ))}
             </div>
             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-xl px-4 py-3 text-center text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
-              <span className="font-semibold">{PRETEST_QUESTIONS.length} questions</span> across 3 categories<br />
+             <span className="font-semibold">{PRETEST_QUESTIONS.length} questions</span> across 4 categories<br />
               Verbal Ability · Numerical Ability · Analytical Ability · General Information
             </div>
             <button

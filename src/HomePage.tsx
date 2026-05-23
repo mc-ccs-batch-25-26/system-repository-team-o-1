@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { Flame, Target, TrendingUp, Award, Zap, BookOpen, Lock } from 'lucide-react';
 import Footer from './components/footer/Footer';
-import UserAvatar from './components/UserAvatar';
 import ProfileModal from './components/ProfileModal';
 import { supabase } from './supabase/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -60,14 +59,16 @@ function HomePage() {
       if (!user) { setLoading(false); return; }
       setCurrentUserSession(user.id);
 
-      const [profileRes, perfRes, sessionRes] = await Promise.all([
+      const [profileRes, perfRes, sessionRes, categoriesRes] = await Promise.all([
         supabase.from('profiles').select('username, avatar_url, xp, level, pretest_done, streak_count, created_at').eq('id', user.id).single(),
         supabase.from('performance').select('accuracy_rate, category_id').eq('user_id', user.id).order('accuracy_rate', { ascending: true }),
         supabase.from('quiz_sessions').select('score, ended_at').eq('user_id', user.id).eq('is_pretest', false).order('ended_at', { ascending: false }).limit(1).maybeSingle(),
+        supabase.from('categories').select('id, name'),
       ]);
 
       const { data: profile, error: profileErr } = profileRes;
       const { data: perf } = perfRes;
+      const { data: categories } = categoriesRes;
 
       // Calculate average accuracy for readiness
       const avgAccuracy = perf && perf.length > 0
@@ -100,18 +101,47 @@ function HomePage() {
         });
       }
 
-      // Fetch weak areas — fetch categories FIRST, then map
-      if (perf && perf.length > 0) {
-        const { data: categories } = await supabase.from('categories').select('id, name');
-        const mapped = perf.slice(0, 3).map((p: any) => ({
-          category: categories?.find(c => c.id === p.category_id)?.name || 'Unknown',
+      let weakData: { category: string; accuracy: number }[] = [];
+
+      // Check if user has taken pretest
+      if (profile?.pretest_done) {
+        // Get weak areas from pretest_results
+        const { data: pretestResults } = await supabase
+          .from('pretest_results')
+          .select(`
+            score,
+            total_questions,
+            category_id
+          `)
+          .eq('user_id', user.id);
+
+        if (pretestResults && pretestResults.length > 0) {
+          // Calculate accuracy per category from pretest
+          weakData = pretestResults.map((item: any) => {
+            const category = categories?.find((c: any) => c.id === item.category_id);
+            return {
+              category: category?.name || 'Unknown',
+              accuracy: Math.round((item.score / item.total_questions) * 100),
+            };
+          });
+          
+          // Sort by lowest accuracy first (weakest areas at the top)
+          weakData.sort((a, b) => a.accuracy - b.accuracy);
+          
+          // Take top 3 weakest areas
+          weakData = weakData.slice(0, 3);
+        }
+      }
+
+      // If no pretest data yet, try to get weak areas from performance (regular quizzes)
+      if (weakData.length === 0 && perf && perf.length > 0) {
+        weakData = perf.slice(0, 3).map((p: any) => ({
+          category: categories?.find((c: any) => c.id === p.category_id)?.name || 'Unknown',
           accuracy: Math.round(p.accuracy_rate || 0),
         }));
-        setWeakAreas(mapped);
-      } else {
-        // Ensure weak areas is empty if no performance data
-        setWeakAreas([]);
       }
+
+      setWeakAreas(weakData);
 
       const { data: lastSession } = sessionRes;
       if (lastSession) {
@@ -175,13 +205,15 @@ function HomePage() {
               {civiquestUser.pretestDone ? 'Your daily quiz is ready based on your weak areas.' : 'Start with the diagnostic pre-test to personalize your review.'}
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-orange-500/10 rounded-xl px-4 py-3">
-            <Flame className="text-orange-500 w-6 h-6" />
-            <div>
-              <div className={`text-xl font-bold ${textClass}`}>{civiquestUser.streak} days</div>
-              <div className={`text-xs ${secondaryTextClass}`}>Current Streak</div>
-            </div>
-          </div>  
+     <div className="flex items-center gap-2 bg-gradient-to-r from-orange-600/20 via-orange-500/15 to-yellow-500/10 rounded-xl px-4 py-3 border border-orange-500/20">
+  <Flame className="text-orange-500 w-6 h-6" />
+  <div>
+    <div className={`text-xl font-bold bg-gradient-to-r from-orange-700 via-orange-500 to-yellow-400 bg-clip-text text-transparent`}>
+      {civiquestUser.streak} days
+    </div>
+    <div className={`text-xs ${secondaryTextClass}`}>Current Streak</div>
+  </div>
+</div>
         </div>
         <div className="mt-4">
           <div className="flex justify-between items-center mb-1">
@@ -240,7 +272,11 @@ function HomePage() {
               <Target className="w-5 h-5 text-red-500" /> Weak Areas
             </h3>
             {weakAreas.length === 0 ? (
-              <p className={`text-sm ${secondaryTextClass}`}>Complete the pre-test and quizzes to see your weak areas.</p>
+              <p className={`text-sm ${secondaryTextClass}`}>
+                {civiquestUser.pretestDone 
+                  ? 'Complete some quizzes to identify your weak areas.' 
+                  : 'Complete the pre-test to see your weak areas.'}
+              </p>
             ) : (
               weakAreas.map((area) => (
                 <div key={area.category} className="mb-3 last:mb-0">

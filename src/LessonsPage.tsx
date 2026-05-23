@@ -34,7 +34,7 @@ const CATEGORY_CONFIG: Record<string, {
     accentBg: 'bg-blue-50 dark:bg-blue-900/30',
     accentText: 'text-blue-600 dark:text-blue-400',
     barColor: 'bg-blue-500',
-    borderAccent: 'border-l-blue-500',
+    borderAccent: 'border-l-blue-9  00',
     modules: ['Grammar rules', 'Vocabulary builder', 'Reading speed', 'Word analogies'],
     startLabel: 'Continue',
   },
@@ -44,7 +44,7 @@ const CATEGORY_CONFIG: Record<string, {
     accentBg: 'bg-emerald-50 dark:bg-emerald-900/30',
     accentText: 'text-emerald-600 dark:text-emerald-400',
     barColor: 'bg-emerald-500',
-    borderAccent: 'border-l-emerald-500',
+    borderAccent: 'border-l-emerald-900',
     modules: ['Basic arithmetic', 'Word problems', 'Number series', 'Fractions & ratios'],
     startLabel: 'Start now',
   },
@@ -54,7 +54,7 @@ const CATEGORY_CONFIG: Record<string, {
     accentBg: 'bg-violet-50 dark:bg-violet-900/30',
     accentText: 'text-violet-600 dark:text-violet-400',
     barColor: 'bg-violet-500',
-    borderAccent: 'border-l-violet-500',
+    borderAccent: 'border-l-violet-900',
     modules: ['Pattern recognition', 'Syllogisms', 'Logical deduction', 'Critical analysis'],
     startLabel: 'Continue',
   },
@@ -64,7 +64,7 @@ const CATEGORY_CONFIG: Record<string, {
     accentBg: 'bg-amber-50 dark:bg-amber-900/30',
     accentText: 'text-amber-600 dark:text-amber-400',
     barColor: 'bg-amber-500',
-    borderAccent: 'border-l-amber-500',
+    borderAccent: 'border-l-amber-900',
     modules: ['Constitution basics', 'Ethics across public service', 'Current events'],
     startLabel: 'Start now',
   }
@@ -133,12 +133,12 @@ const LessonsPage: React.FC = () => {
     return a.completed - b.completed;
   })[0];
 
-  const textClass = isDarkMode ? 'text-white' : 'text-zinc-900';
+  const textClass = isDarkMode ? 'text-white' : 'text-zinc-800';
   const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
   const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
   const trackBg = isDarkMode ? 'bg-zinc-700' : 'bg-zinc-100';
 
-  return (
+  return (  
     <div className="w-full max-w-6xl mx-auto px-4 py-8 space-y-6">
 
       {/* Header */}
@@ -240,7 +240,7 @@ const LessonsPage: React.FC = () => {
 
         {loading ? (
           <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+            <div className="animate-spin rounded-full h-8 w-8 border-b-5 border-blue-400" />
           </div>
         ) : (
           categoryProgress.map((cat, index) => {
@@ -248,7 +248,7 @@ const LessonsPage: React.FC = () => {
             const status = getStatus(pct);
             const cfg = CATEGORY_CONFIG[cat.name];
             const iconBg = cat.name === 'Verbal Ability'
-              ? isDarkMode ? 'bg-blue-900/50 text-blue-400' : 'bg-blue-100 text-blue-600'
+             ? isDarkMode ? 'bg-blue-900/50 text-blue-400' : 'bg-blue-100 text-blue-600'
               : cat.name === 'Numerical Ability'
               ? isDarkMode ? 'bg-emerald-900/50 text-emerald-400' : 'bg-emerald-100 text-emerald-600'
               : cat.name === 'Analytical Ability'
@@ -256,18 +256,18 @@ const LessonsPage: React.FC = () => {
               : isDarkMode ? 'bg-amber-900/50 text-amber-400' : 'bg-amber-100 text-amber-600';
 
             return (
-              <motion.div
+                 <motion.div
                 key={cat.name}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + index * 0.08 }}
                 onClick={() => navigate(`/lessons/${encodeURIComponent(cat.name)}`)}
-                className={`rounded-2xl border p-5 cursor-pointer group transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] ${
-                  isDarkMode ? 'bg-blue-900/10 border-blue-800/30' : 'bg-blue-50/50 border-blue-200'
+                className={`rounded-xl border p-5 cursor-pointer group transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] ${
+                  isDarkMode ? 'bg-gray-500/10 border-gray-500/30' : 'bg-gray-50/50 border-gray-200'
                 }`}
               >
                 <div className="flex items-center gap-5">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
+                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
                     {cfg?.icon}
                   </div>
                   
@@ -277,24 +277,59 @@ const LessonsPage: React.FC = () => {
                       <span className={`text-xs font-semibold px-3 py-1 rounded-full ${status.cls} whitespace-nowrap`}>
                         {status.label}
                       </span>
-                    </div>
+                    </div>  
                     
                     <p className={`text-sm mb-3 truncate ${subtextClass}`}>{cfg?.description}</p>
                     
-                    <div className="flex items-center gap-3">
+                    {/* Modules Row */}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {(cfg?.modules || []).map((mod, mi) => {
+                        const done = mi < Math.ceil((pct / 100) * (cfg?.modules.length || 4));
+                        return (
+                          <div
+                            key={mod}
+                            className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md border transition-colors ${
+                              done
+                                ? isDarkMode
+                                  ? 'bg-gray-800/30 border-gray-700 text-white-300'
+                                  : 'bg-blue-50 border-blue-200 text-blue-700'
+                                : isDarkMode
+                                ? 'bg-zinc-800 border-zinc-700 text-zinc-500'
+                                : 'bg-white border-zinc-200 text-zinc-400'
+                            }`}
+                          >
+                            {done
+                              ? <CheckCircle2 className="w-3 h-3 text-blue-500" />
+                              : <Circle className="w-3 h-3 text-zinc-400" />
+                            }
+                            {mod}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    
+                    <div className="flex items-center gap-4">
                       <div className={`flex-1 ${trackBg} rounded-full h-2 overflow-hidden`}>
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${pct}%` }}
                           transition={{ duration: 0.6, delay: 0.2 + index * 0.1, ease: 'easeOut' }}
-                          className={`h-full rounded-full ${cfg?.barColor || 'bg-blue-500'}`}
+                          className={`h-full rounded-full ${cfg?.barColor || 'bg-gray-500'}`}
                         />
                       </div>
                       <span className={`text-xs font-bold ${textClass} w-9 text-right`}>{pct}%</span>
                     </div>
+                    
+                    {/* Footer */}
+                    <div className="mt-2">
+                      <p className={`text-xs ${subtextClass}`}>
+                        {cat.completed}/{cat.total} items
+                        {cat.accuracy > 0 && <span className="ml-2">· {cat.accuracy}% accuracy</span>}
+                      </p>
+                    </div>
                   </div>
                   
-                  <div className={`p-2 rounded-full flex-shrink-0 ml-2 ${isDarkMode ? 'bg-zinc-800 text-zinc-400 group-hover:bg-zinc-700 group-hover:text-white' : 'bg-zinc-50 text-zinc-400 group-hover:bg-zinc-100 group-hover:text-zinc-600'} transition-colors`}>
+                  <div className={`p-2 rounded-full flex-shrink-0 ml-2 ${isDarkMode ? 'bg-gray-600/30 text-gray-400 group-hover:bg-gray-600 group-hover:text-white' : 'bg-gray-50 text-gray-500 group-hover:bg-gray-100 group-hover:text-gray-600'} transition-colors`}>
                     <ChevronRight className="w-5 h-5" />
                   </div>
                 </div>

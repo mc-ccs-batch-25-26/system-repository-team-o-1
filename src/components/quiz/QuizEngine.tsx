@@ -8,17 +8,18 @@ interface QuizEngineProps {
   totalQuestions: number;
   selectedAnswer: string | null;
   onAnswer: (questionId: string, selected: string) => void;
-  showFeedback: boolean;        // false for Mock Exam
-  showAIExplanation: boolean;   // false for Timed Challenge & Mock Exam
+  showFeedback: boolean;        
+  showAIExplanation: boolean;   
   aiExplanationText: string;
   loadingAI: boolean;
   isDarkMode: boolean;
 }
 
 const CATEGORY_COLORS: Record<string, { pill: string }> = {
-  'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' },
-  'Quantitative Ability': { pill: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' },
-  'Logical Reasoning':    { pill: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300' },
+'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' },
+'Numerical Ability':    { pill: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300' },
+'Analytical Ability':   { pill: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300' },
+'General Information':  { pill: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' },
 };
 
 const QuizEngine = ({
@@ -77,7 +78,7 @@ const QuizEngine = ({
 
             return (
               <motion.button
-                key={option}
+                key={option} 
                 whileHover={!answered ? { scale: 1.01 } : {}}
                 whileTap={!answered ? { scale: 0.99 } : {}}
                 initial={{ opacity: 0, y: 10 }}
