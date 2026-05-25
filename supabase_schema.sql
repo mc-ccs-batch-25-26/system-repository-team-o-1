@@ -1,6 +1,3 @@
--- ============================================
--- CIVIQUEST: Complete Database Schema
--- ============================================
 
 -- 1. PROFILES
 CREATE TABLE IF NOT EXISTS public.profiles (
@@ -44,29 +41,7 @@ CREATE POLICY "Anyone can view categories"
   ON public.categories FOR SELECT
   USING (true);
 
--- 3. QUESTIONS
-CREATE TABLE IF NOT EXISTS public.questions (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  category_id UUID REFERENCES public.categories(id) ON DELETE CASCADE NOT NULL,
-  question_text TEXT NOT NULL,
-  option_a TEXT NOT NULL,
-  option_b TEXT NOT NULL,
-  option_c TEXT NOT NULL,
-  option_d TEXT NOT NULL,
-  correct_answer TEXT NOT NULL,
-  difficulty_level INTEGER DEFAULT 1,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-ALTER TABLE public.questions ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Anyone can view questions"
-  ON public.questions FOR SELECT
-  USING (true);
-
-CREATE INDEX IF NOT EXISTS idx_questions_category_id ON public.questions(category_id);
-
--- 4. QUIZ SESSIONS
+-- 3. QUIZ SESSIONS
 CREATE TABLE IF NOT EXISTS public.quiz_sessions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
@@ -85,31 +60,7 @@ CREATE POLICY "Users can manage own sessions"
 
 CREATE INDEX IF NOT EXISTS idx_quiz_sessions_user_id ON public.quiz_sessions(user_id);
 
--- 5. QUIZ SESSION ANSWERS
-CREATE TABLE IF NOT EXISTS public.quiz_session_answers (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id UUID REFERENCES public.quiz_sessions(id) ON DELETE CASCADE NOT NULL,
-  question_id UUID REFERENCES public.questions(id) ON DELETE CASCADE NOT NULL,
-  selected_answer TEXT,
-  is_correct BOOLEAN,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-ALTER TABLE public.quiz_session_answers ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users can manage own answers"
-  ON public.quiz_session_answers FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.quiz_sessions
-      WHERE quiz_sessions.id = quiz_session_answers.session_id
-      AND quiz_sessions.user_id = auth.uid()
-    )
-  );
-
-CREATE INDEX IF NOT EXISTS idx_quiz_session_answers_session_id ON public.quiz_session_answers(session_id);
-
--- 6. PERFORMANCE
+-- 4. PERFORMANCE 
 CREATE TABLE IF NOT EXISTS public.performance (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
@@ -129,37 +80,30 @@ CREATE POLICY "Users can manage own performance"
 
 CREATE INDEX IF NOT EXISTS idx_performance_user_id ON public.performance(user_id);
 
--- 7. ACHIEVEMENTS
-CREATE TABLE IF NOT EXISTS public.achievements (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL UNIQUE,
-  description TEXT,
-  trigger_condition TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-ALTER TABLE public.achievements ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Anyone can view achievements"
-  ON public.achievements FOR SELECT
-  USING (true);
-
--- 8. USER ACHIEVEMENTS
-CREATE TABLE IF NOT EXISTS public.user_achievements (
+-- 5. PRETEST RESULTS 
+CREATE TABLE IF NOT EXISTS public.pretest_results (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  achievement_id UUID REFERENCES public.achievements(id) ON DELETE CASCADE NOT NULL,
-  unlocked_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(user_id, achievement_id)
+  category_id UUID REFERENCES public.categories(id) ON DELETE CASCADE NOT NULL,
+  score INTEGER NOT NULL CHECK (score >= 0),
+  total_questions INTEGER NOT NULL CHECK (total_questions > 0),
+  accuracy DECIMAL(5,2) GENERATED ALWAYS AS ((score::DECIMAL / NULLIF(total_questions, 0)) * 100) STORED,
+  weak_category BOOLEAN DEFAULT FALSE,
+  completed_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, category_id)
 );
 
-ALTER TABLE public.user_achievements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.pretest_results ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Users can manage own achievements"
-  ON public.user_achievements FOR ALL
+CREATE POLICY "Users can manage own pretest results"
+  ON public.pretest_results FOR ALL
   USING (auth.uid() = user_id);
 
--- 9. VERIFICATION CODES (for login)
+CREATE INDEX IF NOT EXISTS idx_pretest_results_user_id ON public.pretest_results(user_id);
+CREATE INDEX IF NOT EXISTS idx_pretest_results_category ON public.pretest_results(category_id);
+
+-- 6. VERIFICATION CODES (for OTP login)
 CREATE TABLE IF NOT EXISTS public.verification_codes (
   email TEXT PRIMARY KEY,
   otp TEXT NOT NULL,
@@ -183,12 +127,13 @@ CREATE POLICY "Anyone can update verification codes by email"
   USING (true);
 
 -- ============================================
--- SEED DATA
+-- SEED DATA (Fixed category names)
 -- ============================================
 INSERT INTO public.categories (name, description) VALUES
-  ('Verbal Ability', 'Grammar and Correct Usage'),
-  ('Quantitative Ability', 'Mathematics'),
-  ('Logical Reasoning', 'Logical Reasoning and Analysis')
+  ('Verbal Ability', 'Grammar, vocabulary, and reading comprehension'),
+  ('Numerical Ability', 'Basic arithmetic, algebra, geometry, and data interpretation'),
+  ('Analytical Ability', 'Logical reasoning, analogies, patterns, and critical thinking'),
+  ('General Information', 'Philippine Constitution, RA 6713, environmental laws, and current events')
 ON CONFLICT (name) DO NOTHING;
 
 -- ============================================
