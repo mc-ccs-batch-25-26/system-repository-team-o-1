@@ -1,345 +1,338 @@
 import React, { useState, useEffect } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
-import { BookOpen, Hash, Brain, Lightbulb, ChevronRight, CheckCircle2, Circle, TrendingUp, Library, Target, Globe } from 'lucide-react';
-import { motion } from 'framer-motion';
+import {
+    BookOpen, Hash, Brain, Lightbulb, ChevronRight,
+    CheckCircle2, Circle, TrendingUp, Library, Target, Globe,
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from './supabase/supabaseClient';
 
+/* ─── types ──────────────────────────────────────────────────────────────── */
 interface CategoryProgress {
-  name: string;
-  total: number;
-  completed: number;
-  accuracy: number;
+    name: string;
+    total: number;
+    completed: number;
+    accuracy: number;
 }
 
+/* ─── design tokens ──────────────────────────────────────────────────────── */
+const fadeUp = {
+    hidden: { opacity: 0, y: 16 },
+    show:   { opacity: 1, y: 0, transition: { duration: 0.38, ease: [0.22, 1, 0.36, 1] } },
+};
+const stagger = {
+    hidden: {},
+    show:   { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+};
+
+/* ─── constants ──────────────────────────────────────────────────────────── */
 const FLASHCARD_TOTALS: Record<string, number> = {
-  'Verbal Ability': 50,
-  'Numerical Ability': 50,
-  'Analytical Ability': 50,
-  'General Information': 50,
+    'Verbal Ability': 50,
+    'Numerical Ability': 50,
+    'Analytical Ability': 50,
+    'General Information': 50,
 };
 
 const CATEGORY_CONFIG: Record<string, {
-  icon: React.ReactNode;
-  description: string;
-  accentBg: string;
-  accentText: string;
-  barColor: string;
-  borderAccent: string;
-  modules: string[];
-  startLabel: string;
+    icon: React.ReactNode;
+    description: string;
+    iconBg: string;
+    iconText: string;
+    barColor: string;
+    pillBg: string;
+    pillText: string;
+    modules: string[];
 }> = {
-  'Verbal Ability': {
-    icon: <BookOpen className="w-5 h-5" />,
-    description: 'Grammar · Vocabulary · Reading Comprehension · Analogy',
-    accentBg: 'bg-blue-50 dark:bg-blue-900/30',
-    accentText: 'text-blue-600 dark:text-blue-400',
-    barColor: 'bg-blue-500',
-    borderAccent: 'border-l-blue-9  00',
-    modules: ['Grammar rules', 'Vocabulary builder', 'Reading speed', 'Word analogies'],
-    startLabel: 'Continue',
-  },
-  'Numerical Ability': {
-    icon: <Hash className="w-5 h-5" />,
-    description: 'Arithmetic · Algebra · Number Series · Data Interpretation',
-    accentBg: 'bg-emerald-50 dark:bg-emerald-900/30',
-    accentText: 'text-emerald-600 dark:text-emerald-400',
-    barColor: 'bg-emerald-500',
-    borderAccent: 'border-l-emerald-900',
-    modules: ['Basic arithmetic', 'Word problems', 'Number series', 'Fractions & ratios'],
-    startLabel: 'Start now',
-  },
-  'Analytical Ability': {
-    icon: <Brain className="w-5 h-5" />,
-    description: 'Patterns · Deduction · Analogies · Critical Thinking',
-    accentBg: 'bg-violet-50 dark:bg-violet-900/30',
-    accentText: 'text-violet-600 dark:text-violet-400',
-    barColor: 'bg-violet-500',
-    borderAccent: 'border-l-violet-900',
-    modules: ['Pattern recognition', 'Syllogisms', 'Logical deduction', 'Critical analysis'],
-    startLabel: 'Continue',
-  },
-  'General Information': {
-    icon: <Globe className="w-5 h-5" />,
-    description: 'Philippine Constitution · RA 6713 · Environmental Laws',
-    accentBg: 'bg-amber-50 dark:bg-amber-900/30',
-    accentText: 'text-amber-600 dark:text-amber-400',
-    barColor: 'bg-amber-500',
-    borderAccent: 'border-l-amber-900',
-    modules: ['Constitution basics', 'Ethics across public service', 'Current events'],
-    startLabel: 'Start now',
-  }
+    'Verbal Ability': {
+        icon: <BookOpen className="w-5 h-5" />,
+        description: 'Grammar · Vocabulary · Reading Comprehension · Analogy',
+        iconBg: 'bg-sky-100 dark:bg-sky-900/30',
+        iconText: 'text-sky-600 dark:text-sky-400',
+        barColor: 'bg-sky-500',
+        pillBg: 'bg-sky-50 dark:bg-sky-900/20',
+        pillText: 'text-sky-600 dark:text-sky-400',
+        modules: ['Grammar rules', 'Vocabulary builder', 'Reading speed', 'Word analogies'],
+    },
+    'Numerical Ability': {
+        icon: <Hash className="w-5 h-5" />,
+        description: 'Arithmetic · Algebra · Number Series · Data Interpretation',
+        iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
+        iconText: 'text-emerald-600 dark:text-emerald-400',
+        barColor: 'bg-emerald-500',
+        pillBg: 'bg-emerald-50 dark:bg-emerald-900/20',
+        pillText: 'text-emerald-600 dark:text-emerald-400',
+        modules: ['Basic arithmetic', 'Word problems', 'Number series', 'Fractions & ratios'],
+    },
+    'Analytical Ability': {
+        icon: <Brain className="w-5 h-5" />,
+        description: 'Patterns · Deduction · Analogies · Critical Thinking',
+        iconBg: 'bg-violet-100 dark:bg-violet-900/30',
+        iconText: 'text-violet-600 dark:text-violet-400',
+        barColor: 'bg-violet-500',
+        pillBg: 'bg-violet-50 dark:bg-violet-900/20',
+        pillText: 'text-violet-600 dark:text-violet-400',
+        modules: ['Pattern recognition', 'Syllogisms', 'Logical deduction', 'Critical analysis'],
+    },
+    'General Information': {
+        icon: <Globe className="w-5 h-5" />,
+        description: 'Philippine Constitution · RA 6713 · Environmental Laws',
+        iconBg: 'bg-amber-100 dark:bg-amber-900/30',
+        iconText: 'text-amber-600 dark:text-amber-400',
+        barColor: 'bg-amber-500',
+        pillBg: 'bg-amber-50 dark:bg-amber-900/20',
+        pillText: 'text-amber-600 dark:text-amber-400',
+        modules: ['Constitution basics', 'Ethics & public service', 'Current events'],
+    },
 };
 
-const getStatus = (pct: number) => {
-  if (pct >= 70) return { label: 'Mastered', cls: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400' };
-  if (pct >= 10) return { label: 'In Progress', cls: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400' };
-  return { label: 'Not Started', cls: 'bg-zinc-100 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400' };
+/* ─── helpers ────────────────────────────────────────────────────────────── */
+const getStatus = (pct: number): { label: string; cls: string } => {
+    if (pct >= 70) return { label: 'Mastered',    cls: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400' };
+    if (pct >= 10) return { label: 'In Progress', cls: 'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400'         };
+    return                 { label: 'Not Started', cls: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400'               };
 };
 
-const LessonsPage: React.FC = () => {
-  const { isDarkMode } = useOutletContext<any>();
-  const navigate = useNavigate();
-  const [categoryProgress, setCategoryProgress] = useState<CategoryProgress[]>([
-    { name: 'Verbal Ability', total: 50, completed: 0, accuracy: 0 },
-    { name: 'Numerical Ability', total: 50, completed: 0, accuracy: 0 },
-    { name: 'Analytical Ability', total: 50, completed: 0, accuracy: 0 },
-    { name: 'General Information', total: 50, completed: 0, accuracy: 0 },
-  ]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProgress = async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) { setLoading(false); return; }
-
-        const { data: perf } = await supabase
-          .from('performance')
-          .select('accuracy_rate, total_answered, total_correct, category_id')
-          .eq('user_id', user.id);
-
-        const { data: categories } = await supabase.from('categories').select('id, name');
-
-        const updated = Object.entries(FLASHCARD_TOTALS).map(([name, total]) => {
-          const category = categories?.find(c => c.name === name);
-          const perfData = perf?.find(p => p.category_id === category?.id);
-          return {
-            name,
-            total,
-            completed: Math.min(perfData?.total_answered || 0, total),
-            accuracy: Math.round(perfData?.accuracy_rate || 0),
-          };
-        });
-
-        setCategoryProgress(updated);
-      } catch {
-        // use defaults
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProgress();
-  }, []);
-
-  const totalCompleted = categoryProgress.reduce((s, c) => s + c.completed, 0);
-  const totalItems = categoryProgress.reduce((s, c) => s + c.total, 0);
-  const overallPct = totalItems > 0 ? Math.round((totalCompleted / totalItems) * 100) : 0;
-  const avgAccuracy = categoryProgress.filter(c => c.accuracy > 0).length > 0
-    ? Math.round(categoryProgress.filter(c => c.accuracy > 0).reduce((s, c) => s + c.accuracy, 0) / categoryProgress.filter(c => c.accuracy > 0).length)
-    : 0;
-
-  const recommended = [...categoryProgress].sort((a, b) => {
-    if (a.accuracy !== b.accuracy) return a.accuracy - b.accuracy;
-    return a.completed - b.completed;
-  })[0];
-
-  const textClass = isDarkMode ? 'text-white' : 'text-zinc-800';
-  const subtextClass = isDarkMode ? 'text-zinc-400' : 'text-zinc-500';
-  const cardBg = isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-white border-zinc-300';
-  const trackBg = isDarkMode ? 'bg-zinc-700' : 'bg-zinc-100';
-
-  return (  
-    <div className="w-full max-w-6xl mx-auto px-4 py-8 space-y-6">
-
-      {/* Header */}
-      <div>
-        <h1 className={`text-3xl font-bold ${textClass}`}>Study Materials</h1>
-        <p className={`mt-1 ${subtextClass}`}>Structured learning modules for the Civil Service Exam</p>
-      </div>
-
-      {/* Stats Row */}
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          { 
-            label: 'Overall progress', 
-            value: `${overallPct}%`, 
-            sub: `${totalCompleted} of ${totalItems} completed`,
-            colorClasses: isDarkMode ? 'bg-blue-900/10 border-blue-800/30' : 'bg-blue-50/50 border-blue-100',
-            icon: (
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${isDarkMode ? 'bg-blue-900/40 text-blue-400' : 'bg-blue-100 text-blue-600'}`}>
-                <TrendingUp className="w-6 h-6" />
-              </div>
-            )
-          },
-          { 
-            label: 'Lessons done', 
-            value: `${categoryProgress.filter(c => c.completed > 0).length}`, 
-            sub: 'across 4 subjects',
-            colorClasses: isDarkMode ? 'bg-violet-900/10 border-violet-800/30' : 'bg-violet-50/50 border-violet-100',
-            icon: (
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${isDarkMode ? 'bg-violet-900/40 text-violet-400' : 'bg-violet-100 text-violet-600'}`}>
-                <Library className="w-6 h-6" />
-              </div>
-            )
-          },
-          { 
-            label: 'Avg. accuracy', 
-            value: avgAccuracy > 0 ? `${avgAccuracy}%` : '—', 
-            sub: 'based on quizzes',
-            colorClasses: isDarkMode ? 'bg-emerald-900/10 border-emerald-800/30' : 'bg-emerald-50/50 border-emerald-100',
-            icon: (
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${isDarkMode ? 'bg-emerald-900/40 text-emerald-400' : 'bg-emerald-100 text-emerald-600'}`}>
-                <Target className="w-6 h-6" />
-              </div>
-            )
-          },
-        ].map((stat, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className={`${stat.colorClasses} rounded-xl p-5 border flex items-center justify-between gap-4`}
-          >
-            <div>
-              <p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass} mb-1`}>{stat.label}</p>
-              <p className={`text-2xl font-bold ${textClass}`}>{stat.value}</p>
-              <p className={`text-xs mt-0.5 ${subtextClass}`}>{stat.sub}</p>
-            </div>
-            {stat.icon}
-          </motion.div>
-        ))}
-      </div>
-
-      {/* Recommended Banner */}
-      {!loading && recommended && (
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          onClick={() => navigate(`/lessons/${encodeURIComponent(recommended.name)}`)}
-          className={`rounded-xl border cursor-pointer transition-all hover:shadow-md active:scale-[0.99] ${
-            isDarkMode
-              ? 'bg-amber-700/40 border-amber-600/50 hover:border-amber-800/60'
-              : 'bg-amber-50 border-amber-200 hover:border-amber-400'
-          }`}
-        >
-          <div className="p-5 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-amber-500 flex items-center justify-center flex-shrink-0">
-              <Lightbulb className="w-5 h-5 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wide mb-0.5">
-                Recommended next
-              </p>
-              <p className={`text-base font-bold ${textClass}`}>{recommended.name}</p>
-              <p className={`text-sm ${subtextClass} mt-0.5`}>
-                {recommended.accuracy > 0
-                  ? `${recommended.accuracy}% accuracy — review these lessons to improve`
-                  : 'Start here to build your foundation'}
-              </p>
-            </div>
-            <ChevronRight className="w-5 h-5 text-amber-500 flex-shrink-0" />
-          </div>
-        </motion.div>
-      )}
-
-      {/* Subject Cards */}
-      <div className="space-y-5">
-        <p className={`text-xs font-bold uppercase tracking-wider ${subtextClass}`}>All subjects</p>
-
-        {loading ? (
-          <div className="flex justify-center items-center h-40">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-5 border-blue-400" />
-          </div>
-        ) : (
-          categoryProgress.map((cat, index) => {
-            const pct = cat.total > 0 ? Math.round((cat.completed / cat.total) * 100) : 0;
-            const status = getStatus(pct);
-            const cfg = CATEGORY_CONFIG[cat.name];
-            const iconBg = cat.name === 'Verbal Ability'
-             ? isDarkMode ? 'bg-blue-900/50 text-blue-400' : 'bg-blue-100 text-blue-600'
-              : cat.name === 'Numerical Ability'
-              ? isDarkMode ? 'bg-emerald-900/50 text-emerald-400' : 'bg-emerald-100 text-emerald-600'
-              : cat.name === 'Analytical Ability'
-              ? isDarkMode ? 'bg-violet-900/50 text-violet-400' : 'bg-violet-100 text-violet-600'
-              : isDarkMode ? 'bg-amber-900/50 text-amber-400' : 'bg-amber-100 text-amber-600';
-
-            return (
-                 <motion.div
-                key={cat.name}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + index * 0.08 }}
-                onClick={() => navigate(`/lessons/${encodeURIComponent(cat.name)}`)}
-                className={`rounded-xl border p-5 cursor-pointer group transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.99] ${
-                  isDarkMode ? 'bg-gray-500/10 border-gray-500/30' : 'bg-gray-50/50 border-gray-200'
-                }`}
-              >
-                <div className="flex items-center gap-5">
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
-                    {cfg?.icon}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className={`text-lg font-bold ${textClass} truncate`}>{cat.name}</h3>
-                      <span className={`text-xs font-semibold px-3 py-1 rounded-full ${status.cls} whitespace-nowrap`}>
-                        {status.label}
-                      </span>
-                    </div>  
-                    
-                    <p className={`text-sm mb-3 truncate ${subtextClass}`}>{cfg?.description}</p>
-                    
-                    {/* Modules Row */}
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      {(cfg?.modules || []).map((mod, mi) => {
-                        const done = mi < Math.ceil((pct / 100) * (cfg?.modules.length || 4));
-                        return (
-                          <div
-                            key={mod}
-                            className={`flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md border transition-colors ${
-                              done
-                                ? isDarkMode
-                                  ? 'bg-gray-800/30 border-gray-700 text-white-300'
-                                  : 'bg-blue-50 border-blue-200 text-blue-700'
-                                : isDarkMode
-                                ? 'bg-zinc-800 border-zinc-700 text-zinc-500'
-                                : 'bg-white border-zinc-200 text-zinc-400'
-                            }`}
-                          >
-                            {done
-                              ? <CheckCircle2 className="w-3 h-3 text-blue-500" />
-                              : <Circle className="w-3 h-3 text-zinc-400" />
-                            }
-                            {mod}
-                          </div>
-                        );
-                      })}
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                      <div className={`flex-1 ${trackBg} rounded-full h-2 overflow-hidden`}>
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${pct}%` }}
-                          transition={{ duration: 0.6, delay: 0.2 + index * 0.1, ease: 'easeOut' }}
-                          className={`h-full rounded-full ${cfg?.barColor || 'bg-gray-500'}`}
-                        />
-                      </div>
-                      <span className={`text-xs font-bold ${textClass} w-9 text-right`}>{pct}%</span>
-                    </div>
-                    
-                    {/* Footer */}
-                    <div className="mt-2">
-                      <p className={`text-xs ${subtextClass}`}>
-                        {cat.completed}/{cat.total} items
-                        {cat.accuracy > 0 && <span className="ml-2">· {cat.accuracy}% accuracy</span>}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className={`p-2 rounded-full flex-shrink-0 ml-2 ${isDarkMode ? 'bg-gray-600/30 text-gray-400 group-hover:bg-gray-600 group-hover:text-white' : 'bg-gray-50 text-gray-500 group-hover:bg-gray-100 group-hover:text-gray-600'} transition-colors`}>
-                    <ChevronRight className="w-5 h-5" />
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })
-        )}
-      </div>
+/* ─── shimmer ────────────────────────────────────────────────────────────── */
+const Shimmer = ({ className }: { className?: string }) => (
+    <div className={`relative overflow-hidden rounded-xl bg-zinc-100 dark:bg-zinc-800 ${className}`}>
+        <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/20 dark:via-white/5 to-transparent" />
     </div>
-  );
+);
+
+/* ─── animated bar ───────────────────────────────────────────────────────── */
+const Bar = ({ value, colorClass, delay = 0 }: { value: number; colorClass: string; delay?: number }) => (
+    <div className="w-full h-1.5 rounded-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+        <motion.div
+            className={`h-full rounded-full ${colorClass}`}
+            initial={{ width: 0 }}
+            animate={{ width: `${Math.min(value, 100)}%` }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay }}
+        />
+    </div>
+);
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+const LessonsPage: React.FC = () => {
+    const { isDarkMode } = useOutletContext<any>();
+    const navigate = useNavigate();
+
+    const [categoryProgress, setCategoryProgress] = useState<CategoryProgress[]>([
+        { name: 'Verbal Ability',      total: 50, completed: 0, accuracy: 0 },
+        { name: 'Numerical Ability',   total: 50, completed: 0, accuracy: 0 },
+        { name: 'Analytical Ability',  total: 50, completed: 0, accuracy: 0 },
+        { name: 'General Information', total: 50, completed: 0, accuracy: 0 },
+    ]);
+    const [loading, setLoading] = useState(true);
+
+    /* ── data fetch (unchanged logic) ───────────────────────────────────── */
+    useEffect(() => {
+        const fetchProgress = async () => {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) { setLoading(false); return; }
+
+                const { data: lessonProgress } = await supabase
+                    .from('lesson_progress')
+                    .select('category_id, topic_id, score, total_questions')
+                    .eq('user_id', user.id);
+
+                const { data: categories } = await supabase.from('categories').select('id, name');
+
+                const updated = Object.entries(FLASHCARD_TOTALS).map(([name, total]) => {
+                    const category    = categories?.find(c => c.name === name);
+                    const catProgress = lessonProgress?.filter(p => p.category_id === category?.id) || [];
+                    const completedTopics = catProgress.length;
+                    const totalScore  = catProgress.reduce((s, p) => s + (p.score || 0), 0);
+                    const totalQ      = catProgress.reduce((s, p) => s + (p.total_questions || 0), 0);
+                    const accuracy    = totalQ > 0 ? Math.round((totalScore / totalQ) * 100) : 0;
+                    const completedItems = Math.min(completedTopics * 10, total);
+                    return { name, total, completed: completedItems, accuracy };
+                });
+
+                setCategoryProgress(updated);
+            } catch (err) {
+                console.error('Error fetching lesson progress:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProgress();
+    }, []);
+
+    /* ── derived stats ───────────────────────────────────────────────────── */
+    const totalCompleted = categoryProgress.reduce((s, c) => s + c.completed, 0);
+    const totalItems     = categoryProgress.reduce((s, c) => s + c.total, 0);
+    const overallPct     = totalItems > 0 ? Math.round((totalCompleted / totalItems) * 100) : 0;
+    const withAccuracy   = categoryProgress.filter(c => c.accuracy > 0);
+    const avgAccuracy    = withAccuracy.length > 0
+        ? Math.round(withAccuracy.reduce((s, c) => s + c.accuracy, 0) / withAccuracy.length) : 0;
+    const subjectsDone   = categoryProgress.filter(c => c.completed > 0).length;
+
+
+    /* ══════════════════════════════════════════════════════════════════════ */
+    return (
+        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+            <style>{`@keyframes shimmer{to{transform:translateX(200%)}}`}</style>
+
+            <motion.div
+                initial="hidden" animate="show" variants={stagger}
+                className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-6"
+            >
+                {/* ── Page header ─────────────────────────────────────────── */}
+                <motion.div variants={fadeUp}>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2">Study</p>
+                    <h1 className="text-3xl font-bold text-zinc-900 dark:text-white tracking-tight">Study Materials</h1>
+                    <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+                        Structured learning modules for the Civil Service Exam
+                    </p>
+                </motion.div>
+
+                {/* ── Stats row ───────────────────────────────────────────── */}
+                {loading ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {[...Array(3)].map((_, i) => <Shimmer key={i} className="h-24" />)}
+                    </div>
+                ) : (
+                    <motion.div variants={fadeUp} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        {[
+                            {
+                                label: 'Overall Progress',
+                                value: `${overallPct}%`,
+                                sub: `${totalCompleted} of ${totalItems} completed`,
+                                iconBg: 'bg-blue-100 dark:bg-blue-900/30',
+                                icon: <TrendingUp className="w-5 h-5 text-blue-500" />,
+                            },
+                            {
+                                label: 'Subjects Active',
+                                value: String(subjectsDone),
+                                sub: 'across 4 subjects',
+                                iconBg: 'bg-violet-100 dark:bg-violet-900/30',
+                                icon: <Library className="w-5 h-5 text-violet-500" />,
+                            },
+                            {
+                                label: 'Avg. Accuracy',
+                                value: avgAccuracy > 0 ? `${avgAccuracy}%` : '—',
+                                sub: 'based on lesson quizzes',
+                                iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
+                                icon: <Target className="w-5 h-5 text-emerald-500" />,
+                            },
+                        ].map((stat, i) => (
+                            <motion.div
+                                key={i}
+                                variants={fadeUp}
+                                className="group flex items-center gap-4 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300"
+                            >
+                                <div className={`p-3 rounded-xl ${stat.iconBg} transition-transform duration-300 group-hover:scale-110 shrink-0`}>
+                                    {stat.icon}
+                                </div>
+                                <div>
+                                    <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">{stat.label}</p>
+                                    <p className="text-2xl font-semibold text-zinc-900 dark:text-white mt-0.5 leading-none">{stat.value}</p>
+                                    <p className="text-[11px] text-zinc-400 dark:text-zinc-500 mt-0.5">{stat.sub}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                )}
+
+                {/* ── Subject cards ────────────────────────────────────────── */}
+                <motion.div variants={fadeUp} className="space-y-3">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">All Subjects</p>
+
+                    {loading ? (
+                        <div className="space-y-3">
+                            {[...Array(4)].map((_, i) => <Shimmer key={i} className="h-40" />)}
+                        </div>
+                    ) : (
+                        <div className="space-y-3">
+                            {categoryProgress.map((cat, index) => {
+                                const pct    = cat.total > 0 ? Math.round((cat.completed / cat.total) * 100) : 0;
+                                const status = getStatus(pct);
+                                const cfg    = CATEGORY_CONFIG[cat.name];
+
+                                return (
+                                    <motion.button
+                                        key={cat.name}
+                                        initial={{ opacity: 0, y: 12 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.05 + index * 0.07, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                                        onClick={() => navigate(`/lessons/${encodeURIComponent(cat.name)}`)}
+                                        className="w-full text-left rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm hover:shadow-md hover:border-zinc-300 dark:hover:border-zinc-700 active:scale-[0.99] transition-all duration-200 overflow-hidden group"
+                                    >
+                                        {/* card body */}
+                                        <div className="p-5">
+                                            <div className="flex items-start gap-4">
+
+                                                {/* icon */}
+                                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${cfg?.iconBg} ${cfg?.iconText} transition-transform duration-300 group-hover:scale-110`}>
+                                                    {cfg?.icon}
+                                                </div>
+
+                                                {/* content */}
+                                                <div className="flex-1 min-w-0 space-y-3">
+
+                                                    {/* title row */}
+                                                    <div className="flex items-center justify-between gap-3">
+                                                        <h3 className="text-sm font-semibold text-zinc-900 dark:text-white truncate">{cat.name}</h3>
+                                                        <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap shrink-0 ${status.cls}`}>
+                                                            {status.label}
+                                                        </span>
+                                                    </div>
+
+                                                    {/* description */}
+                                                    <p className="text-xs text-zinc-400 dark:text-zinc-500 truncate">{cfg?.description}</p>
+
+                                                    {/* module chips */}
+                                                    <div className="flex flex-wrap gap-1.5">
+                                                        {(cfg?.modules || []).map((mod, mi) => {
+                                                            const done = mi < Math.ceil((pct / 100) * (cfg?.modules.length || 4));
+                                                            return (
+                                                                <span
+                                                                    key={mod}
+                                                                    className={`inline-flex items-center gap-1 text-[10px] font-medium px-2 py-1 rounded-lg border transition-colors ${
+                                                                        done
+                                                                            ? `${cfg?.pillBg} ${cfg?.pillText} border-transparent`
+                                                                            : 'bg-zinc-50 dark:bg-zinc-800/60 text-zinc-400 dark:text-zinc-500 border-zinc-200 dark:border-zinc-700'
+                                                                    }`}
+                                                                >
+                                                                    {done
+                                                                        ? <CheckCircle2 className="w-2.5 h-2.5" />
+                                                                        : <Circle className="w-2.5 h-2.5" />
+                                                                    }
+                                                                    {mod}
+                                                                </span>
+                                                            );
+                                                        })}
+                                                    </div>
+
+                                                    {/* progress bar */}
+                                                    <div className="space-y-1.5">
+                                                        <Bar value={pct} colorClass={cfg?.barColor || 'bg-zinc-400'} delay={0.1 + index * 0.07} />
+                                                        <div className="flex items-center justify-between">
+                                                            <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
+                                                                {cat.completed}/{cat.total} items
+                                                                {cat.accuracy > 0 && (
+                                                                    <span className="ml-2">· {cat.accuracy}% accuracy</span>
+                                                                )}
+                                                            </p>
+                                                            <span className={`text-xs font-bold tabular-nums ${cfg?.iconText}`}>{pct}%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* chevron */}
+                                                <ChevronRight className="w-4 h-4 text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-500 dark:group-hover:text-zinc-400 shrink-0 mt-0.5 transition-colors duration-200 translate-x-0 group-hover:translate-x-0.5" />
+                                            </div>
+                                        </div>
+                                    </motion.button>
+                                );
+                            })}
+                        </div>
+                    )}
+                </motion.div>
+            </motion.div>
+        </div>
+    );
 };
 
 export default LessonsPage;
