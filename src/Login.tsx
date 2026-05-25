@@ -117,10 +117,10 @@ const Login = () => {
                 >
                     {/* logo */}
                     <motion.div variants={fadeUp} className="flex items-center gap-3 mb-8">
-                        <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                            <img src="/system logo.png" alt="CiviQuest" className="w-7 h-7 object-contain" />
+                        <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                            <img src="/System Logo.png" alt="CiviQuest" className="w-13 h-13 object-contain" />
                         </div>
-                        <span className="text-2xl font-bold text-white tracking-tight">CiviQuest</span>
+                        <span className="text-4xl font-bold text-white tracking-tight">CiviQuest</span>
                     </motion.div>
 
                     <motion.h1 variants={fadeUp} className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-4">

@@ -69,7 +69,7 @@ const Sidebar = ({
               <div className="h-[60px] flex items-center px-2 border-b border-slate-200 dark:border-slate-700 shrink-0">
     <div className="flex items-center gap-3 overflow-hidden">
         <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 bg-white">
-            <img src="/system logo.png" alt="CiviQuest" className="w-11 h-11 object-contain" />
+            <img src="/System Logo.png" alt="CiviQuest" className="w-11 h-11 object-contain" />
         </div>
         {!isCollapsed && (
             <span className="text-lg font-bold whitespace-nowrap text-slate-900 dark:text-slate-50 tracking-tight">
