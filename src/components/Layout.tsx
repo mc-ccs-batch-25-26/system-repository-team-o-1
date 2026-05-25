@@ -11,42 +11,52 @@ const Layout = () => {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
-  
   const [profileUsername, setProfileUsername] = useState('');
   const [profileAvatarUrl, setProfileAvatarUrl] = useState<string | null>(null);
   const [profileCreatedAt, setProfileCreatedAt] = useState('');
+  const [profileVersion, setProfileVersion] = useState(0);
 
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme ? savedTheme === 'dark' : true;
-  });
+  const isDarkMode = true;
 
-  // Theme effect
   useEffect(() => {
-    document.body.className = isDarkMode ? 'dark-bg dark' : 'light-bg';
-    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
+    document.body.className = 'dark-bg dark';
+    document.documentElement.style.backgroundColor = '#09090b'; 
+  }, []);
 
-  const toggleTheme = () => {
-    setIsDarkMode(prev => !prev);
-  };
-
-  // Auth effect
   useEffect(() => {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         setCurrentUser(session.user);
-        // Fetch profile for modal
         const { data: profile } = await supabase
           .from('profiles')
-          .select('username, avatar_url, created_at')
+          .select('username, avatar_url, created_at, last_active_date, streak_count')
           .eq('id', session.user.id)
           .single();
         if (profile) {
           setProfileUsername(profile.username || session.user.email?.split('@')[0] || '');
           setProfileAvatarUrl(profile.avatar_url);
           setProfileCreatedAt(profile.created_at || '');
+
+          // Streak logic
+          const today = new Date().toISOString().split('T')[0];
+          const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+          const lastActive = profile.last_active_date;
+          const currentStreak = profile.streak_count || 0;
+
+          let newStreak = currentStreak;
+          if (lastActive === today) {
+            // Already logged in today — no change
+          } else if (lastActive === yesterday) {
+            newStreak = currentStreak + 1;
+          } else {
+            newStreak = 1;
+          }
+
+          await supabase.from('profiles').update({
+            streak_count: newStreak,
+            last_active_date: today
+          }).eq('id', session.user.id);
         }
       } else {
         setCurrentUser(null);
@@ -71,30 +81,27 @@ const Layout = () => {
   const handleProfileUpdated = (newUsername: string, newAvatarUrl: string | null) => {
     setProfileUsername(newUsername);
     setProfileAvatarUrl(newAvatarUrl);
+    setProfileVersion(prev => prev + 1);
   };
 
-  const bgClass = isDarkMode ? "dark-bg" : "light-bg";
-  const textClass = isDarkMode ? "dark-text" : "light-text";
-
   return (
-    <div className={`min-h-screen flex ${bgClass} ${textClass}`}>
+    <div className="min-h-screen flex">
       <Sidebar
-     isDarkMode={isDarkMode}
-     isOpen={isMobileMenuOpen}
-     setIsOpen={setIsMobileMenuOpen}
-     isCollapsed={isCollapsed}
-     setIsCollapsed={setIsCollapsed}
-     onProfileClick={() => setIsProfileModalOpen(true)}
-     avatarUrl={profileAvatarUrl}      // ADD
-     username={profileUsername}        // ADD
-     userEmail={currentUser?.email || ''}  // ADD
+        isDarkMode={isDarkMode}
+        isOpen={isMobileMenuOpen}
+        setIsOpen={setIsMobileMenuOpen}
+        isCollapsed={isCollapsed}
+        setIsCollapsed={setIsCollapsed}
+        onProfileClick={() => setIsProfileModalOpen(true)}
+        avatarUrl={profileAvatarUrl}
+        username={profileUsername}
+        userEmail={currentUser?.email || ''}
       />
       <div className={`flex-1 transition-all duration-300 flex flex-col min-h-screen w-full ${
         isCollapsed ? 'md:ml-16' : 'md:ml-64'
       }`}>
-        <Outlet context={{
+        <Outlet key={profileVersion} context={{
           isDarkMode,
-          toggleTheme,
           currentUser,
           isMobileMenuOpen,
           setIsMobileMenuOpen,
@@ -105,7 +112,6 @@ const Layout = () => {
         </div>
       </div>
 
-      {/* Profile Modal */}
       {isProfileModalOpen && currentUser && (
         <ProfileModal
           onClose={() => setIsProfileModalOpen(false)}

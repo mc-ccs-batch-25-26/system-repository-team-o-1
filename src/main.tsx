@@ -21,6 +21,7 @@ import './supabase/supabaseClient'
 
 emailjs.init("akyGk9Q2Gdfwid34v");
 
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Router>
