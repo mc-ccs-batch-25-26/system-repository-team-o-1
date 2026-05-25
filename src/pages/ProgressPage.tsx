@@ -163,7 +163,7 @@ const ProgressPage = () => {
 
                 {/* ── Page header ─────────────────────────────────────────── */}
                 <motion.div initial="hidden" animate="show" variants={fadeUp}>
-                    <p className="text-xs font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mb-2">Dashboard</p>
+                    <p className="text-xs font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mb-2">Progress</p>
                     <h1 className="text-3xl font-bold text-zinc-900 dark:text-white tracking-tight">
                         Your Progress
                     </h1>
