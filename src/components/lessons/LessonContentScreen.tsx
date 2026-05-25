@@ -134,6 +134,7 @@ export const LessonContentScreen: React.FC = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
+        // Award XP
         const { data: profile } = await supabase.from('profiles').select('xp').eq('id', user.id).maybeSingle();
         if (profile) {
           const earnedXP = (quizScore * 10) + 10; 
@@ -141,37 +142,39 @@ export const LessonContentScreen: React.FC = () => {
           const newLevel = Math.floor(newXP / 500) + 1;
           await supabase.from('profiles').update({ xp: newXP, level: newLevel }).eq('id', user.id);
         }
-        await supabase.from('quiz_sessions').insert({
-          user_id: user.id,
-          score: quizScore,
-          is_pretest: false,
-          is_timed: false,
-          ended_at: new Date().toISOString(),
-        });
+
+        // Save to lesson_progress (NOT performance)
         const { data: categories } = await supabase.from('categories').select('id, name');
         const categoryId = categories?.find(c => c.name === categoryData?.title)?.id;
+        
         if (categoryId) {
-          const { data: existing } = await supabase.from('performance')
-            .select('total_answered, total_correct')
+          // Get existing progress to accumulate scores
+          const { data: existing } = await supabase
+            .from('lesson_progress')
+            .select('score, total_questions')
             .eq('user_id', user.id)
             .eq('category_id', categoryId)
+            .eq('topic_id', topicData.id)
             .maybeSingle();
-          const newTotal = (existing?.total_answered || 0) + questions.length;
-          const newCorrect = (existing?.total_correct || 0) + quizScore;
-          await supabase.from('performance').upsert({
+
+          const prevScore = existing?.score || 0;
+          const prevTotal = existing?.total_questions || 0;
+
+          await supabase.from('lesson_progress').upsert({
             user_id: user.id,
             category_id: categoryId,
-            accuracy_rate: (newCorrect / newTotal) * 100,
-            total_answered: newTotal,
-            total_correct: newCorrect,
-          }, { onConflict: 'user_id, category_id' });
+            topic_id: topicData.id,
+            status: 'completed',
+            score: prevScore + quizScore,
+            total_questions: prevTotal + questions.length,
+            completed_at: new Date().toISOString(),
+          }, { onConflict: 'user_id, category_id, topic_id' });
         }
       }
     } catch (e) {
       console.error('Error finishing lesson:', e);
     }
   };
-
   const toggleSection = (section: 'keyPoints' | 'simpleExplanation' | 'example') => {
     setExpandedSection(prev => prev === section ? null : section);
   };
