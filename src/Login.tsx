@@ -57,19 +57,22 @@ const Login = () => {
     const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
 
     const signInWithEmail = async () => {
-        setAuthing(true);
-        setError('');
-        try {
-            const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-            if (signInError) throw signInError;
-            if (data.user) navigate('/');
-        } catch (err: any) {
-            setError(err.message || 'Invalid email or password.');
-        } finally {
-            setAuthing(false);
-        }
-    };
-
+    if (!email || !password) {
+        setError('Please enter your email and password.');
+        return;
+    }
+    setAuthing(true);
+    setError('');
+    try {
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) throw signInError;
+        if (data.user) navigate('/');
+    } catch (err: any) {
+        setError(err.message || 'Invalid email or password.');
+    } finally {
+        setAuthing(false);
+    }
+};
     const handleForgotPassword = async () => {
         if (!email) { setError('Please enter your email address.'); return; }
         setAuthing(true);
@@ -89,7 +92,13 @@ const Login = () => {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') forgotPasswordMode ? handleForgotPassword() : signInWithEmail();
+    if (e.key === 'Enter') {
+        if (forgotPasswordMode) {
+            handleForgotPassword();
+        } else if (email && password) {
+            signInWithEmail();
+        }
+    }
     };
 
     return (

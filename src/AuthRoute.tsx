@@ -12,28 +12,50 @@ const AuthRoute: React.FunctionComponent<IAuthRouteProps> = (props) => {
     const location = useLocation();
     const [loading, setLoading] = useState(true);
 
+    // Pages only for regular users (admins should NOT access)
+    const userOnlyPages = ['/', '/quizzes', '/lessons', '/progress', '/leaderboard', '/pretest'];
+    
+    // Pages anyone can access
+    const publicPages = ['/login', '/signup', '/admin'];
+
     useEffect(() => {
         const checkAuth = async () => {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
 
                 if (session) {
-                    // Check if pre-test is done
-                    const { data: userData } = await supabase
+                    // Check user role
+                    const { data: profile } = await supabase
                         .from('profiles')
-                        .select('pretest_done')
+                        .select('pretest_done, role')
                         .eq('id', session.user.id)
                         .single();
 
-                    const hasCompletedPretest = userData?.pretest_done === true;
+                    const isAdmin = profile?.role === 'admin' || profile?.role === 'super_admin';
+                    const hasCompletedPretest = profile?.pretest_done === true;
 
-                    // Redirect to pretest if not done and not already there
-                    if (!hasCompletedPretest && location.pathname !== '/pretest') {
-                        navigate('/pretest', { replace: true });
-                        return;
+                    if (isAdmin) {
+                        // Admins can ONLY access /admin routes and /settings
+                        if (!location.pathname.startsWith('/admin') && location.pathname !== '/settings') {
+                            navigate('/admin', { replace: true });
+                            return;
+                        }
+                    } else {
+                        // Regular user logic
+                        if (location.pathname === '/admin') {
+                            navigate('/', { replace: true });
+                            return;
+                        }
+
+                        // Redirect to pretest if not done
+                        if (!hasCompletedPretest && location.pathname !== '/pretest') {
+                            navigate('/pretest', { replace: true });
+                            return;
+                        }
                     }
                 } else {
-                    if (location.pathname !== '/login' && location.pathname !== '/signup') {
+                    // Not logged in
+                    if (!publicPages.includes(location.pathname)) {
                         navigate('/login');
                     }
                 }
@@ -48,7 +70,7 @@ const AuthRoute: React.FunctionComponent<IAuthRouteProps> = (props) => {
 
         const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
             if (!session) {
-                if (location.pathname !== '/login' && location.pathname !== '/signup') {
+                if (!publicPages.includes(location.pathname)) {
                     navigate('/login');
                 }
             }
