@@ -78,7 +78,7 @@ export const getProgressStats = async () => {
     });
 
     const accuracy = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
-    const completion = Math.round(((performanceData || []).length / 3) * 100); // 3 categories
+    const completion = Math.round(((performanceData || []).length / 4) * 100); // 4  categories
 
     // Get pre-test status
     const { data: profile } = await supabase
@@ -162,11 +162,84 @@ export const saveQuizSession = async (
       .single();
 
     if (error) throw error;
+    
+    // Asynchronously kick off badge evaluation in the background without blocking the UI
+    evaluateAndAwardBadges(user.id, { score, totalQuestions, isPretest, isTimed }).catch(e => console.error(e));
+
     return { success: true, sessionId: data.id };
   } catch (error) {
     console.error("Error saving quiz session:", error);
     return { success: false, error };
   }
+};
+
+/**
+ * AUTOMATED BADGE EVALUATION LOGIC
+ * This checks various milestones whenever a quiz completes and awards badges if not already unlocked.
+ */
+const evaluateAndAwardBadges = async (userId: string, context: { score: number, totalQuestions: number, isPretest: boolean, isTimed: boolean }) => {
+    // 1. Fetch current profile stats for streaks, level, etc.
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('streak_count')
+        .eq('id', userId)
+        .single();
+    
+    // 2. Fetch badges already earned so we don't spam database inserts
+    const { data: existingBadges } = await supabase
+        .from('user_badges')
+        .select('badge_type')
+        .eq('user_id', userId);
+        
+    const earnedTypes = new Set((existingBadges || []).map(b => b.badge_type));
+    const newlyEarned: string[] = [];
+    const now = new Date();
+    const hour = now.getHours();
+
+    // -- EVALUATE BADGES --
+
+    // STREAKS
+    if (profile) {
+        if (profile.streak_count >= 3 && !earnedTypes.has('streak_3')) newlyEarned.push('streak_3');
+        if (profile.streak_count >= 10 && !earnedTypes.has('streak_10')) newlyEarned.push('streak_10');
+        if (profile.streak_count >= 30 && !earnedTypes.has('streak_30')) newlyEarned.push('streak_30');
+    }
+
+    // PERFECT SCORE
+    // Must have at least 5 questions to count as a valid perfect score run
+    if (context.score === context.totalQuestions && context.totalQuestions >= 5 && !earnedTypes.has('perfect_score')) {
+        newlyEarned.push('perfect_score');
+    }
+
+    // NIGHT OWL (Midnight to 4 AM)
+    if (hour >= 0 && hour < 5 && !earnedTypes.has('night_owl')) {
+        newlyEarned.push('night_owl');
+    }
+
+    // EARLY BIRD (5 AM to 8 AM)
+    if (hour >= 5 && hour < 8 && !earnedTypes.has('early_bird')) {
+        newlyEarned.push('early_bird');
+    }
+
+    // TODO: Add Speed Demon and Peer Battles when those engines are finalized.
+
+    // 3. Batch insert new badges
+    if (newlyEarned.length > 0) {
+        const inserts = newlyEarned.map(badge_type => ({
+            user_id: userId,
+            badge_type
+        }));
+        
+        const { error: insertError } = await supabase
+            .from('user_badges')
+            .insert(inserts);
+            
+        if (insertError) {
+             console.error("Failed to award badges:", insertError);
+        } else {
+             console.log(`Unlocked new badges: ${newlyEarned.join(', ')}!`);
+        }
+    }
 };
 
 // Save individual answer
