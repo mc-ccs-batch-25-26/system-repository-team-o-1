@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, ArrowRight, Zap, Target, Lightbulb, Calendar, CheckCircle } from 'lucide-react';
 import { supabase } from '../../supabase/supabaseClient';
-import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES, saveMistake } from '../../data/mockQuestions';
+import { MockQuestion, shuffleArray, saveMistake, dbToMockQuestion } from '../../data/mockQuestions';
 import QuizEngine from './QuizEngine';
 import SmartRecommendation from './SmartRecommendation';
 import { motion } from 'framer-motion';
+import FloatingChatbot from '../FloatingChatbot';
 
 const CATEGORY_COLORS: Record<string, { pill: string; bar: string; score: string }> = {
   'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',     bar: 'bg-blue-500',    score: 'text-blue-600 dark:text-blue-400'    },
@@ -53,9 +54,7 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
       if (user) {
         const today = new Date().toLocaleDateString('en-CA');
         const completedDate = localStorage.getItem(`daily_quiz_completed_${user.id}`);
-        if (completedDate === today) {
-          setHasCompletedToday(true);
-        }
+        if (completedDate === today) setHasCompletedToday(true);
       }
       setIsCheckingStatus(false);
     };
@@ -70,7 +69,6 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
     let weakCategories: string[] = [];
 
     if (user) {
-      // FIRST: Check performance table for current weak areas
       const { data: perf } = await supabase
         .from('performance')
         .select('accuracy_rate, categories:category_id(name)')
@@ -88,36 +86,48 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
           .select('categories:category_id(name)')
           .eq('user_id', user.id)
           .eq('weak_category', true);
-
         if (pretestData && pretestData.length > 0) {
           weakCategories = pretestData.map((p: any) => p.categories?.name).filter(Boolean);
         }
       }
 
       const { data: session } = await supabase.from('quiz_sessions').insert({
-        user_id: user.id,
-        is_pretest: false,
-        is_timed: false,
+        user_id: user.id, is_pretest: false, is_timed: false,
       }).select().single();
       if (session) sessionRef.current = session.id;
     }
 
+    // Fetch from database
+    const { data: dbCategories } = await supabase.from('categories').select('id, name');
     let selectedQuestions: MockQuestion[] = [];
+
     if (weakCategories.length > 0) {
-      weakCategories.forEach(cat => {
-        const catQuestions = (MOCK_QUESTIONS[cat] || [])
-          .map(q => ({ ...q, category: cat }))
-          .sort((a, b) => (Number(a.difficulty) || 1) - (Number(b.difficulty) || 1));
-        selectedQuestions.push(...shuffleArray(catQuestions));
-      });
-    } else {
-      CATEGORIES.forEach(cat => {
-        const catQuestions = (MOCK_QUESTIONS[cat] || []).map(q => ({ ...q, category: cat }));
-        selectedQuestions.push(...shuffleArray(catQuestions));
-      });
+      const weakIds = dbCategories?.filter(c => weakCategories.includes(c.name)).map(c => c.id) || [];
+      if (weakIds.length > 0) {
+        const { data: weakQuestions } = await supabase
+          .from('questions')
+          .select('*, categories!inner(name)')
+          .in('category_id', weakIds)
+          .eq('is_active', true)
+          .limit(20);
+        if (weakQuestions) {
+          selectedQuestions = shuffleArray(weakQuestions.map(dbToMockQuestion));
+        }
+      }
     }
 
-    selectedQuestions = shuffleArray(selectedQuestions).slice(0, 5);
+    if (selectedQuestions.length === 0) {
+      const { data: allQuestions } = await supabase
+        .from('questions')
+        .select('*, categories!inner(name)')
+        .eq('is_active', true)
+        .limit(30);
+      if (allQuestions) {
+        selectedQuestions = shuffleArray(allQuestions.map(dbToMockQuestion));
+      }
+    }
+
+    selectedQuestions = selectedQuestions.slice(0, 5);
     selectedQuestions.sort((a, b) => (Number(a.difficulty) || 1) - (Number(b.difficulty) || 1));
 
     setQuestions(selectedQuestions);
@@ -188,13 +198,17 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
 
     const today = new Date().toLocaleDateString('en-CA');
     const yesterday = new Date(Date.now() - 86400000).toLocaleDateString('en-CA');
-    const { data: profile } = await supabase.from('profiles').select('xp, level, streak_count, last_active_date').eq('id', user.id).single();
+    const { data: profile } = await supabase.from('profiles').select('xp, level, streak_count, last_active_date, daily_xp, weekly_xp, monthly_xp').eq('id', user.id).single();
     if (profile) {
       const newXP = (profile.xp || 0) + xp;
       const newLevel = Math.floor(newXP / 500) + 1;
       const lastActive = profile.last_active_date;
       const newStreak = lastActive === today ? profile.streak_count : lastActive === yesterday ? (profile.streak_count || 0) + 1 : 1;
-      await supabase.from('profiles').update({ xp: newXP, level: newLevel, streak_count: newStreak, last_active_date: today }).eq('id', user.id);
+      await supabase.from('profiles').update({
+        xp: newXP, level: newLevel, daily_xp: (profile.daily_xp || 0) + xp,
+        weekly_xp: (profile.weekly_xp || 0) + xp, monthly_xp: (profile.monthly_xp || 0) + xp,
+        streak_count: newStreak, last_active_date: today
+      }).eq('id', user.id);
     }
 
     localStorage.setItem(`daily_quiz_completed_${user.id}`, today);
@@ -336,6 +350,7 @@ const WeakAreasFocus = ({ isDarkMode }: { isDarkMode: boolean }) => {
     <div className={`rounded-xl p-4 border ${isDarkMode ? 'bg-blue-900/10 border-blue-500/20' : 'bg-blue-50 border-blue-200'}`}>
       <p className={`text-xs font-semibold mb-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-700'}`}>🎯 Focusing on your weak areas:</p>
       <div className="flex flex-wrap gap-2">{weakCats.map(cat => (<span key={cat} className={`text-xs font-medium px-2.5 py-1 rounded-full ${isDarkMode ? 'bg-blue-900/40 text-blue-300' : 'bg-blue-100 text-blue-700'}`}>{cat}</span>))}</div>
+      <FloatingChatbot position="bottom-right" />
     </div>
   );
 };

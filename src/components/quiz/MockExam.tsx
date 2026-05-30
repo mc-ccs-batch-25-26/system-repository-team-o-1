@@ -2,10 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, ArrowRight, FileText, AlertTriangle, Clock, Shield, LayoutGrid } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../supabase/supabaseClient';
-import { MOCK_QUESTIONS, MockQuestion, shuffleArray, CATEGORIES } from '../../data/mockQuestions';
+import { MockQuestion, shuffleArray, CATEGORIES, saveMistake, dbToMockQuestion } from '../../data/mockQuestions';
 import QuizEngine from './QuizEngine';
 import SmartRecommendation from './SmartRecommendation';
-import { saveMistake } from '../../data/mockQuestions';
 
 const CATEGORY_COLORS: Record<string, { pill: string; bar: string; score: string }> = {
   'Verbal Ability':       { pill: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',     bar: 'bg-blue-500',    score: 'text-blue-600 dark:text-blue-400'    },
@@ -61,19 +60,39 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
 
   const startExam = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    if (user) { const { data: session } = await supabase.from('quiz_sessions').insert({ user_id: user.id, is_pretest: false, is_timed: true }).select().single(); if (session) sessionRef.current = session.id; }
-    let examQuestions: MockQuestion[] = [];
-    CATEGORIES.forEach(cat => { const catQs = shuffleArray(MOCK_QUESTIONS[cat] || []); examQuestions.push(...catQs.slice(0, 56)); });
+    if (user) {
+      const { data: session } = await supabase.from('quiz_sessions').insert({ user_id: user.id, is_pretest: false, is_timed: true }).select().single();
+      if (session) sessionRef.current = session.id;
+    }
+
+    // Fetch from database - 170 questions
+    const { data: dbQuestions } = await supabase
+      .from('questions')
+      .select('*, categories!inner(name)')
+      .eq('is_active', true)
+      .limit(200);
+
+    let examQuestions: MockQuestion[] = (dbQuestions || []).map(dbToMockQuestion);
     examQuestions = shuffleArray(examQuestions).slice(0, 170);
-    setQuestions(examQuestions); setPhase('exam'); setCurrentIndex(0); setAnswers({}); setScore(0); setTimeLeft(EXAM_DURATION);
+
+    setQuestions(examQuestions);
+    setPhase('exam');
+    setCurrentIndex(0);
+    setAnswers({});
+    setScore(0);
+    setTimeLeft(EXAM_DURATION);
   };
 
   const handleAnswer = async (questionId: string, selected: string) => {
     if (answers[questionId]) return;
     setAnswers(prev => ({ ...prev, [questionId]: selected }));
     if (sessionRef.current) {
-      const q = questions.find(q => q.id === questionId)!; const isCorrect = selected === q.correct;
-      try { await supabase.from('quiz_session_answers').insert({ session_id: sessionRef.current, question_id: questionId, selected_answer: selected, is_correct: isCorrect }); if (!isCorrect) saveMistake(q, selected, q.category || 'Unknown'); } catch (err) { console.error('Failed to save answer:', err); }
+      const q = questions.find(q => q.id === questionId)!;
+      const isCorrect = selected === q.correct;
+      try {
+        await supabase.from('quiz_session_answers').insert({ session_id: sessionRef.current, question_id: questionId, selected_answer: selected, is_correct: isCorrect });
+        if (!isCorrect) saveMistake(q, selected, q.category || 'Unknown');
+      } catch (err) { console.error('Failed to save answer:', err); }
     }
   };
 
@@ -81,15 +100,32 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
   const prevQuestion = () => { if (currentIndex > 0) setCurrentIndex(prev => prev - 1); };
 
   const finishExam = async () => {
-    const totalTimeTaken = EXAM_DURATION - timeLeft; setTimeTaken(totalTimeTaken);
-    let finalScore = 0; const stats: Record<string, { correct: number; total: number }> = {};
-    questions.forEach(q => { const cat = q.category; if (!stats[cat]) stats[cat] = { correct: 0, total: 0 }; stats[cat].total++; if (answers[q.id] === q.correct) { stats[cat].correct++; finalScore++; } });
-    setScore(finalScore); setCategoryStats(stats); setPhase('results');
-    const { data: { user } } = await supabase.auth.getUser(); if (!user) return;
+    const totalTimeTaken = EXAM_DURATION - timeLeft;
+    setTimeTaken(totalTimeTaken);
+    let finalScore = 0;
+    const stats: Record<string, { correct: number; total: number }> = {};
+    questions.forEach(q => {
+      const cat = q.category;
+      if (!stats[cat]) stats[cat] = { correct: 0, total: 0 };
+      stats[cat].total++;
+      if (answers[q.id] === q.correct) { stats[cat].correct++; finalScore++; }
+    });
+    setScore(finalScore);
+    setCategoryStats(stats);
+    setPhase('results');
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
     const earnedXP = finalScore * 10;
-    const { data: profile } = await supabase.from('profiles').select('xp, level').eq('id', user.id).single();
-    if (profile) { const newXP = (profile.xp || 0) + earnedXP; const newLevel = Math.floor(newXP / 500) + 1; await supabase.from('profiles').update({ xp: newXP, level: newLevel }).eq('id', user.id); }
-    if (sessionRef.current) { await supabase.from('quiz_sessions').update({ score: finalScore, total_questions: questions.length, quiz_type: 'mock', ended_at: new Date().toISOString() }).eq('id', sessionRef.current); }
+    const { data: profile } = await supabase.from('profiles').select('xp, level, daily_xp, weekly_xp, monthly_xp').eq('id', user.id).single() as any;
+    if (profile) {
+      const newXP = (profile.xp || 0) + earnedXP;
+      const newLevel = Math.floor(newXP / 500) + 1;
+      await supabase.from('profiles').update({ xp: newXP, level: newLevel, daily_xp: (profile.daily_xp || 0) + earnedXP, weekly_xp: (profile.weekly_xp || 0) + earnedXP, monthly_xp: (profile.monthly_xp || 0) + earnedXP }).eq('id', user.id);
+    }
+    if (sessionRef.current) {
+      await supabase.from('quiz_sessions').update({ score: finalScore, total_questions: questions.length, quiz_type: 'mock', ended_at: new Date().toISOString() }).eq('id', sessionRef.current);
+    }
   };
 
   const formatTime = (seconds: number) => { const h = Math.floor(seconds / 3600); const m = Math.floor((seconds % 3600) / 60); const s = seconds % 60; if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`; return `${m}:${String(s).padStart(2, '0')}`; };
@@ -102,7 +138,6 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
       <div className={`${cardBg} rounded-2xl p-8 md:p-11 border shadow-sm space-y-8`}>
         <div className="flex flex-col items-center gap-3 text-center"><div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${isDarkMode ? 'bg-purple-900/30' : 'bg-purple-50'}`}><FileText className="w-7 h-7 text-purple-500" /></div><div><h1 className={`text-xl font-bold ${textClass}`}>Mock Exam</h1><p className={`text-sm mt-1 leading-relaxed ${subtextClass}`}>Simulate actual Civil Service Exam conditions</p></div></div>
         <div className={`rounded-xl p-4 space-y-3 ${isDarkMode ? 'bg-zinc-800/60' : 'bg-zinc-50'}`}><p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass}`}>Exam Details</p>{[ { icon: Clock, bg: isDarkMode ? 'bg-purple-900/30' : 'bg-purple-50', color: 'text-purple-500', text: '3-hour 10-minute timer — real CSC exam pacing' }, { icon: FileText, bg: isDarkMode ? 'bg-blue-900/30' : 'bg-blue-50', color: 'text-blue-500', text: '170 questions across all 4 categories' }, { icon: Shield, bg: isDarkMode ? 'bg-red-900/30' : 'bg-red-50', color: 'text-red-500', text: 'No instant feedback — results shown at the end' } ].map(({ icon: Icon, bg, color, text }) => (<div key={text} className="flex items-center gap-3"><div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${bg}`}><Icon className={`w-4 h-4 ${color}`} /></div><div className={`text-sm leading-relaxed ${textClass}`}>{text}</div></div>))}</div>
-        <div className={`p-4 rounded-xl border ${isDarkMode ? 'bg-red-900/20 border-red-700/30' : 'bg-red-50 border-red-200'}`}><div className="flex items-start gap-3"><AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" /><div><p className={`text-sm font-semibold ${textClass}`}>Exam Simulation</p><p className={`text-xs ${isDarkMode ? 'text-red-300' : 'text-red-800'} mt-1`}>This mode simulates real exam conditions. You won't see correct answers until the exam is over. Make sure you have 3 hours and 10 minutes available before starting.</p></div></div></div>
         <button onClick={startExam} className={`w-full py-3.5 rounded-xl font-semibold text-sm ${btnPrimary} transition-colors`}>Begin Mock Exam</button>
       </div>
     </div>
@@ -131,7 +166,7 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
       </div>
       <div className="flex justify-between items-center px-1"><button onClick={() => setShowNavigator(!showNavigator)} className={`flex items-center gap-2 text-xs font-bold tracking-wider rounded-lg px-3 py-2 transition-colors ${isDarkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300' : 'bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700'} shadow-sm`}><LayoutGrid className="w-4 h-4" /><span>{answeredCount}/{questions.length} Answered</span></button></div>
       <AnimatePresence>{showNavigator && (<motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden"><div className={`p-4 rounded-2xl border shadow-sm ${cardBg}`}><div className="grid grid-cols-10 gap-1.5 w-full justify-items-center">{questions.map((q, idx) => (<button key={q.id} onClick={() => setCurrentIndex(idx)} className={`w-7 h-7 flex items-center justify-center rounded text-[10px] font-bold transition-all ${idx === currentIndex ? 'bg-purple-600 text-white shadow-sm scale-110 z-10' : answers[q.id] ? isDarkMode ? 'bg-zinc-600 text-zinc-300' : 'bg-zinc-400 text-white' : isDarkMode ? 'border border-zinc-700 text-zinc-600 hover:bg-zinc-800' : 'border border-zinc-300 text-zinc-400 hover:bg-zinc-50'}`}>{idx + 1}</button>))}</div></div></motion.div>)}</AnimatePresence>
-      {showWarning && isTimeCritical && (<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className={`p-4 rounded-xl flex items-center gap-3 text-sm font-medium ${isDarkMode ? 'bg-red-900/30 text-red-400 border border-red-700/50' : 'bg-red-50 text-red-600 border border-red-200'}`}><AlertTriangle className="w-5 h-5 flex-shrink-0" />Less than 5 minutes remaining! Submit your exam soon.<button onClick={() => setShowWarning(false)} className="ml-auto text-xs underline font-bold opacity-80 hover:opacity-100">Dismiss</button></motion.div>)}
+      {showWarning && isTimeCritical && (<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className={`p-4 rounded-xl flex items-center gap-3 text-sm font-medium ${isDarkMode ? 'bg-red-900/30 text-red-400 border border-red-700/50' : 'bg-red-50 text-red-600 border border-red-200'}`}><AlertTriangle className="w-5 h-5 flex-shrink-0" />Less than 5 minutes remaining!<button onClick={() => setShowWarning(false)} className="ml-auto text-xs underline font-bold opacity-80 hover:opacity-100">Dismiss</button></motion.div>)}
       {currentQuestion && <QuizEngine question={currentQuestion} questionIndex={currentIndex} totalQuestions={questions.length} selectedAnswer={answers[currentQuestion.id] || null} onAnswer={handleAnswer} showFeedback={false} showAIExplanation={false} aiExplanationText="" loadingAI={false} isDarkMode={isDarkMode} />}
       <div className="flex gap-3 pt-2">
         <button onClick={prevQuestion} disabled={currentIndex === 0} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all ${currentIndex === 0 ? 'opacity-20 cursor-not-allowed text-zinc-400 border-transparent' : `bg-transparent border ${isDarkMode ? 'border-zinc-700 text-zinc-400 hover:bg-zinc-800' : 'border-zinc-300 text-zinc-500 hover:bg-zinc-100'}`}`}><ArrowLeft className="w-4 h-4" /> Previous</button>

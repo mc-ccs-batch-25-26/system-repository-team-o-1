@@ -89,6 +89,7 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
           <div className="flex items-center gap-3">
           
             <div>
+               <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2">Practice</p>
               <h1 className={`text-2xl font-bold tracking-tight ${textPri}`}>Quiz Hub</h1>
               <p className={`text-xs ${textSec}`}>Sharpen your Civil Service Exam skills</p>
             </div>

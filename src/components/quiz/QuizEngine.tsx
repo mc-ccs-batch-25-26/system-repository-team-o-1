@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, Lightbulb } from 'lucide-react';
+import { CheckCircle2, XCircle, Lightbulb, BookOpen } from 'lucide-react';
 import { MockQuestion } from '../../data/mockQuestions';
 
 interface QuizEngineProps {
@@ -134,6 +134,30 @@ const QuizEngine = ({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Source / Reference Proof */}
+        {answered && showFeedback && question.source && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`mt-4 p-4 rounded-xl text-sm border flex items-start gap-3 ${
+              isDarkMode ? 'bg-zinc-800/50 border-zinc-700/50 text-zinc-300' : 'bg-zinc-50 border-zinc-200 text-zinc-600'
+            }`}
+          >
+            <BookOpen className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-zinc-900 dark:text-zinc-100 uppercase tracking-widest text-[10px] mb-1">
+                Reference / Source
+              </p>
+              <p>{question.source}</p>
+              {question.source_type && (
+                <span className="inline-block mt-2 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-zinc-200 dark:bg-zinc-700 text-zinc-600 dark:text-zinc-400">
+                  {question.source_type.replace('_', ' ')}
+                </span>
+              )}
+            </div>
+          </motion.div>
+        )}
       </motion.div>
     </AnimatePresence>
   );
