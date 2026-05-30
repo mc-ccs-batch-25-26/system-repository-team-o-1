@@ -1,152 +1,230 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabase/supabaseClient';
-import { Search, RefreshCw, Activity, UserMinus } from 'lucide-react';
+import { Search, RefreshCw, Activity, UserMinus, Users, Clock, Wifi, WifiOff } from 'lucide-react';
+import { motion } from 'framer-motion';
+ 
+const ROLE_META: Record<string, { bg: string; color: string; border: string }> = {
+  super_admin: { bg: 'rgba(251,191,36,0.10)', color: '#fbbf24', border: 'rgba(251,191,36,0.25)' },
+  admin:       { bg: 'rgba(99,102,241,0.10)', color: '#818cf8', border: 'rgba(99,102,241,0.25)' },
+  user:        { bg: 'rgba(255,255,255,0.05)', color: '#6b7280', border: 'rgba(255,255,255,0.08)' },
+};
+ 
+const StatPill: React.FC<{ 
+  label: string; 
+  color: string; 
+  bg: string; 
+  border: string; 
+  icon?: React.ReactNode;
+}> = ({ label, color, bg, border, icon }) => (
+  <div style={{
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 5,
+    padding: '3px 10px',
+    borderRadius: 999,
+    background: bg,
+    border: `1px solid ${border}`,
+    fontSize: 11,
+    fontWeight: 700,
+    color: color,
+  }}>
+    {icon}
+    {label}
+  </div>
+);
 
-const AdminUsers = () => {
-  const [users, setUsers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+const T = {
+  bg: '#0f0f0f',
+  surf: 'rgba(255,255,255,0.03)',
+  surf2: 'rgba(255,255,255,0.04)',
+  border: 'rgba(255,255,255,0.06)',
+  textPri: '#f5f5f5',
+  textSec: '#a3a3a3',
+  textTer: '#525252',
+  accent: '#818cf8',
+  accentBg: 'rgba(99,102,241,0.08)',
+};
+
+export const AdminUsers: React.FC = () => {
+  const [users, setUsers]         = useState<any[]>([]);
+  const [loading, setLoading]     = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
+  const [searchFocused, setSearchFocused] = useState(false);
+ 
+  useEffect(() => { fetchUsers(); }, []);
+ 
+  /* ── Data fetch (unchanged) ── */
   const fetchUsers = async () => {
     setLoading(true);
     const { data: profiles } = await supabase
       .from('profiles')
       .select('id, username, email, role, created_at, last_active_date');
-    
-    if (profiles) {
-      setUsers(profiles.map(p => ({
-        ...p,
-        email: p.email || 'N/A'
-      })));
-    }
+    if (profiles) setUsers(profiles.map(p => ({ ...p, email: p.email || 'N/A' })));
     setLoading(false);
   };
-
+ 
+  /* ── Status logic (unchanged) ── */
   const getUserStatus = (lastActiveDate: string | null) => {
-    if (!lastActiveDate) return { status: 'Inactive', text: 'Never active' };
-    
-    const diffTime = new Date().getTime() - new Date(lastActiveDate).getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays <= 7) {
-      return { 
-        status: 'Active', 
-        text: `Active (${diffDays === 0 ? 'Today' : diffDays === 1 ? '1 day ago' : diffDays + ' days ago'})` 
-      };
-    } else {
-      return { 
-        status: 'Inactive', 
-        text: `Inactive (${diffDays} days ago)` 
-      };
-    }
+    if (!lastActiveDate) return { active: false, text: 'Never active' };
+    const diff = Math.floor((Date.now() - new Date(lastActiveDate).getTime()) / 86_400_000);
+    if (diff <= 7) return { active: true, text: diff === 0 ? 'Today' : diff === 1 ? '1 day ago' : `${diff} days ago` };
+    return { active: false, text: `${diff} days ago` };
   };
-
-  const filteredUsers = users.filter(u => 
-    u.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.email?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const activeUsersCount = users.filter(u => getUserStatus(u.last_active_date).status === 'Active').length;
-
+ 
+  const filtered     = users.filter(u => u.username?.toLowerCase().includes(searchTerm.toLowerCase()) || u.email?.toLowerCase().includes(searchTerm.toLowerCase()));
+  const activeCount  = users.filter(u => getUserStatus(u.last_active_date).active).length;
+ 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white p-6">
-      <div className="max-w-5xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+    <div style={{ minHeight: '100vh', background: T.bg, color: T.textPri, fontFamily: 'inherit' }}>
+ 
+      {/* Ambient */}
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: -80, right: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle,rgba(99,102,241,0.07) 0%,transparent 70%)', filter: 'blur(30px)' }} />
+        <div style={{ position: 'absolute', inset: 0, opacity: 0.018, backgroundImage: 'linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px)', backgroundSize: '52px 52px' }} />
+      </div>
+ 
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1000, margin: '0 auto', padding: '28px 20px 60px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+ 
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14 }}
+        >
           <div>
-            <h1 className="text-2xl font-black">User Management</h1>
-            <p className="text-sm text-zinc-500 mt-0.5">View user accounts and their activity status</p>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, background: T.accentBg, border: `1px solid rgba(99,102,241,0.20)`, padding: '3px 10px', borderRadius: 999, marginBottom: 8 }}>
+              <Users size={10} color={T.accent} />
+              <span style={{ fontSize: 10, fontWeight: 700, color: T.accent, letterSpacing: '0.10em', textTransform: 'uppercase' }}>User Management</span>
+            </div>
+            <h1 style={{ fontSize: 22, fontWeight: 900, color: T.textPri, margin: 0, letterSpacing: '-0.4px' }}>All Users</h1>
+            <p style={{ fontSize: 12, color: T.textSec, margin: '3px 0 0' }}>View accounts and their activity status</p>
           </div>
-          <div className="flex gap-2">
-            <span className="px-3 py-1 rounded-lg bg-emerald-900/30 border border-emerald-800/50 text-sm text-emerald-400">
-              {activeUsersCount} active
-            </span>
-            <span className="px-3 py-1 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-400">
-              {users.length} total
-            </span>
+ 
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <StatPill label={`${activeCount} active`}  color="#34d399" bg="rgba(16,185,129,0.10)" border="rgba(16,185,129,0.22)" icon={<Wifi size={11} />} />
+            <StatPill label={`${users.length} total`}  color={T.textSec} bg={T.surf} border={T.border} />
           </div>
-        </div>
-
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+        </motion.div>
+ 
+        {/* Search */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 8,
+          background: searchFocused ? 'rgba(255,255,255,0.06)' : T.surf,
+          border: `1px solid ${searchFocused ? 'rgba(99,102,241,0.40)' : T.border}`,
+          borderRadius: 12, padding: '0 14px',
+          boxShadow: searchFocused ? '0 0 0 3px rgba(99,102,241,0.10)' : 'none',
+          transition: 'all 0.2s',
+        }}>
+          <Search size={15} color={searchFocused ? T.accent : T.textSec} style={{ flexShrink: 0 }} />
           <input
-            type="text"
-            placeholder="Search by username or email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 bg-zinc-900 border border-zinc-800 rounded-xl text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-700"
+            type="text" placeholder="Search by username or email…"
+            value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
+            onFocus={() => setSearchFocused(true)} onBlur={() => setSearchFocused(false)}
+            style={{ flex: 1, background: 'none', border: 'none', outline: 'none', padding: '11px 0', fontSize: 13, color: T.textPri }}
           />
+          {searchTerm && <span style={{ fontSize: 11, color: T.textSec, whiteSpace: 'nowrap' }}>{filtered.length} results</span>}
         </div>
-
-        <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl overflow-hidden">
+ 
+        {/* Table */}
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 20, overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.35)' }}>
+          {/* Header row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 100px 110px 160px', padding: '10px 18px', borderBottom: `1px solid ${T.border}`, background: T.surf2 }}>
+            {['Username', 'Email', 'Role', 'Joined', 'Status'].map((h, i) => (
+              <span key={h} style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase', color: T.textSec, textAlign: i === 4 ? 'right' : 'left' }}>
+                {h}
+              </span>
+            ))}
+          </div>
+ 
           {loading ? (
-            <div className="py-12 text-center text-zinc-500">
-              <RefreshCw className="w-6 h-6 mx-auto animate-spin mb-2" />
-              Loading users...
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0', gap: 10 }}>
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
+                <RefreshCw size={20} color={T.textSec} />
+              </motion.div>
+              <span style={{ fontSize: 12, color: T.textSec }}>Loading users…</span>
+            </div>
+          ) : filtered.length === 0 ? (
+            <div style={{ padding: '48px 24px', textAlign: 'center' }}>
+              <p style={{ fontSize: 14, color: T.textSec, margin: 0 }}>No users found</p>
             </div>
           ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-zinc-900 text-zinc-500 text-xs uppercase">
-                  <th className="text-left p-3">Username</th>
-                  <th className="text-left p-3 hidden sm:table-cell">Email</th>
-                  <th className="text-left p-3">Role</th>
-                  <th className="text-left p-3 hidden md:table-cell">Joined</th>
-                  <th className="text-right p-3">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.map(user => {
-                  const statusInfo = getUserStatus(user.last_active_date);
-                  return (
-                    <tr key={user.id} className="border-t border-zinc-800 hover:bg-zinc-800/30">
-                      <td className="p-3">
-                        <p className="font-semibold text-white">{user.username || 'Unnamed'}</p>
-                      </td>
-                      <td className="p-3 hidden sm:table-cell">
-                        <p className="text-xs text-zinc-400">{user.email}</p>
-                      </td>
-                      <td className="p-3">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-                          user.role === 'super_admin' ? 'bg-amber-900/30 text-amber-400' :
-                          user.role === 'admin' ? 'bg-blue-900/30 text-blue-400' :
-                          'bg-zinc-800 text-zinc-400'
-                        }`}>
-                          {user.role || 'user'}
-                        </span>
-                      </td>
-                      <td className="p-3 hidden md:table-cell">
-                        <span className="text-xs text-zinc-500">
-                          {new Date(user.created_at).toLocaleDateString()}
-                        </span>
-                      </td>
-                      <td className="p-3 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {statusInfo.status === 'Active' ? (
-                            <Activity className="w-3.5 h-3.5 text-emerald-400" />
-                          ) : (
-                            <UserMinus className="w-3.5 h-3.5 text-zinc-500" />
-                          )}
-                          <span className={`text-xs ${statusInfo.status === 'Active' ? 'text-emerald-400' : 'text-zinc-500'}`}>
-                            {statusInfo.text}
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            filtered.map((user, idx) => {
+              const status  = getUserStatus(user.last_active_date);
+              const roleMeta = ROLE_META[user.role] || ROLE_META.user;
+              return (
+                <motion.div
+                  key={user.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: idx * 0.02 }}
+                  style={{
+                    display: 'grid', gridTemplateColumns: '1.5fr 2fr 100px 110px 160px',
+                    alignItems: 'center', padding: '13px 18px',
+                    borderBottom: idx < filtered.length - 1 ? `1px solid rgba(255,255,255,0.03)` : 'none',
+                    transition: 'background 0.15s',
+                  }}
+                  whileHover={{ background: 'rgba(255,255,255,0.02)' }}
+                >
+                  {/* Username */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{
+                      width: 32, height: 32, borderRadius: 9, flexShrink: 0,
+                      background: 'linear-gradient(135deg,#6366f1,#818cf8)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: 12, fontWeight: 800, color: '#fff',
+                    }}>
+                      {(user.username || 'U')[0].toUpperCase()}
+                    </div>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: T.textPri }}>{user.username || 'Unnamed'}</span>
+                  </div>
+ 
+                  {/* Email */}
+                  <span style={{ fontSize: 12, color: T.textSec, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingRight: 12 }}>
+                    {user.email}
+                  </span>
+ 
+                  {/* Role */}
+                  <span style={{
+                    display: 'inline-block', padding: '2px 9px', borderRadius: 999,
+                    fontSize: 10, fontWeight: 700,
+                    background: roleMeta.bg, color: roleMeta.color, border: `1px solid ${roleMeta.border}`,
+                  }}>
+                    {user.role || 'user'}
+                  </span>
+ 
+                  {/* Joined */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <Clock size={11} color={T.textTer} />
+                    <span style={{ fontSize: 11, color: T.textSec }}>
+                      {new Date(user.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })}
+                    </span>
+                  </div>
+ 
+                  {/* Status */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6 }}>
+                    <div style={{
+                      width: 6, height: 6, borderRadius: '50%',
+                      background: status.active ? '#34d399' : T.textTer,
+                      boxShadow: status.active ? '0 0 6px rgba(52,211,153,0.5)' : 'none',
+                    }} />
+                    <span style={{ fontSize: 11, color: status.active ? '#34d399' : T.textSec }}>
+                      {status.active ? `Active · ${status.text}` : `Inactive · ${status.text}`}
+                    </span>
+                  </div>
+                </motion.div>
+              );
+            })
           )}
-          {!loading && filteredUsers.length === 0 && (
-            <div className="py-12 text-center text-zinc-500">
-              <p>No users found</p>
+ 
+          {/* Footer */}
+          {!loading && filtered.length > 0 && (
+            <div style={{ padding: '10px 18px', borderTop: `1px solid ${T.border}`, background: T.surf2, display: 'flex', justifyContent: 'flex-end' }}>
+              <span style={{ fontSize: 11, color: T.textSec }}>{filtered.length} user{filtered.length !== 1 ? 's' : ''}</span>
             </div>
           )}
         </div>
+ 
       </div>
     </div>
   );
