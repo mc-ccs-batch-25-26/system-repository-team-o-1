@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext, useNavigate } from "react-router-dom";
-                                            import { Target, TrendingUp, Award, Zap, BookOpen, Lock, CheckCircle2 } from 'lucide-react';
+import { Target, TrendingUp, Award, Zap, BookOpen, Lock, CheckCircle2 } from 'lucide-react';
 import Footer from './components/footer/Footer';
 import ProfileModal from './components/ProfileModal';
 import { supabase } from './supabase/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
+import FloatingChatbot from './components/FloatingChatbot';
 
 const fadeUp = {
     hidden: { opacity: 0, y: 16 },
@@ -359,6 +360,8 @@ function HomePage() {
                     memberSince={civiquestUser.created_at}
                     onProfileUpdated={(newUsername, newAvatarUrl) => { setCiviquestUser(prev => ({ ...prev, username: newUsername, avatarUrl: newAvatarUrl })); }} />
             )}
+
+            <FloatingChatbot position="bottom-right" />
         </div>
     );
 }

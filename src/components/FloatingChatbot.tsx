@@ -5,11 +5,12 @@ import {
   FaTrash, FaCopy, FaHistory, FaPlus, FaChevronLeft,
 } from 'react-icons/fa';
 import { getProgressStats } from '../firebase/progressService';
-import { getCategoryPerformanceData } from '../firebase/analyticsService';
+import { getCategoryPerformanceData, categorizePerformance } from '../firebase/analyticsService';
 import { getUserData } from '../firebase/userService';
 import { supabase } from '../supabase/supabaseClient';
 import { useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { getTier, getXpToNextTier, getXpToNextLevel } from '../utils/rankService';
 
 /* ─── Types (unchanged) ───────────────────────────────────────── */
 interface FloatingChatbotProps {
@@ -278,19 +279,36 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
   };
 
   const analyzeUserProgress = () => {
-    if (!userStats || !userProgressData || userProgressData.length === 0)
-      return "I don't have enough data about your progress yet. Please complete some quizzes first.";
+    if (!userStats || !userProgressData || userProgressData.length === 0) {
+      return "I don't have enough data about your progress yet. Please complete some quizzes first so I can analyze your performance.";
+    }
+    
     const { progressStats } = userStats;
-    const { accuracy, readiness, quizzesTaken } = progressStats;
-    const sortedCategories = [...userProgressData].sort((a, b) => a.accuracy - b.accuracy);
+    const accuracy = progressStats?.accuracy || 0;
+    const quizzesTaken = progressStats?.quizzesTaken || 0;
+    const readiness = progressStats?.readiness || 0;
+    
+    const sortedCategories = [...userProgressData]
+      .filter((c: any) => (c.regularAnswered || 0) > 0)
+      .sort((a: any, b: any) => (a.regularAccuracy || 0) - (b.regularAccuracy || 0));
+    
     const weakestCategories = sortedCategories.slice(0, 2);
-    let analysis = `**Your Progress**:\n- Accuracy: ${accuracy}%\n- Quizzes: ${quizzesTaken}\n- Readiness: ${readiness}%\n\n`;
+    
+    let analysis = `**Your Progress**\n`;
+    analysis += `- Accuracy: ${accuracy}%\n`;
+    analysis += `- Quizzes taken: ${quizzesTaken}\n`;
+    analysis += `- Readiness: ${readiness}%\n\n`;
+    
     if (weakestCategories.length > 0) {
       analysis += `**Weak Areas**:\n`;
-      weakestCategories.forEach(cat => { analysis += `- ${cat.categoryName}: ${cat.accuracy}%\n`; });
-      analysis += '\n';
+      weakestCategories.forEach((cat: any) => {
+        analysis += `- ${cat.categoryName}: ${cat.regularAccuracy}% (${cat.regularCorrect}/${cat.regularAnswered} correct)\n`;
+      });
+      analysis += `\n**Tip**: Focus on **${weakestCategories[0]?.categoryName || 'your weakest area'}** to improve your score. Practice with targeted quizzes in that subject.`;
+    } else {
+      analysis += `**Tip**: Take more quizzes so I can identify your weak areas and give personalized recommendations.`;
     }
-    analysis += `**Tip**: Focus on ${weakestCategories[0]?.categoryName || 'your weakest area'} to improve your readiness score.`;
+    
     return analysis;
   };
 
@@ -315,15 +333,58 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+    
     try {
-      const progressKeywords = ['progress', 'performance', 'score', 'how am i doing', 'my results', 'stats', 'improve', 'tips', 'weak areas'];
-      if (progressKeywords.some(k => text.toLowerCase().includes(k))) {
-        await fetchUserData();
-        const analysis = analyzeUserProgress();
-        setMessages(prev => [...prev, { content: analysis, sender: 'ai', id: (Date.now() + 1).toString(), timestamp: Date.now() }]);
-        setIsLoading(false);
-        return;
-      }
+      await fetchUserData();
+
+      // Deterministic Service Fallbacks (Data Safe Handling)
+      const xp = userStats?.userData?.xp || 0;
+      const level = userStats?.userData?.level || 1;
+      const streak = userStats?.userData?.streakCount || 0;
+      const quizzesTaken = userStats?.progressStats?.quizzesTaken || 0;
+      const readiness = userStats?.progressStats?.readiness || 0;
+
+      // Deterministic Calculations (Removed from Prompt Layer)
+      const xpToNextLevel = getXpToNextLevel(level, xp);
+      const userTier = getTier(xp).name;
+      const xpToNextTier = getXpToNextTier(xp);
+      const rankStatusStr = xpToNextTier > 0
+        ? `XP needed to rank up to next tier: ${xpToNextTier}` 
+        : `Maximum Rank Achieved!`;
+
+      // Deterministic Categorization (Removed Boolean Math from LLM)
+      const { weakAreas, averageAreas, strongAreas, hasData } = categorizePerformance(userProgressData || []);
+
+      const categoryContext = hasData
+        ? `Explicit Subject Categorization:
+- WEAK AREAS: ${weakAreas.length > 0 ? weakAreas.join(', ') : 'None! Great job!'}
+- STRONG AREAS: ${strongAreas.length > 0 ? strongAreas.join(', ') : 'None yet.'}
+- AVERAGE AREAS: ${averageAreas.length > 0 ? averageAreas.join(', ') : 'None.'}`
+        : "No subject data available. User hasn't completed quizzes yet.";
+
+      // Zero-Trust Prompt (No AI Arithmetic Instructions)
+      const systemPrompt = `You are a "Personal Learning Coach" for the CiviQuest Civil Service Exam app. Answer politely, directly, and concisely. Use the strictly calculated, deterministic stats below to provide recommendations. Do not invent data and DO NOT perform arithmetic calculations yourself. Rely exclusively on the provided 'needed' values.
+
+**User's Live Stats:**
+- Current Level: ${level} 
+- XP To Next Level: ${xpToNextLevel} XP
+- Current Total XP: ${xp} 
+- Leaderboard Rank: ${userTier}
+- Promove to Next Rank: ${rankStatusStr}
+- Current Streak: ${streak} days
+- Quizzes Completed: ${quizzesTaken}
+- App Readiness Score: ${readiness}%
+
+${categoryContext}
+
+Your Capabilities & Explanations:
+1. Explain Rank/Progression: Read the exact "XP To Next Level" and "Promove to Next Rank" stats provided. DO NOT calculate distances yourself.
+2. Explain Weak Areas: Advise exactly the subjects listed under WEAK AREAS. Provide general tips to improve them.
+3. Explain Strong Areas: Praise them for specific subjects listed under STRONG AREAS.
+4. Motivate Streaks: Praise their active ${streak} day streak.
+5. Why Daily Quiz: If asked why they got certain questions, explain that Daily Quizzes target their WEAK AREAS to help them master missing concepts.
+6. Refuse completely off-topic logic outside the app or exams. DO NOT dump raw system data lists unless asked.`;
+
       const openRouterApiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
@@ -336,7 +397,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
         body: JSON.stringify({
           model: 'google/gemini-2.0-flash-001',
           messages: [
-            { role: 'system', content: 'You are CiviQuest Buddy. Only answer Civil Service Exam topics. Keep responses direct, concise and helpful. Refuse off-topic questions politely.' },
+            { role: 'system', content: systemPrompt },
             ...messages.slice(-6).map(msg => ({ role: msg.sender === 'user' ? 'user' : 'assistant', content: msg.content })),
             { role: 'user', content: text },
           ],
