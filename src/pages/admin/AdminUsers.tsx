@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../supabase/supabaseClient';
-import { Search, RefreshCw, Activity, UserMinus, Users, Clock, Wifi, WifiOff } from 'lucide-react';
+import { Search, RefreshCw, Activity, UserMinus, Users, Clock, Wifi, WifiOff, Shield, ChevronUp, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
  
-const ROLE_META: Record<string, { bg: string; color: string; border: string }> = {
-  super_admin: { bg: 'rgba(251,191,36,0.10)', color: '#fbbf24', border: 'rgba(251,191,36,0.25)' },
-  admin:       { bg: 'rgba(99,102,241,0.10)', color: '#818cf8', border: 'rgba(99,102,241,0.25)' },
-  user:        { bg: 'rgba(255,255,255,0.05)', color: '#6b7280', border: 'rgba(255,255,255,0.08)' },
+const ROLE_META: Record<string, { bg: string; color: string; border: string; label: string }> = {
+  super_admin: { bg: 'rgba(251,191,36,0.10)', color: '#fbbf24', border: 'rgba(251,191,36,0.25)', label: 'Super Admin' },
+  admin:       { bg: 'rgba(99,102,241,0.10)', color: '#818cf8', border: 'rgba(99,102,241,0.25)', label: 'Admin' },
+  user:        { bg: 'rgba(255,255,255,0.05)', color: '#6b7280', border: 'rgba(255,255,255,0.08)', label: 'User' },
 };
  
 const StatPill: React.FC<{ 
@@ -50,10 +50,18 @@ export const AdminUsers: React.FC = () => {
   const [loading, setLoading]     = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
+  const [currentAdminId, setCurrentAdminId] = useState<string | null>(null);
  
-  useEffect(() => { fetchUsers(); }, []);
+  useEffect(() => { 
+    fetchUsers();
+    getCurrentAdmin();
+  }, []);
+
+  const getCurrentAdmin = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) setCurrentAdminId(user.id);
+  };
  
-  /* ── Data fetch (unchanged) ── */
   const fetchUsers = async () => {
     setLoading(true);
     const { data: profiles } = await supabase
@@ -63,7 +71,19 @@ export const AdminUsers: React.FC = () => {
     setLoading(false);
   };
  
-  /* ── Status logic (unchanged) ── */
+  const toggleRole = async (userId: string, currentRole: string) => {
+    // Don't allow changing your own role
+    if (userId === currentAdminId) return;
+    
+    // Cycle: user → admin → super_admin → user
+    const roles = ['user', 'admin', 'super_admin'];
+    const currentIndex = roles.indexOf(currentRole || 'user');
+    const newRole = roles[(currentIndex + 1) % roles.length];
+    
+    await supabase.from('profiles').update({ role: newRole }).eq('id', userId);
+    fetchUsers();
+  };
+ 
   const getUserStatus = (lastActiveDate: string | null) => {
     if (!lastActiveDate) return { active: false, text: 'Never active' };
     const diff = Math.floor((Date.now() - new Date(lastActiveDate).getTime()) / 86_400_000);
@@ -83,7 +103,7 @@ export const AdminUsers: React.FC = () => {
         <div style={{ position: 'absolute', inset: 0, opacity: 0.018, backgroundImage: 'linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px)', backgroundSize: '52px 52px' }} />
       </div>
  
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1000, margin: '0 auto', padding: '28px 20px 60px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: 1100, margin: '0 auto', padding: '28px 20px 60px', display: 'flex', flexDirection: 'column', gap: 20 }}>
  
         {/* Header */}
         <motion.div
@@ -98,7 +118,7 @@ export const AdminUsers: React.FC = () => {
               <span style={{ fontSize: 10, fontWeight: 700, color: T.accent, letterSpacing: '0.10em', textTransform: 'uppercase' }}>User Management</span>
             </div>
             <h1 style={{ fontSize: 22, fontWeight: 900, color: T.textPri, margin: 0, letterSpacing: '-0.4px' }}>All Users</h1>
-            <p style={{ fontSize: 12, color: T.textSec, margin: '3px 0 0' }}>View accounts and their activity status</p>
+            <p style={{ fontSize: 12, color: T.textSec, margin: '3px 0 0' }}>Manage accounts, roles, and activity</p>
           </div>
  
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -129,9 +149,9 @@ export const AdminUsers: React.FC = () => {
         {/* Table */}
         <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 20, overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.35)' }}>
           {/* Header row */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 100px 110px 160px', padding: '10px 18px', borderBottom: `1px solid ${T.border}`, background: T.surf2 }}>
-            {['Username', 'Email', 'Role', 'Joined', 'Status'].map((h, i) => (
-              <span key={h} style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase', color: T.textSec, textAlign: i === 4 ? 'right' : 'left' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 2fr 110px 100px 150px 80px', padding: '10px 18px', borderBottom: `1px solid ${T.border}`, background: T.surf2 }}>
+            {['Username', 'Email', 'Role', 'Joined', 'Status', ''].map((h, i) => (
+              <span key={i} style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase', color: T.textSec, textAlign: i === 4 || i === 5 ? 'right' : 'left' }}>
                 {h}
               </span>
             ))}
@@ -152,6 +172,7 @@ export const AdminUsers: React.FC = () => {
             filtered.map((user, idx) => {
               const status  = getUserStatus(user.last_active_date);
               const roleMeta = ROLE_META[user.role] || ROLE_META.user;
+              const isSelf = user.id === currentAdminId;
               return (
                 <motion.div
                   key={user.id}
@@ -159,7 +180,7 @@ export const AdminUsers: React.FC = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: idx * 0.02 }}
                   style={{
-                    display: 'grid', gridTemplateColumns: '1.5fr 2fr 100px 110px 160px',
+                    display: 'grid', gridTemplateColumns: '1.5fr 2fr 110px 100px 150px 80px',
                     alignItems: 'center', padding: '13px 18px',
                     borderBottom: idx < filtered.length - 1 ? `1px solid rgba(255,255,255,0.03)` : 'none',
                     transition: 'background 0.15s',
@@ -176,7 +197,10 @@ export const AdminUsers: React.FC = () => {
                     }}>
                       {(user.username || 'U')[0].toUpperCase()}
                     </div>
-                    <span style={{ fontSize: 13, fontWeight: 700, color: T.textPri }}>{user.username || 'Unnamed'}</span>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: T.textPri }}>
+                      {user.username || 'Unnamed'}
+                      {isSelf && <span style={{ fontSize: 9, color: T.accent, marginLeft: 6 }}>(you)</span>}
+                    </span>
                   </div>
  
                   {/* Email */}
@@ -184,14 +208,31 @@ export const AdminUsers: React.FC = () => {
                     {user.email}
                   </span>
  
-                  {/* Role */}
-                  <span style={{
-                    display: 'inline-block', padding: '2px 9px', borderRadius: 999,
-                    fontSize: 10, fontWeight: 700,
-                    background: roleMeta.bg, color: roleMeta.color, border: `1px solid ${roleMeta.border}`,
-                  }}>
-                    {user.role || 'user'}
-                  </span>
+                  {/* Role — Clickable to toggle */}
+                  <button
+                    onClick={() => toggleRole(user.id, user.role)}
+                    disabled={isSelf}
+                    title={isSelf ? "Can't change your own role" : `Click to change role (current: ${roleMeta.label})`}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 4,
+                      padding: '4px 10px',
+                      borderRadius: 999,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      background: roleMeta.bg,
+                      color: roleMeta.color,
+                      border: `1px solid ${roleMeta.border}`,
+                      cursor: isSelf ? 'default' : 'pointer',
+                      opacity: isSelf ? 0.7 : 1,
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    <Shield size={10} />
+                    {roleMeta.label}
+                    {!isSelf && <ChevronDown size={10} />}
+                  </button>
  
                   {/* Joined */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
@@ -212,6 +253,9 @@ export const AdminUsers: React.FC = () => {
                       {status.active ? `Active · ${status.text}` : `Inactive · ${status.text}`}
                     </span>
                   </div>
+
+                  {/* Empty (actions column placeholder) */}
+                  <div />
                 </motion.div>
               );
             })
@@ -219,7 +263,8 @@ export const AdminUsers: React.FC = () => {
  
           {/* Footer */}
           {!loading && filtered.length > 0 && (
-            <div style={{ padding: '10px 18px', borderTop: `1px solid ${T.border}`, background: T.surf2, display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ padding: '10px 18px', borderTop: `1px solid ${T.border}`, background: T.surf2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: 10, color: T.textTer }}>Click a role badge to promote/demote users</span>
               <span style={{ fontSize: 11, color: T.textSec }}>{filtered.length} user{filtered.length !== 1 ? 's' : ''}</span>
             </div>
           )}
