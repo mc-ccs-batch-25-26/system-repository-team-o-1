@@ -30,6 +30,8 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
   const [showComboEffect, setShowComboEffect] = useState(false);
   const sessionRef = useRef<string | null>(null);
   const [personalBest, setPersonalBest] = useState<{ score: number; questions: number; category: string } | null>(null);
+  const [aiText, setAiText] = useState('');
+  const [loadingAI, setLoadingAI] = useState(false);
 
   useEffect(() => { const saved = localStorage.getItem('civiquest_timed_challenge_best'); if (saved) setPersonalBest(JSON.parse(saved)); }, []);
   const currentQuestion = questions[currentIndex];
@@ -49,7 +51,6 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
       if (session) sessionRef.current = session.id;
     }
 
-    // Fetch from database
     let query = supabase.from('questions').select('*, categories!inner(name)').eq('is_active', true);
     if (selectedCategory !== 'All') {
       const { data: cat } = await supabase.from('categories').select('id').eq('name', selectedCategory).single();
@@ -60,9 +61,31 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
     let pool: MockQuestion[] = (dbQuestions || []).map(dbToMockQuestion);
     
     setQuestions(shuffleArray(pool).slice(0, selectedCategory === 'All' ? 20 : QUESTIONS_PER_CATEGORY));
-    setPhase('challenge'); setCurrentIndex(0); setAnswers({}); setPoints(0); setCombo(0); setMaxCombo(0); setCorrectCount(0); setTimeLeft(CHALLENGE_DURATION);
+    setPhase('challenge'); setCurrentIndex(0); setAnswers({}); setPoints(0); setCombo(0); setMaxCombo(0); setCorrectCount(0); setAiText(''); setTimeLeft(CHALLENGE_DURATION);
   };
 
+  const getAIExplanation = async (question: MockQuestion, userAnswer: string) => {
+        setLoadingAI(true);
+        try {
+            const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
+            const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`, 'HTTP-Referer': window.location.origin, 'X-Title': 'CiviQuest' },
+                body: JSON.stringify({
+                    model: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+                    messages: [
+                        { role: 'system', content: 'You are a Civil Service Exam tutor. Explain in 2-3 sentences why the answer is correct and why the user\'s choice was wrong. Be concise and helpful.' },
+                        { role: 'user', content: `Question: ${question.question}\nOptions: ${question.options.join(', ')}\nCorrect answer: ${question.correct}\nMy answer: ${userAnswer}\nPlease explain.` },
+                    ],
+                }),
+            });
+            const data = await response.json();
+            setAiText(data.choices?.[0]?.message?.content || `The correct answer is "${question.correct}".`);
+        } catch {
+            setAiText(`The correct answer is "${question.correct}".`);
+        } finally { setLoadingAI(false); }
+    };
+    
   const handleAnswer = async (questionId: string, selected: string) => {
     if (answers[questionId]) return;
     const q = questions.find(q => q.id === questionId)!;
@@ -70,27 +93,40 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
     setAnswers(prev => ({ ...prev, [questionId]: selected }));
     if (isCorrect) {
       const newCombo = combo + 1; setCombo(newCombo); if (newCombo > maxCombo) setMaxCombo(newCombo); setCorrectCount(prev => prev + 1);
-      const speedBonus = Math.floor(timeLeft / 30) * 10; const comboMultiplier = Math.min(newCombo, 5); const earned = (100 + speedBonus) * comboMultiplier; setPoints(prev => prev + earned);
+      const xpPerCorrect = 10;
+      setPoints(prev => prev + xpPerCorrect);
       if (newCombo >= 3) { setShowComboEffect(true); setTimeout(() => setShowComboEffect(false), 1000); }
-    } else { setCombo(0); saveMistake(q, selected, q.category || 'Unknown'); }
+    } else { 
+      setCombo(0); 
+      saveMistake(q, selected, q.category || 'Unknown'); 
+      await getAIExplanation(q, selected);
+    }
     if (sessionRef.current) {
       try { await supabase.from('quiz_session_answers').insert({ session_id: sessionRef.current, question_id: questionId, selected_answer: selected, is_correct: isCorrect }); } catch (err) { console.error('Failed to save answer:', err); }
     }
   };
 
-  const goToNext = () => { if (currentIndex < questions.length - 1) setCurrentIndex(prev => prev + 1); else finishChallenge(); };
+  const goToNext = () => { 
+    setAiText(''); 
+    if (currentIndex < questions.length - 1) setCurrentIndex(prev => prev + 1); 
+    else finishChallenge(); 
+  };
   const goToPrevious = () => { if (currentIndex > 0) setCurrentIndex(prev => prev - 1); };
 
   const finishChallenge = async () => {
+    const earnedXP = correctCount * 10;
     setPhase('results');
+    
     const currentBest = personalBest;
-    if (!currentBest || points > currentBest.score) {
-      const newBest = { score: points, questions: correctCount, category: selectedCategory };
+    if (!currentBest || earnedXP > currentBest.score) {
+      const newBest = { score: earnedXP, questions: correctCount, category: selectedCategory };
       localStorage.setItem('civiquest_timed_challenge_best', JSON.stringify(newBest));
       setPersonalBest(newBest);
     }
-    const { data: { user } } = await supabase.auth.getUser(); if (!user) return;
-    const earnedXP = correctCount * 10;
+    
+    const { data: { user } } = await supabase.auth.getUser(); 
+    if (!user) return;
+    
     const { data: profile } = await supabase.from('profiles').select('xp, level, daily_xp, weekly_xp, monthly_xp').eq('id', user.id).maybeSingle() as any;
     if (profile) {
       const newXP = (profile.xp || 0) + earnedXP;
@@ -103,7 +139,6 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
   };
 
   const formatTime = (seconds: number) => { const m = Math.floor(seconds / 60); const s = seconds % 60; return `${m}:${String(s).padStart(2, '0')}`; };
-  const questionsAttempted = Object.keys(answers).length;
 
   if (phase === 'config') return (
     <div className="w-full max-w-2xl mx-auto px-4 py-8 space-y-6">
@@ -117,12 +152,12 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
   );
 
   if (phase === 'results') {
-    const isNewBest = personalBest && points >= personalBest.score;
+    const isNewBest = personalBest && correctCount * 10 >= personalBest.score;
     return (
       <div className="w-full max-w-md mx-auto px-4 py-8 space-y-5">
         <div className="text-center space-y-1"><h1 className={`text-2xl font-bold ${textClass}`}>{isNewBest ? 'New Personal Best! 🏆' : 'Challenge Over! ⏱️'}</h1></div>
         <div className={`${cardBg} rounded-2xl border shadow-sm p-4 space-y-3`}>
-          <div className={`rounded-xl p-5 text-center border ${isDarkMode ? 'bg-zinc-800/60 border-zinc-700' : 'bg-zinc-50 border-zinc-200'}`}><p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass}`}>Score</p><div className="text-4xl font-bold text-rose-500 mt-2">{points.toLocaleString()} pts</div></div>
+          <div className={`rounded-xl p-5 text-center border ${isDarkMode ? 'bg-zinc-800/60 border-zinc-700' : 'bg-zinc-50 border-zinc-200'}`}><p className={`text-xs font-semibold uppercase tracking-wide ${subtextClass}`}>XP Earned</p><div className="text-4xl font-bold text-rose-500 mt-2">+{correctCount * 10} XP</div></div>
           <div className="flex gap-3 pt-2"><button onClick={() => setPhase('config')} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm ${btnPrimary} transition-colors`}>Try Again</button><button onClick={onBack} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm border transition-colors ${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`}>Back to Hub</button></div>
         </div>
       </div>
@@ -134,13 +169,13 @@ const TimedChallenge = ({ isDarkMode, onBack }: TimedChallengeProps) => {
     <div className="min-h-screen bg-zinc-950 w-full max-w-3xl mx-auto px-4 py-6 space-y-6">
       <div className={`sticky top-4 z-10 py-3.5 px-5 rounded-2xl border shadow-sm backdrop-blur-md ${timeLeft < 30 ? isDarkMode ? 'bg-red-900/80 border-red-700' : 'bg-red-50/90 border-red-200' : isDarkMode ? 'bg-zinc-800/80 border-zinc-700' : 'bg-white/90 border-zinc-300'}`}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4"><div><p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>Points</p><p className={`text-lg font-bold ${textClass}`}>{points.toLocaleString()}</p></div><div><p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>Combo</p><p className={`text-lg font-bold ${combo >= 3 ? 'text-orange-500' : textClass}`}>{combo > 0 ? `${combo}x` : '-'}</p></div></div>
+          <div className="flex items-center gap-4"><div><p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>XP</p><p className={`text-lg font-bold ${textClass}`}>{points.toLocaleString()}</p></div><div><p className={`text-[10px] uppercase font-bold tracking-wider ${subtextClass}`}>Combo</p><p className={`text-lg font-bold ${combo >= 3 ? 'text-orange-500' : textClass}`}>{combo > 0 ? `${combo}x` : '-'}</p></div></div>
           <div className={`flex items-center gap-2 font-mono text-2xl font-bold ${timeLeft < 30 ? 'text-red-500 animate-pulse' : 'text-rose-500'}`}><Timer className="w-5 h-5" />{formatTime(timeLeft)}</div>
         </div>
         <div className={`w-full rounded-full h-1.5 mt-3 overflow-hidden ${isDarkMode ? 'bg-zinc-900' : 'bg-zinc-100'}`}><motion.div animate={{ width: `${timerPercent}%` }} transition={{ duration: 1, ease: 'linear' }} className={`h-1.5 rounded-full ${timeLeft < 60 ? 'bg-red-500' : 'bg-rose-500'}`} /></div>
       </div>
       {showComboEffect && <motion.div initial={{ opacity: 0, scale: 0.5, y: -20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, y: -30 }} className="text-center"><span className="text-2xl font-black text-orange-500 drop-shadow-lg">🔥 {combo}x COMBO!</span></motion.div>}
-      {currentQuestion && <QuizEngine question={currentQuestion} questionIndex={currentIndex} totalQuestions={questions.length} selectedAnswer={answers[currentQuestion.id] || null} onAnswer={handleAnswer} showFeedback={true} showAIExplanation={false} aiExplanationText="" loadingAI={false} isDarkMode={isDarkMode} />}
+      {currentQuestion && <QuizEngine question={currentQuestion} questionIndex={currentIndex} totalQuestions={questions.length} selectedAnswer={answers[currentQuestion.id] || null} onAnswer={handleAnswer} showFeedback={true} showAIExplanation={true} aiExplanationText={aiText} loadingAI={loadingAI} isDarkMode={isDarkMode} />}
       <div className="flex gap-3">
         <button onClick={goToPrevious} disabled={currentIndex === 0} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 border transition-all ${currentIndex === 0 ? 'opacity-40 cursor-not-allowed' : `${isDarkMode ? 'border-zinc-700 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-300 text-zinc-700 hover:bg-zinc-50'}`}`}><ChevronLeft className="w-4 h-4" /> Previous</button>
         {currentIndex < questions.length - 1 ? <button onClick={goToNext} className={`flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 ${btnPrimary} transition-colors`}>Next <ChevronRight className="w-4 h-4" /></button> : <button onClick={finishChallenge} className="flex-1 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white transition-colors"><Trophy className="w-4 h-4" /> Finish</button>}

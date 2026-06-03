@@ -76,10 +76,10 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
         .order('accuracy_rate', { ascending: true });
 
       if (perf && perf.length > 0) {
-        weakCategories = perf
-          .filter((p: any) => (p.accuracy_rate || 0) < 70)
-          .map((p: any) => p.categories?.name)
-          .filter(Boolean);
+       weakCategories = perf
+       .filter((p: any) => (p.total_answered || 0) >= 5 && (p.accuracy_rate || 0) < 70)
+       .map((p: any) => p.categories?.name)
+       .filter(Boolean);
       } else {
         const { data: pretestData } = await supabase
           .from('pretest_results')
@@ -102,19 +102,54 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
     let selectedQuestions: MockQuestion[] = [];
 
     if (weakCategories.length > 0) {
-      const weakIds = dbCategories?.filter(c => weakCategories.includes(c.name)).map(c => c.id) || [];
-      if (weakIds.length > 0) {
-        const { data: weakQuestions } = await supabase
-          .from('questions')
-          .select('*, categories!inner(name)')
-          .in('category_id', weakIds)
-          .eq('is_active', true)
-          .limit(20);
-        if (weakQuestions) {
-          selectedQuestions = shuffleArray(weakQuestions.map(dbToMockQuestion));
-        }
-      }
+     const weakIds = dbCategories?.filter(c => weakCategories.includes(c.name)).map(c => c.id) || [];
+       if (weakIds.length > 0) {
+    // Fetch ALL questions from weak categories
+     const { data: weakQuestions } = await supabase
+      .from('questions')
+      .select('*, categories!inner(name)')
+      .in('category_id', weakIds)
+      .eq('is_active', true);
+    
+       if (weakQuestions && weakQuestions.length > 0) {
+      // Group questions by category
+        const byCategory: Record<string, any[]> = {};
+         weakQuestions.forEach((q: any) => {
+        const catName = q.categories?.name || 'Unknown';
+        if (!byCategory[catName]) byCategory[catName] = [];
+        byCategory[catName].push(q);
+      });
+
+      // Build accuracy map from the weakCategories we already fetched
+      const categoryAccuracy: Record<string, number> = {};
+      weakCategories.forEach((cat, idx) => {
+        // weakCategories came from perf filtered by < 70%
+        // Lower index = weaker (since we ordered by accuracy ascending)
+        categoryAccuracy[cat] = 70 - (idx * 15); // Estimate: 55%, 40%, 25% based on position
+      });
+
+      // Sort categories by estimated weakness
+      const sortedCats = Object.keys(byCategory).sort((a, b) => {
+        return (categoryAccuracy[a] || 50) - (categoryAccuracy[b] || 50);
+      });
+
+      // Distribute 5 questions: weakest gets 3, next gets 2
+      let remaining = 5;
+      const selected: any[] = [];
+      
+      sortedCats.forEach((cat, idx) => {
+        if (remaining <= 0) return;
+        const pool = shuffleArray(byCategory[cat]);
+        // First (weakest): 3 questions, Second: 2 questions
+        const take = idx === 0 ? Math.min(3, remaining) : Math.min(2, remaining);
+        selected.push(...pool.slice(0, take));
+        remaining -= take;
+      });
+
+      selectedQuestions = shuffleArray(selected).map(dbToMockQuestion);
+     }
     }
+  }
 
     if (selectedQuestions.length === 0) {
       const { data: allQuestions } = await supabase
@@ -146,7 +181,7 @@ const DailyQuiz = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: Dail
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`, 'HTTP-Referer': window.location.origin, 'X-Title': 'CiviQuest' },
         body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-001',
+          model: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
           messages: [
             { role: 'system', content: 'You are a Civil Service Exam tutor. Explain in 2-3 sentences why the answer is correct and why the user\'s choice was wrong. Be concise and helpful.' },
             { role: 'user', content: `Question: ${question.question}\nOptions: ${question.options.join(', ')}\nCorrect answer: ${question.correct}\nMy answer: ${userAnswer}\nPlease explain.` }

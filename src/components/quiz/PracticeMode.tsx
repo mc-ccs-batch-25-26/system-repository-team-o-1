@@ -105,7 +105,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`, 'HTTP-Referer': window.location.origin, 'X-Title': 'CiviQuest' },
                 body: JSON.stringify({
-                    model: 'google/gemini-2.0-flash-001',
+                    model: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
                     messages: [
                         { role: 'system', content: 'You are a Civil Service Exam tutor. Explain in 2-3 sentences why the answer is correct and why the user\'s choice was wrong. Be concise and helpful.' },
                         { role: 'user', content: `Question: ${question.question}\nOptions: ${question.options.join(', ')}\nCorrect answer: ${question.correct}\nMy answer: ${userAnswer}\nPlease explain.` },
@@ -154,7 +154,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        const earnedXP = score * 15;
+        const earnedXP = score * 10; // Earn 10 XP per correct answer in practice mode
         const { data: profile } = await supabase.from('profiles').select('xp, level, daily_xp, weekly_xp, monthly_xp').eq('id', user.id).maybeSingle();
         if (profile) {
             const newXP = (profile.xp || 0) + earnedXP;
@@ -235,7 +235,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
         const weakest = getWeakest();
         const pct = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
         const scoreCol = getScoreColor(score, questions.length);
-        const earnedXP = score * 15;
+        const earnedXP = score * 5;
         return (
             <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
                 <div className="w-full max-w-lg mx-auto px-4 sm:px-6 py-10 space-y-5">

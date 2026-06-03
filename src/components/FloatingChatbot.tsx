@@ -395,7 +395,7 @@ Your Capabilities & Explanations:
           'X-Title': 'CiviQuest',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-001',
+          model: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
           messages: [
             { role: 'system', content: systemPrompt },
             ...messages.slice(-6).map(msg => ({ role: msg.sender === 'user' ? 'user' : 'assistant', content: msg.content })),
