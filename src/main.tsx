@@ -17,11 +17,12 @@ import AdminLayout from './components/AdminLayout.tsx'
 import ProgressPage from './pages/ProgressPage'
 import PretestPage from './pages/PretestPage'
 import LeaderboardPage from './pages/LeaderboardPage';
+import FriendsPage from './pages/FriendsPage';  
 import { TopicsListScreen } from './components/lessons/TopicsListScreen.tsx';
 import { LessonContentScreen } from './components/lessons/LessonContentScreen.tsx';
 import './supabase/supabaseClient'
 import AdminDashboard from './pages/admin/AdminDashboard.tsx';
-import AdminUsers from './pages/admin/AdminUsers.tsx';
+
 
 emailjs.init("akyGk9Q2Gdfwid34v");
 
@@ -33,7 +34,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         {/* Admin routes — uses AdminSidebar, no Layout */}
         <Route element={<AuthRoute><AdminLayout /></AuthRoute>}>
           <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/admin/users" element={<AdminUsers />} />
         </Route>
 
         {/* Regular user routes — uses Sidebar + Layout */}
@@ -43,6 +43,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/quizzes" element={<QuizzesPage />} />
           <Route path="/lessons" element={<LessonsPage />} />
           <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/friends" element={<FriendsPage />} />  {/* ← ADDED */}
           <Route path="/settings" element={<Settings />} />
           <Route path="/lessons/:category" element={<TopicsListScreen />} />
           <Route path="/lessons/:category/:topic" element={<LessonContentScreen />} />
