@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Settings, LogOut, SignalHigh, ChevronsLeft, ChevronsRight, Book, Clock, AlertCircle, Trophy, Shield } from 'lucide-react';
+import { Home, Settings, LogOut, SignalHigh, ChevronsLeft, ChevronsRight, Book, Clock, AlertCircle, Trophy, Shield, Users } from 'lucide-react';
 import { supabase } from '../supabase/supabaseClient';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import UserAvatar from './UserAvatar';
 
@@ -25,6 +25,7 @@ const userNavItems = [
     { path: '/lessons',  icon: Book,       label: 'Study'      },
     { path: '/progress', icon: SignalHigh, label: 'Progress'   },
     { path: '/leaderboard', icon: Trophy,  label: 'Leaderboard'},
+    { path: '/friends',  icon: Users,      label: 'Friends'    },
     { path: '/settings', icon: Settings,   label: 'Settings'   },
 ];
 
@@ -40,6 +41,7 @@ const Sidebar = ({
 }: SidebarProps) => {
     const location = useLocation();
     const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+    const [pendingCount, setPendingCount] = useState(0);
 
     const navItems = isAdmin ? adminNavItems : userNavItems;
 
@@ -47,6 +49,41 @@ const Sidebar = ({
         await supabase.auth.signOut();
         setShowLogoutDialog(false);
     };
+
+    // Fetch pending friend request count
+    useEffect(() => {
+        const fetchPendingCount = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) return;
+
+            const { count } = await supabase
+                .from('friendships')
+                .select('*', { count: 'exact', head: true })
+                .eq('receiver_id', user.id)
+                .eq('status', 'pending');
+
+            setPendingCount(count || 0);
+        };
+
+        fetchPendingCount();
+
+        // Real-time subscription for friend request updates
+        const channel = supabase
+            .channel('sidebar-friend-requests')
+            .on('postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'friendships',
+                },
+                () => fetchPendingCount()
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    }, []);
 
     const sidebarWidth = isCollapsed ? 'w-[60px]' : 'w-64';
     const sidebarTranslate = isOpen ? 'translate-x-0' : '-translate-x-full';
@@ -116,6 +153,9 @@ const Sidebar = ({
                             ? location.pathname === '/'
                             : location.pathname.startsWith(item.path);
 
+                        const isFriends = item.path === '/friends';
+                        const showBadge = isFriends && pendingCount > 0;
+
                         return (
                             <Link
                                 key={item.path}
@@ -135,13 +175,30 @@ const Sidebar = ({
                                 {isActive && !isCollapsed && (
                                     <span className="absolute left-0 top-2 bottom-2 w-0.5 rounded-full bg-white/40" />
                                 )}
-                                <item.icon className={`w-[18px] h-[18px] shrink-0 ${!isActive && 'group-hover:translate-x-0.5'}`} />
+                                <div className="relative">
+                                    <item.icon className={`w-[18px] h-[18px] shrink-0 ${!isActive && 'group-hover:translate-x-0.5'}`} />
+                                    {/* Badge on icon when collapsed */}
+                                    {showBadge && isCollapsed && (
+                                        <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-red-500 flex items-center justify-center text-[9px] font-bold text-white">
+                                            {pendingCount > 9 ? '9+' : pendingCount}
+                                        </span>
+                                    )}
+                                </div>
                                 {!isCollapsed && (
-                                    <span className="whitespace-nowrap overflow-hidden">{item.label}</span>
+                                    <span className="whitespace-nowrap overflow-hidden flex items-center gap-2">
+                                        {item.label}
+                                        {/* Badge next to label when expanded */}
+                                        {showBadge && (
+                                            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-[10px] font-bold text-white">
+                                                {pendingCount > 99 ? '99+' : pendingCount}
+                                            </span>
+                                        )}
+                                    </span>
                                 )}
                                 {isCollapsed && (
                                     <span className="pointer-events-none absolute left-full ml-2 px-2.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap bg-slate-800 dark:bg-slate-100 text-slate-50 dark:text-slate-900 opacity-0 group-hover:opacity-100 shadow-lg z-50">
                                         {item.label}
+                                        {showBadge && ` (${pendingCount})`}
                                     </span>
                                 )}
                             </Link>
