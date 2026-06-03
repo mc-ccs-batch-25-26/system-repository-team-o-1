@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import {
-    ArrowLeft, BookMarked, RefreshCw, Lightbulb, AlertCircle,
-    CheckCircle2, XCircle, ChevronDown, ChevronLeft, ChevronRight, ArrowRight,
+import {ArrowLeft, BookMarked, RefreshCw, Lightbulb, AlertCircle,
+CheckCircle2, XCircle, ChevronDown, ChevronLeft, ChevronRight, ArrowRight,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { getMistakes, SavedMistake, CATEGORIES } from '../../data/mockQuestions';
+import { motion, AnimatePresence } from 'framer-motion';
+
 
 /* ─── design tokens ──────────────────────────────────────────────────────── */
 const fadeUp = {
