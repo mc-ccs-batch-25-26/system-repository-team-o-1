@@ -9,7 +9,7 @@ const Layout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);  // ← ADDED
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [profileUsername, setProfileUsername] = useState('');
   const [profileAvatarUrl, setProfileAvatarUrl] = useState<string | null>(null);
@@ -30,30 +30,45 @@ const Layout = () => {
         setCurrentUser(session.user);
         const { data: profile } = await supabase
           .from('profiles')
-          .select('username, avatar_url, created_at, role, last_active_date, streak_count, daily_xp, weekly_xp, monthly_xp, last_xp_reset')
+         .select('username, avatar_url, created_at, role, last_active_at, streak_count, daily_xp, weekly_xp, monthly_xp, last_xp_reset')
           .eq('id', session.user.id)
           .single();
         if (profile) {
           setProfileUsername(profile.username || session.user.email?.split('@')[0] || '');
           setProfileAvatarUrl(profile.avatar_url);
           setProfileCreatedAt(profile.created_at || '');
-          setIsAdmin(profile.role === 'admin' || profile.role === 'super_admin');  // ← ADDED
+          setIsAdmin(profile.role === 'admin' || profile.role === 'super_admin');
 
           // Skip streak/XP logic for admins
           if (profile.role !== 'admin' && profile.role !== 'super_admin') {
-            // Streak logic
-            const today = new Date().toISOString().split('T')[0];
-            const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-            const lastActive = profile.last_active_date;
+            
+            // Get current UTC time from database (single source of truth)
+            const { data: dbTime } = await supabase.rpc('get_current_utc_time');
+            const now = dbTime ? new Date(dbTime) : new Date();
+            
+            // Calculate UTC-based date strings
+            const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+            const yesterdayUTC = new Date(todayUTC.getTime() - 86400000);
+            
+            // Format as YYYY-MM-DD in UTC
+            const todayStr = todayUTC.toISOString().split('T')[0];
+            const yesterdayStr = yesterdayUTC.toISOString().split('T')[0];
+            
+            // Parse user's last active date (from database)
+            const lastActive = profile.last_active_at;
+            const lastActiveDate = lastActive ? new Date(lastActive) : null;
+            const lastActiveStr = lastActiveDate 
+              ? new Date(Date.UTC(lastActiveDate.getUTCFullYear(), lastActiveDate.getUTCMonth(), lastActiveDate.getUTCDate())).toISOString().split('T')[0]
+              : null;
+            
             const currentStreak = profile.streak_count || 0;
 
-            const today2 = new Date();
-            const weekStart = new Date(today2);
-            weekStart.setDate(today2.getDate() - today2.getDay());
-            const monthStart = new Date(today2.getFullYear(), today2.getMonth(), 1);
+            // XP reset logic using UTC
+            const weekStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() - now.getUTCDay()));
+            const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
 
             const lastReset = profile.last_xp_reset ? new Date(profile.last_xp_reset) : null;
-            const needsDailyReset = !lastReset || lastReset.toDateString() !== today2.toDateString();
+            const needsDailyReset = !lastReset || lastReset.toISOString().split('T')[0] !== todayStr;
             const needsWeeklyReset = !lastReset || lastReset < weekStart;
             const needsMonthlyReset = !lastReset || lastReset < monthStart;
 
@@ -63,28 +78,31 @@ const Layout = () => {
             if (needsMonthlyReset) updates.monthly_xp = 0;
 
             if (Object.keys(updates).length > 0) {
-              updates.last_xp_reset = today2.toISOString();
+              updates.last_xp_reset = now.toISOString();
               await supabase.from('profiles').update(updates).eq('id', session.user.id);
             }
 
+            // Calculate streak using UTC dates
             let newStreak = currentStreak;
-            if (lastActive === today) {
+            if (lastActiveStr === todayStr) {
               // Already logged in today — no change
-            } else if (lastActive === yesterday) {
+            } else if (lastActiveStr === yesterdayStr) {
+              // Consecutive day — increment
               newStreak = currentStreak + 1;
             } else {
+              // Streak broken — reset
               newStreak = 1;
             }
 
             await supabase.from('profiles').update({
               streak_count: newStreak,
-              last_active_date: today
+              last_active_at: todayStr
             }).eq('id', session.user.id);
           }
         }
       } else {
         setCurrentUser(null);
-        setIsAdmin(false);  // ← ADDED
+        setIsAdmin(false);
       }
     };
 
@@ -95,7 +113,7 @@ const Layout = () => {
         setCurrentUser(session.user);
       } else {
         setCurrentUser(null);
-        setIsAdmin(false);  // ← ADDED
+        setIsAdmin(false);
       }
     });
 
@@ -122,7 +140,7 @@ const Layout = () => {
         avatarUrl={profileAvatarUrl}
         username={profileUsername}
         userEmail={currentUser?.email || ''}
-        isAdmin={isAdmin}  // ← ADDED
+        isAdmin={isAdmin}
       />
       <div className={`flex-1 transition-all duration-300 flex flex-col min-h-screen w-full ${
         isCollapsed ? 'md:ml-16' : 'md:ml-64'
@@ -132,7 +150,7 @@ const Layout = () => {
           currentUser,
           isMobileMenuOpen,
           setIsMobileMenuOpen,
-          isUserAdmin: isAdmin  // ← UPDATED (was false)
+          isUserAdmin: isAdmin
         }} />
       </div>
 

@@ -20,6 +20,38 @@ export interface TimePerformance {
   accuracy: number;
 }
 
+export interface CategorizedAreas {
+  weakAreas: string[];
+  averageAreas: string[];
+  strongAreas: string[];
+  hasData: boolean;
+}
+
+export const categorizePerformance = (performanceData: CategoryPerformance[]): CategorizedAreas => {
+  const weakAreas: string[] = [];
+  const averageAreas: string[] = [];
+  const strongAreas: string[] = [];
+
+  if (!performanceData || performanceData.length === 0) {
+    return { weakAreas, averageAreas, strongAreas, hasData: false };
+  }
+
+  let hasData = false;
+  performanceData.forEach(cat => {
+    const answered = cat.regularAnswered || 0;
+    const accuracy = cat.regularAccuracy || 0;
+    if (answered > 0) {
+      hasData = true;
+      const label = `${cat.categoryName} (${accuracy}%)`;
+      if (accuracy < 70) weakAreas.push(label);
+      else if (accuracy >= 85) strongAreas.push(label);
+      else averageAreas.push(label);
+    }
+  });
+
+  return { weakAreas, averageAreas, strongAreas, hasData };
+};
+
 export const getCategoryPerformanceData = async (): Promise<CategoryPerformance[]> => {
   try {
     const { data: { user } } = await supabase.auth.getUser();

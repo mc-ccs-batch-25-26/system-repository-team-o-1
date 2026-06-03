@@ -19,7 +19,6 @@ interface AdminSidebarProps {
 
 const adminNavItems = [
     { path: '/admin',       icon: Shield,  label: 'Dashboard' },
-    { path: '/admin/users', icon: Users,   label: 'Users'  },
 ];
 
 /* ─── tiny helpers ──────────────────────────────────────────── */

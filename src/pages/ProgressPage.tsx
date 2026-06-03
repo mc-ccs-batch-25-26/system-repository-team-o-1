@@ -160,7 +160,6 @@ const ProgressPage = () => {
             <style>{`@keyframes shimmer{to{transform:translateX(200%)}}`}</style>
 
             <div className="flex flex-col w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-7">
-
                 {/* ── Page header ─────────────────────────────────────────── */}
                 <motion.div initial="hidden" animate="show" variants={fadeUp}>
                     <p className="text-xs font-semibold tracking-widest text-zinc-400 dark:text-zinc-500 uppercase mb-2">Progress</p>
