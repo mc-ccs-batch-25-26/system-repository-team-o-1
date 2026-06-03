@@ -37,7 +37,7 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
       accent:      { light: '#3b82f6', dark: '#60a5fa' },
       iconBg:      isDarkMode ? 'bg-blue-500/15' : 'bg-blue-50',
       iconColor:   isDarkMode ? 'text-blue-400'  : 'text-blue-600',
-      badge:       '15 XP / correct',
+      badge:       '10 XP / correct',
       features:    ['Instant feedback', 'Category filter'],
     },
     {
@@ -70,7 +70,6 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
       accent:      { light: '#10b981', dark: '#34d399' },
       iconBg:      isDarkMode ? 'bg-emerald-500/15' : 'bg-emerald-50',
       iconColor:   isDarkMode ? 'text-emerald-400'  : 'text-emerald-600',
-      badge:       'Review only',
       features:    ['AI explanations', 'Retry wrongs'],
     },
   ];

@@ -200,10 +200,12 @@ const evaluateAndAwardBadges = async (userId: string, context: { score: number, 
 
     // STREAKS
     if (profile) {
-        if (profile.streak_count >= 3 && !earnedTypes.has('streak_3')) newlyEarned.push('streak_3');
-        if (profile.streak_count >= 10 && !earnedTypes.has('streak_10')) newlyEarned.push('streak_10');
-        if (profile.streak_count >= 30 && !earnedTypes.has('streak_30')) newlyEarned.push('streak_30');
-    }
+    if (profile.streak_count >= 3 && !earnedTypes.has('streak_3')) newlyEarned.push('streak_3');
+    if (profile.streak_count >= 5 && !earnedTypes.has('streak_5')) newlyEarned.push('streak_5');
+    if (profile.streak_count >= 7 && !earnedTypes.has('streak_7')) newlyEarned.push('streak_7');
+    if (profile.streak_count >= 10 && !earnedTypes.has('streak_10')) newlyEarned.push('streak_10');
+    if (profile.streak_count >= 30 && !earnedTypes.has('streak_30')) newlyEarned.push('streak_30');
+}
 
     // PERFECT SCORE
     // Must have at least 5 questions to count as a valid perfect score run
