@@ -16,7 +16,7 @@ const AuthRoute: React.FunctionComponent<IAuthRouteProps> = (props) => {
     const userOnlyPages = ['/', '/quizzes', '/lessons', '/progress', '/leaderboard', '/pretest'];
     
     // Pages anyone can access
-    const publicPages = ['/login', '/signup', '/admin'];
+    const publicPages = ['/login', '/signup'];
 
     useEffect(() => {
         const checkAuth = async () => {
