@@ -182,8 +182,9 @@ const AdminContent: React.FC = () => {
     if (!formData.option_c?.trim()) { setFormError('Option C is required'); return false; }
     if (!formData.option_d?.trim()) { setFormError('Option D is required'); return false; }
     if (!formData.correct_answer) { setFormError('Correct answer is required'); return false; }
+    if (!formData.source_reference?.trim()) { setFormError('Source reference is required for data integrity'); return false; }
     return true;
-  };
+};
   const handleSubmit = async () => {
     if (!validateForm()) return;
     try {
@@ -389,7 +390,7 @@ const AdminContent: React.FC = () => {
                         </select>
                       </Field>
  
-                      <Field label="Source Reference">
+                      <Field label="Source Reference" required>
                         <input value={formData.source_reference} onChange={e => setFormData({ ...formData, source_reference: e.target.value })} placeholder="e.g., RA 6713, Art. XI 1987 Constitution" style={inputStyle} />
                       </Field>
  

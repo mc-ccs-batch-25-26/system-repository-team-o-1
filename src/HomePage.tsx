@@ -116,6 +116,7 @@ function HomePage() {
     });
     const [weakAreas, setWeakAreas] = useState<{ category: string; accuracy: number }[]>([]);
     const [recentQuiz, setRecentQuiz] = useState({ date: 'Not yet', score: 0, total: 0, accuracy: 0, quizType: '' });
+    const [recentBadges, setRecentBadges] = useState<any[]>([]);
 
     useEffect(() => {
         const loadDashboard = async () => {
@@ -124,19 +125,21 @@ function HomePage() {
             if (!user) { setLoading(false); return; }
             setCurrentUserSession(user.id);
 
-            const [profileRes, perfRes, sessionRes, mockRes, categoriesRes] = await Promise.all([
-                supabase.from('profiles').select('username, avatar_url, xp, level, pretest_done, streak_count, created_at').eq('id', user.id).maybeSingle(),
-                supabase.from('performance').select('accuracy_rate, category_id').eq('user_id', user.id).order('accuracy_rate', { ascending: true }),
-                supabase.from('quiz_sessions').select('score, total_questions, quiz_type, ended_at').eq('user_id', user.id).eq('is_pretest', false).not('ended_at', 'is', null).order('ended_at', { ascending: false }).limit(1).maybeSingle(),
-                supabase.from('quiz_sessions').select('score, total_questions').eq('user_id', user.id).eq('quiz_type', 'mock').order('ended_at', { ascending: false }).limit(1).maybeSingle(),
-                supabase.from('categories').select('id, name'),
-            ]);
+            const [profileRes, perfRes, sessionRes, mockRes, categoriesRes, badgesRes] = await Promise.all([
+               supabase.from('profiles').select('username, avatar_url, xp, level, pretest_done, streak_count, created_at').eq('id', user.id).maybeSingle(),
+               supabase.from('performance').select('accuracy_rate, category_id').eq('user_id', user.id).order('accuracy_rate', { ascending: true }),
+               supabase.from('quiz_sessions').select('score, total_questions, quiz_type, ended_at').eq('user_id', user.id).eq('is_pretest', false).not('ended_at', 'is', null).order('ended_at', { ascending: false }).limit(1).maybeSingle(),
+               supabase.from('quiz_sessions').select('score, total_questions').eq('user_id', user.id).eq('quiz_type', 'mock').order('ended_at', { ascending: false }).limit(1).maybeSingle(),
+               supabase.from('categories').select('id, name'),
+               supabase.from('user_badges').select('badge_id, badge_name, earned_at').eq('user_id', user.id).order('earned_at', { ascending: false }).limit(4),
+      ]);
 
             const { data: profile, error: profileErr } = profileRes;
             const { data: perf } = perfRes;
             const { data: lastSession } = sessionRes;
             const { data: lastMock } = mockRes;
             const { data: categories } = categoriesRes;
+            const { data: badges } = badgesRes;
 
             const avgAccuracy = perf && perf.length > 0
                 ? perf.reduce((sum: number, p: any) => sum + (p.accuracy_rate || 0), 0) / perf.length : 0;
@@ -180,11 +183,14 @@ function HomePage() {
                     }).filter(item => item.accuracy < 70).sort((a, b) => a.accuracy - b.accuracy).slice(0, 3);
                 }
             }
-            if (weakData.length === 0 && perf && perf.length > 0) {
-                weakData = perf.filter((p: any) => (p.accuracy_rate || 0) < 70).slice(0, 3).map((p: any) => ({
-                    category: categories?.find((c: any) => c.id === p.category_id)?.name || 'Unknown',
-                    accuracy: Math.round(p.accuracy_rate || 0),
-                }));
+           if (weakData.length === 0 && perf && perf.length > 0) {
+              weakData = perf
+             .filter((p: any) => (p.total_answered || 0) >= 5 && (p.accuracy_rate || 0) < 70)
+             .slice(0, 3)
+             .map((p: any) => ({
+             category: categories?.find((c: any) => c.id === p.category_id)?.name || 'Unknown',
+             accuracy: Math.round(p.accuracy_rate || 0),
+          }));
             }
             setWeakAreas(weakData);
 
@@ -199,6 +205,7 @@ function HomePage() {
             }
 
             setLoading(false);
+            if (badges) setRecentBadges(badges);
         };
         loadDashboard();
     }, []);
@@ -332,26 +339,35 @@ function HomePage() {
                 </div>
 
                 {/* Recent Achievements */}
-                <motion.div variants={fadeUp} className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
-                    <div className="flex items-center gap-2 px-5 py-4 border-b border-zinc-100 dark:border-zinc-800"><Award className="w-4 h-4 text-amber-500" /><h3 className="text-sm font-semibold text-zinc-900 dark:text-white">Recent Achievements</h3></div>
-                    <div className="p-5">
-                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                            {[
-                                { name: 'First Quiz', unlocked: civiquestUser.pretestDone, icon: '🎯' },
-                                { name: '3-Day Streak', unlocked: civiquestUser.streak >= 3, icon: '🔥' },
-                                { name: 'Perfect Score', unlocked: false, icon: '⭐' },
-                                { name: '10 Quizzes', unlocked: false, icon: '📚' },
-                            ].map((badge) => (
-                                <motion.div key={badge.name} whileHover={badge.unlocked ? { scale: 1.03 } : {}} transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                                    className={`flex flex-col items-center gap-2 p-4 rounded-xl border text-center transition-all duration-200 ${badge.unlocked ? 'border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 hover:border-amber-300 dark:hover:border-amber-700 hover:bg-amber-50/50 dark:hover:bg-amber-900/10' : 'border-dashed border-zinc-200 dark:border-zinc-700 opacity-70 grayscale'}`}>
-                                    <span className="text-2xl">{badge.icon}</span>
-                                    <div><p className={`text-xs font-semibold ${badge.unlocked ? 'text-zinc-800 dark:text-zinc-200' : 'text-zinc-500'} flex items-center justify-center gap-1`}>{badge.name}{!badge.unlocked && <Lock className="w-2.5 h-2.5" />}</p></div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </div>
-                </motion.div>
-            </motion.div>
+          <motion.div variants={fadeUp} className="rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
+           <div className="flex items-center gap-2 px-5 py-4 border-b border-zinc-100 dark:border-zinc-800"><Award className="w-4 h-4 text-amber-500" /><h3 className="text-sm font-semibold text-zinc-900 dark:text-white">Recent Achievements</h3></div>
+            <div className="p-5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {recentBadges.length > 0 ? recentBadges.map((badge: any) => {
+                const badgeIcon = badge.badge_id?.includes('streak') ? '🔥' :
+                    badge.badge_id?.includes('perfect') ? '⭐' :
+                    badge.badge_id?.includes('quiz') || badge.badge_id?.includes('pretest') ? '📚' :
+                    badge.badge_id?.includes('night') ? '🌙' :
+                    badge.badge_id?.includes('early') ? '🌅' :
+                    badge.badge_id?.includes('level') ? '📈' :
+                    badge.badge_id?.includes('battle') ? '⚔️' : '🏅';
+                return (
+                    <motion.div key={badge.badge_id} whileHover={{ scale: 1.03 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                        className="flex flex-col items-center gap-2 p-4 rounded-xl border text-center border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 hover:border-amber-300 dark:hover:border-amber-700 hover:bg-amber-50/50 dark:hover:bg-amber-900/10">
+                        <span className="text-2xl">{badgeIcon}</span>
+                        <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-200">{badge.badge_name || badge.badge_id}</p>
+                    </motion.div>
+                );
+            }) : (
+                <div className="col-span-4 flex flex-col items-center py-4 text-center gap-2">
+                    <Award className="w-7 h-7 text-zinc-300 dark:text-zinc-600" />
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400">Complete quizzes to earn badges!</p>
+                </div>
+            )}
+        </div>
+         </div>
+       </motion.div>
+      </motion.div>
 
             <Footer isDarkMode={isDarkMode} />
             {isProfileModalOpen && currentUserSession && (
