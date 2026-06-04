@@ -64,19 +64,19 @@ const QuizzesPage = () => {
   // LOADING
   if (pretestLoading) {
     return (
-      <div className="w-full max-w-7xl mx-auto px-4 py-8 flex items-center justify-center h-64">
+      <div className="w-full min-h-screen bg-zinc-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-zinc-300 border-t-blue-500" />
-          <p className={`text-sm ${subtextClass}`}>Loading your profile…</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-2 border-zinc-600 border-t-blue-500" />
+          <p className="text-sm text-zinc-400">Loading your profile…</p>
         </div>
       </div>
     );
   }
 
   // PRE-TEST GATE
-  if (!pretestChecked) {
+ if (!pretestChecked) {
     return (
-      <div className="w-full max-w-7xl mx-auto px-4 py-8">
+      <div className="w-full min-h-screen bg-zinc-950 max-w-7xl mx-auto px-4 py-8">
         <div className="max-w-md mx-auto mt-12">
           <div className={`${cardBg} rounded-2xl border p-8 text-center space-y-5 shadow-sm`}>
             <div className={`w-14 h-14 rounded-2xl mx-auto flex items-center justify-center ${isDarkMode ? 'bg-blue-900/30' : 'bg-blue-50'}`}>
