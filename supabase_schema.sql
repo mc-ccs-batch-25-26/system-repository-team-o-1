@@ -374,6 +374,7 @@ DECLARE
 BEGIN
     FOR r IN SELECT tablename FROM pg_tables WHERE schemaname = 'public'
     LOOP
-        EXECUTE format('GRANT SELECT, INSERT, UPDATE, DELETE ON public.%I TO anon, authenticated, service_role', r.tablename);
+        EXECUTE format('GRANT SELECT ON public.%I TO anon', r.tablename);
+        EXECUTE format('GRANT SELECT, INSERT, UPDATE, DELETE ON public.%I TO authenticated, service_role', r.tablename);
     END LOOP;
 END $$;
