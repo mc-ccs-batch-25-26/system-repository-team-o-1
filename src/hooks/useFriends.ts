@@ -45,9 +45,7 @@ export const useFriends = (currentUserId?: string) => {
       .or(`sender_id.eq.${currentUserId},receiver_id.eq.${currentUserId}`)
       .eq('status', 'accepted');
 
-    console.log('🔍 Raw acceptedFriends:', acceptedFriends);
-    console.log('❌ Error if any:', error);
-
+    if (error) console.error('Error fetching accepted friends:', error);
     if (acceptedFriends) {
       const friendList = acceptedFriends.map((f: any) => {
        
