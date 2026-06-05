@@ -50,7 +50,7 @@ export const useFriends = (currentUserId?: string) => {
 
     if (acceptedFriends) {
       const friendList = acceptedFriends.map((f: any) => {
-        // Handle both array and object cases for nested relations
+       
         const senderData = Array.isArray(f.sender) ? f.sender[0] : f.sender;
         const receiverData = Array.isArray(f.receiver) ? f.receiver[0] : f.receiver;
 
@@ -61,9 +61,9 @@ export const useFriends = (currentUserId?: string) => {
           id: friend?.id,
           username: friend?.username || 'Unknown',
           avatar_url: friend?.avatar_url || null,
-          friendship_id: f.id, // ★ Store the friendship row ID for removeFriend
+          friendship_id: f.id, 
         };
-      }).filter((f: any) => f.id); // Remove any null entries
+      }).filter((f: any) => f.id); 
 
       console.log('👥 Processed friends list:', friendList);
       setFriends(friendList);

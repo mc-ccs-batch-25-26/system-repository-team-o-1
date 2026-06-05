@@ -102,7 +102,7 @@ const DeniedScreen = () => (
 );
  
 /* ════════════════════════════════════════════════════════════════
-   ADMIN DASHBOARD (auth wrapper — logic unchanged)
+   ADMIN DASHBOARD WRAPPER (AUTH CHECK)
 ════════════════════════════════════════════════════════════════ */
 const AdminDashboard: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -149,7 +149,7 @@ const AdminContent: React.FC = () => {
     difficulty: 'medium', is_active: true,
   });
  
-  /* ── Data loading (unchanged) ── */
+  /* ── Data loading ── */
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
@@ -165,7 +165,7 @@ const AdminContent: React.FC = () => {
  
   useEffect(() => { loadData(); }, [loadData]);
  
-  /* ── Form handlers (unchanged) ── */
+  /* ── Form handlers ── */
   const resetForm = () => {
     setFormData({ category_id: '', question_text: '', option_a: '', option_b: '', option_c: '', option_d: '', correct_answer: '', explanation: '', source_reference: '', source_type: 'official', difficulty: 'medium', is_active: true });
     setEditingId(null); setShowForm(false); setFormError('');
@@ -199,8 +199,6 @@ const AdminContent: React.FC = () => {
     catch (err) { console.error('Delete failed:', err); }
   };
  
-  const activeCount      = questions.filter(q => q.is_active).length;
-  const unverifiedCount  = questions.filter(q => !q.last_verified_at && q.is_active).length;
  
   return (
     <div style={{ minHeight: '100vh', background: T.bg, color: T.textPri, fontFamily: 'inherit' }}>
@@ -231,14 +229,11 @@ const AdminContent: React.FC = () => {
  
           {/* Stats + CTA */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-            <StatPill label={`${activeCount} active`}  color="#34d399" bg="rgba(16,185,129,0.10)"  border="rgba(16,185,129,0.22)" />
-            {unverifiedCount > 0 && (
-              <StatPill label={`${unverifiedCount} unverified`} color="#fbbf24" bg="rgba(245,158,11,0.10)" border="rgba(245,158,11,0.22)" icon={<AlertTriangle size={11} />} />
-            )}
-            <CTAButton onClick={() => { resetForm(); setShowForm(true); }} icon={<Plus size={14} />}>
-              Add Question
-            </CTAButton>
-          </div>
+        <StatPill label={`${questions.length} questions`} color={T.textSec} bg={T.surf} border={T.border} />
+        <CTAButton onClick={() => { resetForm(); setShowForm(true); }} icon={<Plus size={14} />}>
+            Add Question
+       </CTAButton>
+       </div>
         </motion.div>
  
         {/* ══ TABS ══ */}
