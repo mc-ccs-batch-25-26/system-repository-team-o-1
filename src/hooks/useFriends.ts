@@ -65,11 +65,10 @@ export const useFriends = (currentUserId?: string) => {
         };
       }).filter((f: any) => f.id); 
 
-      console.log('👥 Processed friends list:', friendList);
       setFriends(friendList);
     } else {
-      console.log('⚠️ No acceptedFriends returned');
       setFriends([]);
+    }
     }
 
     // Get pending requests sent TO current user
