@@ -304,9 +304,8 @@ const FriendsPage: React.FC = () => {
                                 className="w-full max-w-sm rounded-2xl border border-zinc-700 bg-zinc-900 shadow-2xl p-6"
                                 onClick={e => e.stopPropagation()}
                             >
-                                <div className="flex items-start gap-3 mb-4">
                                     <div className="w-9 h-9 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0">
-                                        <UserMinus className="w-4.5 h-4.5 text-red-400" />
+                                        <UserMinus className="w-4 h-4 text-red-400" />
                                     </div>
                                     <div>
                                         <h3 className="text-sm font-semibold text-white">
