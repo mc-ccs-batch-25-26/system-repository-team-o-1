@@ -327,9 +327,9 @@ CREATE POLICY "Anyone can insert verification codes"
   ON public.verification_codes FOR INSERT
   WITH CHECK (true);
 
-CREATE POLICY "Anyone can read verification codes"
+CREATE POLICY "Service role can read verification codes"
   ON public.verification_codes FOR SELECT
-  USING (true);
+  USING (auth.role() = 'service_role');
 
 CREATE POLICY "Anyone can update verification codes"
   ON public.verification_codes FOR UPDATE
