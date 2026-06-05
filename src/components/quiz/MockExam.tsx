@@ -165,7 +165,28 @@ const MockExam = ({ isDarkMode, onBack, onStartPractice, onOpenAIReview }: MockE
         <div className={`w-full rounded-full h-1.5 mt-3 overflow-hidden ${isDarkMode ? 'bg-zinc-900' : 'bg-zinc-100'}`}><motion.div animate={{ width: `${progress}%` }} transition={{ duration: 0.3 }} className={`h-1.5 rounded-full ${isTimeCritical ? 'bg-red-500' : 'bg-purple-500'}`} /></div>
       </div>
       <div className="flex justify-between items-center px-1"><button onClick={() => setShowNavigator(!showNavigator)} className={`flex items-center gap-2 text-xs font-bold tracking-wider rounded-lg px-3 py-2 transition-colors ${isDarkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300' : 'bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700'} shadow-sm`}><LayoutGrid className="w-4 h-4" /><span>{answeredCount}/{questions.length} Answered</span></button></div>
-      <AnimatePresence>{showNavigator && (<motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden"><div className={`p-4 rounded-2xl border shadow-sm ${cardBg}`}><div className="grid grid-cols-10 gap-1.5 w-full justify-items-center">{questions.map((q, idx) => (<button key={q.id} onClick={() => setCurrentIndex(idx)} className={`w-7 h-7 flex items-center justify-center rounded text-[10px] font-bold transition-all ${idx === currentIndex ? 'bg-purple-600 text-white shadow-sm scale-110 z-10' : answers[q.id] ? isDarkMode ? 'bg-zinc-600 text-zinc-300' : 'bg-zinc-400 text-white' : isDarkMode ? 'border border-zinc-700 text-zinc-600 hover:bg-zinc-800' : 'border border-zinc-300 text-zinc-400 hover:bg-zinc-50'}`}>{idx + 1}</button>))}</div></div></motion.div>)}</AnimatePresence>
+      <AnimatePresence>{showNavigator && (<motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden"><div className={`p-4 rounded-2xl border shadow-sm ${cardBg}`}><div className="grid grid-cols-10 gap-1.5 w-full justify-items-center">{questions.map((q, idx) => {
+        const isAccessible = idx <= currentIndex || !!answers[q.id];
+        const isFuture = idx > currentIndex && !answers[q.id];
+        return (
+          <button
+            key={q.id}
+            onClick={() => isAccessible && setCurrentIndex(idx)}
+            disabled={!isAccessible}
+            className={`w-7 h-7 flex items-center justify-center rounded text-[10px] font-bold transition-all ${
+              idx === currentIndex
+                ? 'bg-purple-600 text-white shadow-sm scale-110 z-10'
+                : answers[q.id]
+                  ? isDarkMode ? 'bg-zinc-600 text-zinc-300' : 'bg-zinc-400 text-white'
+                  : isFuture
+                    ? 'opacity-30 cursor-not-allowed border border-zinc-700 text-zinc-700'
+                    : isDarkMode ? 'border border-zinc-700 text-zinc-600 hover:bg-zinc-800' : 'border border-zinc-300 text-zinc-400 hover:bg-zinc-50'
+            }`}
+          >
+            {idx + 1}
+          </button>
+        );
+      })}</div></div></motion.div>)}</AnimatePresence>
       {showWarning && isTimeCritical && (<motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className={`p-4 rounded-xl flex items-center gap-3 text-sm font-medium ${isDarkMode ? 'bg-red-900/30 text-red-400 border border-red-700/50' : 'bg-red-50 text-red-600 border border-red-200'}`}><AlertTriangle className="w-5 h-5 flex-shrink-0" />Less than 5 minutes remaining!<button onClick={() => setShowWarning(false)} className="ml-auto text-xs underline font-bold opacity-80 hover:opacity-100">Dismiss</button></motion.div>)}
       {currentQuestion && <QuizEngine question={currentQuestion} questionIndex={currentIndex} totalQuestions={questions.length} selectedAnswer={answers[currentQuestion.id] || null} onAnswer={handleAnswer} showFeedback={false} showAIExplanation={false} aiExplanationText="" loadingAI={false} isDarkMode={isDarkMode} />}
       <div className="flex gap-3 pt-2">
