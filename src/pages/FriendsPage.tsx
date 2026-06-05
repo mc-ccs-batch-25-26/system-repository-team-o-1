@@ -304,6 +304,7 @@ const FriendsPage: React.FC = () => {
                                 className="w-full max-w-sm rounded-2xl border border-zinc-700 bg-zinc-900 shadow-2xl p-6"
                                 onClick={e => e.stopPropagation()}
                             >
+                                <div className="flex items-start gap-3 mb-4">
                                     <div className="w-9 h-9 rounded-xl bg-red-500/10 flex items-center justify-center shrink-0">
                                         <UserMinus className="w-4 h-4 text-red-400" />
                                     </div>
@@ -315,7 +316,7 @@ const FriendsPage: React.FC = () => {
                                             You won't see each other's rankings anymore. You can add them again later.
                                         </p>
                                     </div>
-                                </div>
+                                </div
                                 <div className="flex gap-2.5">
                                     <button
                                         onClick={() => setRemoveDialog({ isOpen: false, friend: null })}
