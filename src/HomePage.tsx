@@ -101,10 +101,10 @@ function HomePage() {
     const { isDarkMode } = useOutletContext<any>();
     const navigate = useNavigate();
 
-    const [previousLevel, setPreviousLevel] = useState(() => {
-        const saved = localStorage.getItem('civiquest_previous_level');
-        return saved ? parseInt(saved) : 1;
-    });
+    const [previousLevel, setPreviousLevel] = useState<number | null>(() => {
+    const saved = localStorage.getItem('civiquest_previous_level');
+    return saved ? parseInt(saved) : null;
+   });
     const [showLevelUp, setShowLevelUp] = useState(false);
     const [loading, setLoading] = useState(true);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -150,26 +150,32 @@ function HomePage() {
             const weakAreasImproved = categoriesCovered > 0 ? Math.max(0, 4 - weakAreasCount) : 0;
 
             if (!profileErr && profile) {
-                const xp = profile.xp || 0;
-                const newLevel = profile.level || 1;
-                if (newLevel > previousLevel && previousLevel > 0) {
-                    setShowLevelUp(true);
-                    setTimeout(() => setShowLevelUp(false), 2000);
-                }
-                setPreviousLevel(newLevel);
-                localStorage.setItem('civiquest_previous_level', String(newLevel));
-                const readiness = profile.pretest_done
-                    ? Math.round((mockScore * 0.4) + (avgAccuracy * 0.3) + (weakAreasImproved / 4) * 15 + (Math.min(categoriesCovered, 4) / 4) * 10 + (profile.pretest_done ? 5 : 0))
-                    : 0;
-                setCiviquestUser({
-                    username: profile.username || user.email?.split('@')[0] || 'Aspirant',
-                    avatarUrl: profile.avatar_url || null,
-                    xp, level: newLevel,
-                    streak: profile.streak_count || 0,
-                    pretestDone: profile.pretest_done || false,
-                    readiness, created_at: profile.created_at || '',
-                });
-            }
+             const xp = profile.xp || 0;
+             const newLevel = profile.level || 1;
+             const savedLevel = localStorage.getItem('civiquest_previous_level');
+    
+    // Only show level-up if we have a saved level AND it's different
+           if (savedLevel && newLevel > parseInt(savedLevel)) {
+         setShowLevelUp(true);
+         setTimeout(() => setShowLevelUp(false), 2000);
+       }
+    
+    // Always save the current level
+         setPreviousLevel(newLevel);
+         localStorage.setItem('civiquest_previous_level', String(newLevel));
+    
+         const readiness = profile.pretest_done
+         ? Math.round((mockScore * 0.4) + (avgAccuracy * 0.3) + (weakAreasImproved / 4) * 15 + (Math.min(categoriesCovered, 4) / 4) * 10 + (profile.pretest_done ? 5 : 0))
+         : 0;
+          setCiviquestUser({
+            username: profile.username || user.email?.split('@')[0] || 'Aspirant',
+            avatarUrl: profile.avatar_url || null,
+            xp, level: newLevel,
+            streak: profile.streak_count || 0,
+            pretestDone: profile.pretest_done || false,
+            readiness, created_at: profile.created_at || '',
+        });
+     }
 
             let weakData: { category: string; accuracy: number }[] = [];
             if (profile?.pretest_done) {
@@ -205,7 +211,22 @@ function HomePage() {
             }
 
             setLoading(false);
-            if (badges) setRecentBadges(badges);
+            if (badges) {
+            const deduped = badges.filter((badge, index, self) => {
+             if (badge.badge_id?.startsWith('streak')) {
+            const streakBadges = self.filter((b: any) => b.badge_id?.startsWith('streak'));
+            const highestStreak = streakBadges.sort((a: any, b: any) => {
+                const aNum = parseInt(a.badge_id?.replace('streak_', '') || '0');
+                const bNum = parseInt(b.badge_id?.replace('streak_', '') || '0');
+                return bNum - aNum;
+            })[0];
+            return badge.badge_id === highestStreak.badge_id;
+          }
+            return true;
+        });
+           setRecentBadges(deduped.slice(0, 4));
+     }
+
         };
         loadDashboard();
     }, []);
