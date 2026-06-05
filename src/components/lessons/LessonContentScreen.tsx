@@ -284,7 +284,7 @@ export const LessonContentScreen: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-001',
+          model: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
           messages: [{
             role: 'user',
             content: `A student answered "${wrongAnswer}" to the question "${question}". The correct answer is "${correctAnswer}". Briefly explain why the student's answer is incorrect and why the correct answer is right. Keep it simple, encouraging, and under 3 sentences.`,
@@ -400,7 +400,7 @@ export const LessonContentScreen: React.FC = () => {
 
   const activePhaseIndex = PHASE_STEPS.findIndex((s) => s.key === phase);
 
-  /* ── back handler (logic unchanged) ── */
+  
   const handleBack = () => {
     if (phase === 'INTRO') {
       navigate(`/lessons/${encodeURIComponent(categoryData.title)}`);

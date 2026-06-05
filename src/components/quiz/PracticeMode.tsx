@@ -88,7 +88,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
         }
 
         const { data: dbQuestions } = await query.limit(50);
-        let pool: MockQuestion[] = (dbQuestions || []).map(dbToMockQuestion);
+        const pool: MockQuestion[] = (dbQuestions || []).map(dbToMockQuestion);
         
         setQuestions(shuffleArray(pool).slice(0, 15));
         setPhase('quiz');
@@ -105,7 +105,7 @@ const PracticeMode = ({ isDarkMode, onBack, onOpenAIReview, preSelectedCategory 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`, 'HTTP-Referer': window.location.origin, 'X-Title': 'CiviQuest' },
                 body: JSON.stringify({
-                    model: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+                    model: "nvidia/nemotron-3-super-120b-a12b:free",
                     messages: [
                         { role: 'system', content: 'You are a Civil Service Exam tutor. Explain in 2-3 sentences why the answer is correct and why the user\'s choice was wrong. Be concise and helpful.' },
                         { role: 'user', content: `Question: ${question.question}\nOptions: ${question.options.join(', ')}\nCorrect answer: ${question.correct}\nMy answer: ${userAnswer}\nPlease explain.` },
