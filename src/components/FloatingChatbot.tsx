@@ -362,7 +362,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
 - AVERAGE AREAS: ${averageAreas.length > 0 ? averageAreas.join(', ') : 'None.'}`
         : "No subject data available. User hasn't completed quizzes yet.";
 
-      // Zero-Trust Prompt (No AI Arithmetic Instructions)
+     
       const systemPrompt = `You are a "Personal Learning Coach" for the CiviQuest Civil Service Exam app. Answer politely, directly, and concisely. Use the strictly calculated, deterministic stats below to provide recommendations. Do not invent data and DO NOT perform arithmetic calculations yourself. Rely exclusively on the provided 'needed' values.
 
 **User's Live Stats:**
@@ -395,7 +395,7 @@ Your Capabilities & Explanations:
           'X-Title': 'CiviQuest',
         },
         body: JSON.stringify({
-          model: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free',
+          model: "nvidia/nemotron-3-super-120b-a12b:free",
           messages: [
             { role: 'system', content: systemPrompt },
             ...messages.slice(-6).map(msg => ({ role: msg.sender === 'user' ? 'user' : 'assistant', content: msg.content })),
