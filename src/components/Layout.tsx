@@ -30,7 +30,7 @@ const Layout = () => {
         setCurrentUser(session.user);
         const { data: profile } = await supabase
           .from('profiles')
-         .select('username, avatar_url, created_at, role, last_active_at, streak_count, daily_xp, weekly_xp, monthly_xp, last_xp_reset')
+          .select('username, avatar_url, created_at, role, last_active_at, streak_count, daily_xp, weekly_xp, monthly_xp, last_xp_reset')
           .eq('id', session.user.id)
           .single();
         if (profile) {
@@ -145,6 +145,26 @@ const Layout = () => {
       <div className={`flex-1 transition-all duration-300 flex flex-col min-h-screen w-full ${
         isCollapsed ? 'md:ml-16' : 'md:ml-64'
       }`}>
+
+        {/* ── Mobile Header with Hamburger ── */}
+        <div className="md:hidden flex items-center justify-between px-4 py-3 bg-zinc-900 border-b border-zinc-800 sticky top-0 z-30">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white">
+              <img src="/System Logo.png" alt="CiviQuest" className="w-7 h-7 object-contain" />
+            </div>
+            <span className="text-sm font-bold text-white tracking-tight">CiviQuest</span>
+          </div>
+          <button
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="p-2 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-white transition-colors"
+            aria-label="Open menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M3 12h18M3 6h18M3 18h18" />
+            </svg>
+          </button>
+        </div>
+
         <Outlet key={profileVersion} context={{
           isDarkMode,
           currentUser,

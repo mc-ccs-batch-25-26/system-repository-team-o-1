@@ -58,23 +58,28 @@ const Settings: React.FC = () => {
     useEffect(() => { loadUserData(); }, []);
 
     const handleClearProfileData = async () => {
-        if (!currentUserId) return;
-        setClearing(true); setClearError(null);
-        try {
-            const { data: sessions } = await supabase.from('quiz_sessions').select('id').eq('user_id', currentUserId);
-            const sessionIds = sessions?.map(s => s.id) || [];
-            if (sessionIds.length > 0) await supabase.from('quiz_session_answers').delete().in('session_id', sessionIds);
-            await supabase.from('quiz_sessions').delete().eq('user_id', currentUserId);
-            await supabase.from('performance').delete().eq('user_id', currentUserId);
-            await supabase.from('lesson_progress').delete().eq('user_id', currentUserId);
-            await supabase.from('pretest_results').delete().eq('user_id', currentUserId);
-            await supabase.from('profiles').update({ xp: 0, level: 1, pretest_done: false, streak_count: 0, last_active_date: null }).eq('id', currentUserId);
-            localStorage.clear();
-            await supabase.auth.signOut();
-            navigate('/login');
-        } catch (err) { setClearError('Failed to clear data.'); }
-        finally { setClearing(false); setShowConfirm(false); }
-    };
+    if (!currentUserId) return;
+    setClearing(true); setClearError(null);
+    try {
+        const { data: sessions } = await supabase.from('quiz_sessions').select('id').eq('user_id', currentUserId);
+        const sessionIds = sessions?.map(s => s.id) || [];
+        if (sessionIds.length > 0) await supabase.from('quiz_session_answers').delete().in('session_id', sessionIds);
+        await supabase.from('quiz_sessions').delete().eq('user_id', currentUserId);
+        await supabase.from('performance').delete().eq('user_id', currentUserId);
+        await supabase.from('lesson_progress').delete().eq('user_id', currentUserId);
+        await supabase.from('pretest_results').delete().eq('user_id', currentUserId);
+        await supabase.from('user_badges').delete().eq('user_id', currentUserId);
+        await supabase.from('xp_logs').delete().eq('user_id', currentUserId);
+        await supabase.from('profiles').update({ 
+            xp: 0, level: 1, pretest_done: false, streak_count: 0, 
+            last_active_at: null, daily_xp: 0, weekly_xp: 0, monthly_xp: 0, last_xp_reset: null 
+        }).eq('id', currentUserId);
+        localStorage.clear();
+        await supabase.auth.signOut();
+        navigate('/login');
+    } catch (err) { setClearError('Failed to clear data.'); }
+    finally { setClearing(false); setShowConfirm(false); }
+  };
 
     const handleChangePassword = async () => {
         if (!currentPassword || !newPassword) return;
