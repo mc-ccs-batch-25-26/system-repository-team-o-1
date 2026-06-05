@@ -12,9 +12,6 @@ const AuthRoute: React.FunctionComponent<IAuthRouteProps> = (props) => {
     const location = useLocation();
     const [loading, setLoading] = useState(true);
 
-    // Pages only for regular users (admins should NOT access)
-    const userOnlyPages = ['/', '/quizzes', '/lessons', '/progress', '/leaderboard', '/pretest'];
-    
     // Pages anyone can access
     const publicPages = ['/login', '/signup'];
 
