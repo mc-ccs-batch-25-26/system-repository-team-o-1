@@ -237,8 +237,9 @@ const Sidebar = ({
                     <motion.div key="dialog-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
                         <motion.div initial={{ opacity: 0, scale: 0.95, y: 8 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96, y: 4 }} transition={{ duration: 0.22 }} className="w-full max-w-sm rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-2xl p-6">
                             <div className="flex items-start gap-3 mb-4">
-                                <div className="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-900/20 flex items-center justify-center shrink-0"><AlertCircle className="w-4.5 h-4.5 text-rose-500" /></div>
+                                <div className="w-9 h-9 rounded-xl bg-rose-50 dark:bg-rose-900/20 flex items-center justify-center shrink-0"><AlertCircle className="w-4 h-4 text-rose-500" /></div>
                                 <div><h3 className="text-sm font-semibold text-slate-900 dark:text-slate-50">Sign out of CiviQuest?</h3><p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Your progress is saved. You can sign back in anytime.</p></div>
+                            </div>
                             </div>
                             <div className="flex gap-2.5">
                                 <button onClick={() => setShowLogoutDialog(false)} className="flex-1 py-2.5 rounded-xl text-sm font-semibold border border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Cancel</button>
