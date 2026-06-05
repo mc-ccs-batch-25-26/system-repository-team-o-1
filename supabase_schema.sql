@@ -233,9 +233,9 @@ CREATE TABLE IF NOT EXISTS public.user_badges (
 
 ALTER TABLE public.user_badges ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Anyone can view badges"
+CREATE POLICY "Users can view own badges"
   ON public.user_badges FOR SELECT
-  USING (true);
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can earn badges"
   ON public.user_badges FOR INSERT
