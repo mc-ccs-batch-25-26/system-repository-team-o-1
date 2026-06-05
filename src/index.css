@@ -48,7 +48,7 @@ html, body, #root {
   @apply bg-zinc-950;
 }
 
-dark-bg {
+.dark-bg {
   @apply bg-zinc-950;
 }
 
