@@ -48,13 +48,31 @@ export const fetchQuestionById = async (id: string): Promise<Question | null> =>
 };
 
 export const createQuestion = async (question: Partial<Question>): Promise<Question> => {
+  // Check for duplicate first
+  const { data: existing } = await supabase
+    .from('questions')
+    .select('id')
+    .eq('question_text', question.question_text?.trim())
+    .eq('category_id', question.category_id)
+    .maybeSingle();
+
+  if (existing) {
+    throw new Error('This question already exists in the selected category.');
+  }
+
   const { data, error } = await supabase
     .from('questions')
     .insert([question])
     .select()
     .single();
   
-  if (error) throw error;
+  if (error) {
+    // Handle the unique constraint error from the database
+    if (error.code === '23505') {
+      throw new Error('This question already exists in the selected category.');
+    }
+    throw error;
+  }
   return data;
 };
 

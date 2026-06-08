@@ -1,19 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabase/supabaseClient';
-import {
-  Plus, Edit, Trash2, Save, X, Search, RefreshCw,
-  AlertTriangle, CheckCircle, Shield, BookOpen,
-  Eye, EyeOff, LayoutGrid, List, Sparkles,
-} from 'lucide-react';
+import {Plus, Edit, Trash2, Save, X, Search, RefreshCw,AlertTriangle, CheckCircle, Shield, BookOpen,Eye, EyeOff, LayoutGrid, List, Sparkles,} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  fetchQuestions, createQuestion, updateQuestion, deleteQuestion,
-  fetchCategories, createCategory, updateCategory, deleteCategory,
-  Question, Category,
-} from '../../firebase/questionService';
+import {fetchQuestions, createQuestion, updateQuestion, deleteQuestion, fetchCategories, createCategory, updateCategory, deleteCategory,Question, Category,} from '../../firebase/questionService';
  
 /* ─── Types ───────────────────────────────────────────────────── */
-type Tab = 'questions' | 'categories';
+type Tab = 'questions' | 'categories' | 'lessons';
  
 /* ─── Theme tokens ────────────────────────────────────────────── */
 const T = {
@@ -187,12 +179,15 @@ const AdminContent: React.FC = () => {
 };
   const handleSubmit = async () => {
     if (!validateForm()) return;
+    
     try {
       if (editingId) await updateQuestion(editingId, formData);
-      else           await createQuestion(formData);
+      else await createQuestion(formData);
       resetForm(); loadData();
-    } catch (err: any) { setFormError(err.message || 'Failed to save question'); }
-  };
+    } catch (err: any) { 
+      setFormError(err.message || 'Failed to save question'); 
+    }
+};
   const handleDelete = async (id: string) => {
     if (!window.confirm('Delete this question? This action cannot be undone.')) return;
     try { await deleteQuestion(id); loadData(); }
@@ -238,7 +233,7 @@ const AdminContent: React.FC = () => {
  
         {/* ══ TABS ══ */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 2, background: 'rgba(255,255,255,0.04)', border: `1px solid ${T.border}`, borderRadius: 12, padding: 4 }}>
-          {(['questions', 'categories'] as Tab[]).map(tab => {
+          {(['questions', 'categories', 'lessons'] as Tab[]).map(tab => {
             const active = activeTab === tab;
             return (
               <button key={tab} onClick={() => setActiveTab(tab)} style={{
@@ -270,7 +265,6 @@ const AdminContent: React.FC = () => {
           >
             {/* Filters */}
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              {/* Search */}
               <div style={{
                 flex: '1 1 220px', display: 'flex', alignItems: 'center', gap: 8,
                 background: searchFocused ? 'rgba(255,255,255,0.06)' : T.surf,
@@ -314,7 +308,6 @@ const AdminContent: React.FC = () => {
                     boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
                   }}
                 >
-                  {/* Form header */}
                   <div style={{ padding: '18px 22px 16px', borderBottom: `1px solid ${T.border}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: T.surf2 }}>
                     <div>
                       <h2 style={{ fontSize: 16, fontWeight: 800, color: T.textPri, margin: 0, letterSpacing: '-0.2px' }}>
@@ -328,7 +321,6 @@ const AdminContent: React.FC = () => {
                   </div>
  
                   <div style={{ padding: '20px 22px 22px' }}>
-                    {/* Error */}
                     <AnimatePresence>
                       {formError && (
                         <motion.div
@@ -341,7 +333,6 @@ const AdminContent: React.FC = () => {
                       )}
                     </AnimatePresence>
  
-                    {/* Grid */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
                       <Field label="Category" required>
                         <select value={formData.category_id} onChange={e => setFormData({ ...formData, category_id: e.target.value })} style={selectStyle}>
@@ -409,7 +400,6 @@ const AdminContent: React.FC = () => {
                       </Field>
                     </div>
  
-                    {/* Active toggle + actions */}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 18, flexWrap: 'wrap', gap: 12 }}>
                       <button
                         onClick={() => setFormData({ ...formData, is_active: !formData.is_active })}
@@ -446,7 +436,6 @@ const AdminContent: React.FC = () => {
               borderRadius: 20, overflow: 'hidden',
               boxShadow: '0 4px 24px rgba(0,0,0,0.35)',
             }}>
-              {/* Table header */}
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 130px 70px 90px 90px 90px',
@@ -497,7 +486,6 @@ const AdminContent: React.FC = () => {
                       }}
                       whileHover={{ background: 'rgba(255,255,255,0.02)' }}
                     >
-                      {/* Question text */}
                       <div style={{ paddingRight: 16 }}>
                         <p style={{ fontSize: 13, color: T.textPri, margin: 0, lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                           {q.question_text}
@@ -509,28 +497,23 @@ const AdminContent: React.FC = () => {
                         )}
                       </div>
  
-                      {/* Category */}
                       <span style={{ fontSize: 11, color: T.textSec, paddingRight: 8 }}>
                         {q.categories?.name || '—'}
                       </span>
  
-                      {/* Answer */}
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
                         <CheckCircle size={12} color="#34d399" />
                         <span style={{ fontSize: 13, fontWeight: 800, color: '#34d399' }}>{q.correct_answer}</span>
                       </div>
  
-                      {/* Difficulty */}
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <DiffBadge d={q.difficulty} />
                       </div>
  
-                      {/* Status */}
                       <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <StatusBadge verified={!!q.last_verified_at} />
                       </div>
  
-                      {/* Actions */}
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 4 }}>
                         <IconBtn onClick={() => startEdit(q)} title="Edit" color="#818cf8">
                           <Edit size={13} />
@@ -544,13 +527,23 @@ const AdminContent: React.FC = () => {
                 </div>
               )}
  
-              {/* Table footer */}
               {questions.length > 0 && (
                 <div style={{ padding: '10px 18px', borderTop: `1px solid ${T.border}`, background: T.surf2, display: 'flex', justifyContent: 'flex-end' }}>
                   <span style={{ fontSize: 11, color: T.textSec }}>{questions.length} question{questions.length !== 1 ? 's' : ''}</span>
                 </div>
               )}
             </div>
+          </motion.div>
+        )}
+ 
+        {/* ══ LESSONS TAB ══ */}
+        {activeTab === 'lessons' && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+          >
+            <LessonManager />
           </motion.div>
         )}
  
@@ -571,7 +564,183 @@ const AdminContent: React.FC = () => {
 };
  
 /* ────────────────────────────────────────────────────────
-   CATEGORY MANAGER (logic unchanged)
+   LESSON MANAGER
+──────────────────────────────────────────────────────── */
+const LessonManager: React.FC = () => {
+  const [subTab, setSubTab] = useState<'topics' | 'items' | 'quiz'>('topics');
+  const [topics, setTopics] = useState<any[]>([]);
+  const [items, setItems] = useState<any[]>([]);
+  const [quizQuestions, setQuizQuestions] = useState<any[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [lessonLoading, setLessonLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data: t } = await supabase.from('lesson_topics').select('*, categories:category_id(name)').order('sort_order');
+      setTopics(t || []);
+      setLessonLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  const fetchItems = async (topicId: string) => {
+    setSelectedTopic(topicId);
+    setSubTab('items');
+    const { data } = await supabase.from('lesson_items').select('*').eq('topic_id', topicId).order('sort_order');
+    setItems(data || []);
+  };
+
+  const fetchQuizQuestions = async (topicId: string) => {
+    setSelectedTopic(topicId);
+    setSubTab('quiz');
+    const { data } = await supabase.from('lesson_quiz_questions').select('*').eq('topic_id', topicId).order('sort_order');
+    setQuizQuestions(data || []);
+  };
+
+  if (lessonLoading) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '48px 0', gap: 10 }}>
+        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}>
+          <RefreshCw size={20} color={T.textSec} />
+        </motion.div>
+        <span style={{ fontSize: 12, color: T.textSec }}>Loading lessons…</span>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {/* Sub-tabs */}
+      <div style={{ display: 'flex', gap: 8 }}>
+        {[
+          { id: 'topics' as const, label: 'Topics' },
+          { id: 'items' as const, label: 'Items' },
+          { id: 'quiz' as const, label: 'Quiz Questions' },
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setSubTab(tab.id)}
+            style={{
+              padding: '8px 16px', borderRadius: 10, border: 'none', cursor: 'pointer',
+              background: subTab === tab.id ? 'linear-gradient(135deg,#6366f1,#818cf8)' : T.surf3,
+              color: subTab === tab.id ? '#fff' : T.textSec,
+              fontSize: 12, fontWeight: 700, transition: 'all 0.15s',
+            }}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Topics List */}
+      {subTab === 'topics' && (
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 20, overflow: 'hidden' }}>
+          <div style={{ padding: '14px 18px', borderBottom: `1px solid ${T.border}`, background: T.surf2 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: T.textSec, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              {topics.length} Topics
+            </span>
+          </div>
+          {topics.map((topic, i) => (
+            <div key={topic.id} style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '12px 18px', borderBottom: i < topics.length - 1 ? `1px solid ${T.border}` : 'none',
+            }}>
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 600, color: T.textPri }}>{topic.title}</p>
+                <p style={{ fontSize: 11, color: T.textSec }}>{topic.categories?.name}</p>
+              </div>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button onClick={() => fetchItems(topic.id)} style={{
+                  padding: '5px 10px', borderRadius: 6, border: `1px solid ${T.border}`,
+                  background: T.surf2, color: T.textSec, fontSize: 10, cursor: 'pointer',
+                }}>Items</button>
+                <button onClick={() => fetchQuizQuestions(topic.id)} style={{
+                  padding: '5px 10px', borderRadius: 6, border: `1px solid ${T.border}`,
+                  background: T.surf2, color: T.textSec, fontSize: 10, cursor: 'pointer',
+                }}>Quiz</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Items List */}
+      {subTab === 'items' && (
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 20, overflow: 'hidden' }}>
+          <div style={{ padding: '14px 18px', borderBottom: `1px solid ${T.border}`, background: T.surf2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: T.textSec, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              {items.length} Items {selectedTopic ? `· ${topics.find(t => t.id === selectedTopic)?.title || ''}` : ''}
+            </span>
+            <button onClick={() => { setSelectedTopic(null); setItems([]); setSubTab('topics'); }} style={{
+              padding: '4px 10px', borderRadius: 6, border: `1px solid ${T.border}`,
+              background: T.surf2, color: T.textSec, fontSize: 10, cursor: 'pointer',
+            }}>← Back</button>
+          </div>
+          {items.length === 0 ? (
+            <div style={{ padding: '32px 18px', textAlign: 'center', color: T.textSec, fontSize: 12 }}>
+              Click "Items" on a topic to view its flashcards
+            </div>
+          ) : (
+            items.map((item, i) => (
+              <div key={item.id} style={{
+                padding: '12px 18px', borderBottom: i < items.length - 1 ? `1px solid ${T.border}` : 'none',
+              }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: T.textPri }}>{item.word}</p>
+                <p style={{ fontSize: 11, color: T.textSec, lineHeight: 1.5, marginTop: 4 }}>{item.definition?.substring(0, 150)}...</p>
+                <span style={{ display: 'inline-block', marginTop: 6, padding: '2px 8px', borderRadius: 999, fontSize: 9, fontWeight: 700, background: T.surf3, color: T.textSec }}>
+                  {item.difficulty}
+                </span>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {/* Quiz Questions List */}
+      {subTab === 'quiz' && (
+        <div style={{ background: T.surf, border: `1px solid ${T.border}`, borderRadius: 20, overflow: 'hidden' }}>
+          <div style={{ padding: '14px 18px', borderBottom: `1px solid ${T.border}`, background: T.surf2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: T.textSec, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              {quizQuestions.length} Questions {selectedTopic ? `· ${topics.find(t => t.id === selectedTopic)?.title || ''}` : ''}
+            </span>
+            <button onClick={() => { setSelectedTopic(null); setQuizQuestions([]); setSubTab('topics'); }} style={{
+              padding: '4px 10px', borderRadius: 6, border: `1px solid ${T.border}`,
+              background: T.surf2, color: T.textSec, fontSize: 10, cursor: 'pointer',
+            }}>← Back</button>
+          </div>
+          {quizQuestions.length === 0 ? (
+            <div style={{ padding: '32px 18px', textAlign: 'center', color: T.textSec, fontSize: 12 }}>
+              Click "Quiz" on a topic to view its questions
+            </div>
+          ) : (
+            quizQuestions.map((q, i) => (
+              <div key={q.id} style={{
+                padding: '12px 18px', borderBottom: i < quizQuestions.length - 1 ? `1px solid ${T.border}` : 'none',
+              }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: T.textPri }}>{q.question}</p>
+                <div style={{ display: 'flex', gap: 8, marginTop: 6, flexWrap: 'wrap' }}>
+                  {q.options?.map((opt: string, oi: number) => (
+                    <span key={oi} style={{
+                      padding: '2px 8px', borderRadius: 999, fontSize: 10, fontWeight: 600,
+                      background: opt === q.correct_answer ? 'rgba(16,185,129,0.15)' : T.surf3,
+                      color: opt === q.correct_answer ? '#34d399' : T.textSec,
+                      border: `1px solid ${opt === q.correct_answer ? 'rgba(16,185,129,0.3)' : T.border}`,
+                    }}>
+                      {opt} {opt === q.correct_answer ? '✓' : ''}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+ 
+/* ────────────────────────────────────────────────────────
+   CATEGORY MANAGER
 ──────────────────────────────────────────────────────── */
 const CategoryManager: React.FC<{ categories: Category[]; onUpdate: () => void }> = ({ categories, onUpdate }) => {
   const [showForm, setShowForm]   = useState(false);
