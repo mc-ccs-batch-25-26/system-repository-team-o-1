@@ -1,4 +1,4 @@
-# Project Title: [Your Thesis Title Here]
+# CIVIQUEST: GAMIFIED CIVIL SERVICE REVIEWER
 
 ## System Repository Template
 
