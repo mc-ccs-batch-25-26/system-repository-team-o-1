@@ -25,7 +25,6 @@ export const useFriends = (currentUserId?: string) => {
   const [sentRequests, setSentRequests] = useState<FriendRequest[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch friends and requests
   const fetchFriends = useCallback(async () => {
     if (!currentUserId) return;
     setLoading(true);
@@ -48,25 +47,20 @@ export const useFriends = (currentUserId?: string) => {
     if (error) console.error('Error fetching accepted friends:', error);
     if (acceptedFriends) {
       const friendList = acceptedFriends.map((f: any) => {
-       
         const senderData = Array.isArray(f.sender) ? f.sender[0] : f.sender;
         const receiverData = Array.isArray(f.receiver) ? f.receiver[0] : f.receiver;
-
         const isSender = f.sender_id === currentUserId;
         const friend = isSender ? receiverData : senderData;
-
         return {
           id: friend?.id,
           username: friend?.username || 'Unknown',
           avatar_url: friend?.avatar_url || null,
-          friendship_id: f.id, 
+          friendship_id: f.id,
         };
-      }).filter((f: any) => f.id); 
-
+      }).filter((f: any) => f.id);
       setFriends(friendList);
     } else {
       setFriends([]);
-    }
     }
 
     // Get pending requests sent TO current user
@@ -138,7 +132,6 @@ export const useFriends = (currentUserId?: string) => {
     fetchFriends();
   }, [fetchFriends]);
 
-  // Send friend request
   const sendFriendRequest = async (receiverId: string) => {
     const { data, error } = await supabase
       .from('friendships')
@@ -154,7 +147,6 @@ export const useFriends = (currentUserId?: string) => {
     return { data, error };
   };
 
-  // Accept friend request
   const acceptFriendRequest = async (requestId: string) => {
     const { error } = await supabase
       .from('friendships')
@@ -165,7 +157,6 @@ export const useFriends = (currentUserId?: string) => {
     return { error };
   };
 
-  // Reject friend request
   const rejectFriendRequest = async (requestId: string) => {
     const { error } = await supabase
       .from('friendships')
@@ -176,7 +167,6 @@ export const useFriends = (currentUserId?: string) => {
     return { error };
   };
 
-  // Remove friend
   const removeFriend = async (friendshipId: string) => {
     const { error } = await supabase
       .from('friendships')

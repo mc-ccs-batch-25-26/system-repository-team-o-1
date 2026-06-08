@@ -40,7 +40,6 @@ const FriendsPage: React.FC = () => {
         }
     };
 
-
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center" style={{ background: '#09090b' }}>
@@ -48,7 +47,6 @@ const FriendsPage: React.FC = () => {
             </div>
         );
     }
-
     return (
         <div className="min-h-screen text-white" style={{ background: '#09090b' }}>
             <div className="relative z-10 flex flex-col w-full max-w-6xl mx-auto px-4 sm:px-6 py-9 space-y-6">
@@ -60,15 +58,13 @@ const FriendsPage: React.FC = () => {
                     className="flex items-center justify-between"
                 >
                     <div>
-                        <div className="flex items-center gap-2 mb-1">
-                        
+                 <div className="flex items-center gap-2 mb-1">
                             <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: '#858794' }}>
                                 Friends
                             </p>
                         </div>
                         <h1 className="text-2xl font-black text-white">Your Friends</h1>
                     </div>
-
                     <button
                         onClick={() => setShowAddFriend(true)}
                         className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-white"
@@ -316,7 +312,7 @@ const FriendsPage: React.FC = () => {
                                             You won't see each other's rankings anymore. You can add them again later.
                                         </p>
                                     </div>
-                                </div
+                                </div>
                                 <div className="flex gap-2.5">
                                     <button
                                         onClick={() => setRemoveDialog({ isOpen: false, friend: null })}
