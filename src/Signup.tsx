@@ -1,239 +1,308 @@
 import { useState } from 'react';
 import { supabase } from './supabase/supabaseClient';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { sendVerificationOTP } from './firebase/emailVerificationService';
 import OTPVerification from './components/OTPVerification';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Lock, ArrowRight, CheckCircle2, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 
+/* ─── design tokens ──────────────────────────────────────────────────────── */
+const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show:   { opacity: 1, y: 0, transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] } },
+};
+const stagger = {
+    hidden: {},
+    show:   { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+};
+
+const FEATURES = [
+    'Adaptive quizzes tailored to your weak areas',
+    'AI-powered explanations for every question',
+    'Real-time progress tracking and analytics',
+];
+
+/* ─── password strength ──────────────────────────────────────────────────── */
+const getStrength = (pw: string): { level: number; label: string; color: string } => {
+    if (!pw) return { level: 0, label: '', color: '' };
+    if (pw.length < 6) return { level: 1, label: 'Too short', color: 'bg-rose-500' };
+    if (pw.length < 8)  return { level: 2, label: 'Weak',     color: 'bg-amber-500' };
+    if (/[A-Z]/.test(pw) && /\d/.test(pw)) return { level: 4, label: 'Strong', color: 'bg-emerald-500' };
+    return { level: 3, label: 'Fair', color: 'bg-amber-400' };
+};
+
+/* ─── input component ────────────────────────────────────────────────────── */
+const Field = ({
+    type, placeholder, value, onChange, icon, error, right,
+}: {
+    type: string; placeholder: string; value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    icon: React.ReactNode; error?: string; right?: React.ReactNode;
+}) => (
+    <div className="space-y-1.5">
+        <div className={`relative flex items-center rounded-xl border bg-white/5 transition-all duration-200 ${error ? 'border-rose-400/60' : 'border-white/10 focus-within:border-blue-400/60'}`}>
+            <span className="pl-4 text-white/30">{icon}</span>
+            <input
+                type={type}
+                placeholder={placeholder}
+                value={value}
+                onChange={onChange}
+                className="flex-1 py-3 px-3 bg-transparent text-white placeholder-white/30 text-sm focus:outline-none"
+            />
+            {right && <span className="pr-3">{right}</span>}
+        </div>
+        {error && <p className="text-xs text-rose-300 pl-1">{error}</p>}
+    </div>
+);
+
+/* ══════════════════════════════════════════════════════════════════════════ */
 const Signup = () => {
     const navigate = useNavigate();
-    const [authing, setAuthing] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [showVerification, setShowVerification] = useState(false);
+    const [authing,           setAuthing]           = useState(false);
+    const [email,             setEmail]             = useState('');
+    const [password,          setPassword]          = useState('');
+    const [confirmPassword,   setConfirmPassword]   = useState('');
+    const [showPassword,      setShowPassword]      = useState(false);
+    const [showConfirm,       setShowConfirm]       = useState(false);
+    const [error,             setError]             = useState('');
+    const [emailError,        setEmailError]        = useState('');
+    const [showVerification,  setShowVerification]  = useState(false);
     const [verificationEmail, setVerificationEmail] = useState('');
 
-    const validateEmail = (email: string): boolean => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
-    
-    // Function to handle email input change with validation
-   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmail = e.target.value;
-    setEmail(newEmail);
-    if (!newEmail) {
-        setEmailError('');
-        return;
-    }
-    const basicEmailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!basicEmailRegex.test(newEmail)) {
-        setEmailError('Please enter a valid email address');
-   } else {
-        setEmailError('');
-    }
+    const strength = getStrength(password);
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const v = e.target.value;
+        setEmail(v);
+        const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        setEmailError(v && !valid ? 'Please enter a valid email address.' : '');
     };
 
     const signUpWithEmail = async () => {
-        // Reset errors
         setError('');
-
-        if (!validateEmail(email)) {
-            setEmailError('Please enter a valid email address');
-            return;
-        }
-
-        // Check if passwords match
-        if (password !== confirmPassword) {
-            setError('Passwords do not match');
-            return;
-        }
-
-        // Check password length
-        if (password.length < 6) {
-            setError('Password must be at least 6 characters');
-            return;
-        }
+        const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if (!valid)                        { setEmailError('Please enter a valid email address.'); return; }
+        if (password !== confirmPassword)  { setError('Passwords do not match.'); return; }
+        if (password.length < 6)           { setError('Password must be at least 6 characters.'); return; }
 
         setAuthing(true);
-
         try {
-            // Send verification OTP
             const sent = await sendVerificationOTP(email);
-
             if (sent) {
                 setVerificationEmail(email);
                 setShowVerification(true);
-                setAuthing(false);
             } else {
-                setError("Failed to send verification code. Please try again.");
-                setAuthing(false);
+                setError('Failed to send verification code. Please try again.');
             }
-        } catch (error) {
-            console.error("Error sending verification:", error);
-            setError("Failed to send verification code. Please try again.");
+        } catch {
+            setError('Failed to send verification code. Please try again.');
+        } finally {
             setAuthing(false);
         }
     };
 
-    // Function to handle successful verification
-   const handleVerificationSuccess = async () => {
-    try {
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-        });
-
-        if (error) throw error;
-
-        if (data.user) {
-            // Profile auto-created by handle_new_user trigger
-            navigate('/');
+    const handleVerificationSuccess = async () => {
+        setAuthing(true);
+        setError('');
+        try {
+            const { data, error } = await supabase.auth.signUp({ email, password });
+            if (error) throw error;
+            if (data.user) navigate('/');
+        } catch (err: any) {
+            setError(err.message || 'Failed to create account. Please try again.');
+        } finally {
+            setAuthing(false);
+            setShowVerification(false);
         }
-    } catch (error: any) {
-        console.error("Error creating user:", error);
-        setError(error.message || "Failed to create account. Please try again.");
-    } finally {
-        setAuthing(false);
-        setShowVerification(false);
-    }
-};
+    };
 
-    // Function to cancel verification
     const handleVerificationCancel = () => {
         setShowVerification(false);
         setAuthing(false);
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') signUpWithEmail();
+    };
+
     return (
-        <div className='w-full min-h-screen flex overflow-hidden bg-gradient-to-br from-gray-900 to-black'>
-            {/* Decorative elements - adjusted for better mobile display */}
-            <div className="absolute top-0 left-0 w-full h-full opacity-10">
-                <div className="absolute top-10 left-10 sm:top-20 sm:left-20 w-24 h-24 sm:w-40 sm:h-40 rounded-full bg-green-300 blur-xl"></div>
-                <div className="absolute bottom-20 right-10 sm:bottom-40 sm:right-20 w-32 h-32 sm:w-60 sm:h-60 rounded-full bg-green-500 blur-xl"></div>
-                <div className="absolute bottom-10 left-20 sm:bottom-20 sm:left-40 w-20 h-20 sm:w-32 sm:h-32 rounded-full bg-green-200 blur-xl"></div>
-                <div className="absolute top-1/3 right-1/4 w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-green-400 blur-xl"></div>
+        <div className="min-h-screen w-full flex overflow-hidden bg-[#0a0a0f] relative">
+
+            {/* ── ambient glow ──────────────────────────────────────────── */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-blue-600/20 blur-[120px]" />
+                <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-violet-600/15 blur-[120px]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-[100px]" />
             </div>
 
-            {/* Content container - improved padding for mobile */}
-            <div className='w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center p-4 sm:p-6 py-8 sm:py-12 z-10'>
-                {/* Left side - Brand Panel - adjusted for mobile */}
-                <div className='w-full md:w-1/2 mb-8 md:mb-0 flex flex-col items-center justify-center text-center md:text-left md:pr-4 lg:pr-10'>
-                    {/* Logo and tagline - responsive sizing */}
-                    <div className="flex flex-col items-center md:items-start">
-                        <img src="/CiviQuest.png" alt="CiviQuest Logo" className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain" />
-                        <h1 className="text-3xl sm:text-4xl font-bold text-white mt-4 sm:mt-6 mb-2 sm:mb-3">CiviQuest</h1>
-                        <p className="text-gray-300 text-base sm:text-lg max-w-md px-4 md:px-0">Your ultimate companion for Civil Service Examinations preparation</p>
-                    </div>
+            {/* ── subtle grid ───────────────────────────────────────────── */}
+            <div
+                className="pointer-events-none absolute inset-0 opacity-[0.03]"
+                style={{ backgroundImage: 'linear-gradient(white 1px,transparent 1px),linear-gradient(90deg,white 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+            />
 
-                    {/* Feature highlights - better padding for mobile */}
-                    <div className="mt-6 sm:mt-10 grid grid-cols-1 gap-3 sm:gap-4 w-full max-w-md px-4 md:px-0">
-                        <div className="flex items-center space-x-3 text-white/90">
-                            <div className="bg-white/10 p-2 rounded-full flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <span className="text-sm sm:text-base">Comprehensive study materials</span>
+            <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-16 px-6 py-12">
+
+                {/* ── Left: Brand ───────────────────────────────────────── */}
+                <motion.div
+                    initial="hidden" animate="show" variants={stagger}
+                    className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left"
+                >
+                    {/* logo */}
+                    <motion.div variants={fadeUp} className="flex items-center gap-3 mb-8">
+                        <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                            <img src="/System Logo.png" alt="CiviQuest" className="w-13 h-13 object-contain" />
                         </div>
-                        <div className="flex items-center space-x-3 text-white/90">
-                            <div className="bg-white/10 p-2 rounded-full flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <span className="text-sm sm:text-base">Practice exams with detailed solutions</span>
+                        <span className="text-4xl font-bold text-white tracking-tight">CiviQuest</span>
+                    </motion.div>
+
+                    <motion.h1 variants={fadeUp} className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
+                        Start your CSE<br />journey today.
+                    </motion.h1>
+
+                    <motion.p variants={fadeUp} className="text-base text-white/50 max-w-sm mb-10">
+                        Join thousands of Filipinos preparing smarter for the Civil Service Examination.
+                    </motion.p>
+
+                    <motion.ul variants={stagger} className="space-y-3.5">
+                        {FEATURES.map((f, i) => (
+                            <motion.li key={i} variants={fadeUp} className="flex items-center gap-3">
+                                <div className="w-5 h-5 rounded-full bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0">
+                                    <CheckCircle2 className="w-3 h-3 text-blue-400" />
+                                </div>
+                                <span className="text-sm text-white/60">{f}</span>
+                            </motion.li>
+                        ))}
+                    </motion.ul>
+
+                    {/* trust badge */}
+                    <motion.div variants={fadeUp} className="mt-10 flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-white/8 bg-white/[0.03]">
+                        <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <p className="text-xs text-white/40">Free to use · No credit card required · OTP verified</p>
+                    </motion.div>
+                </motion.div>
+
+                {/* ── Right: Form ───────────────────────────────────────── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+                    className="w-full lg:w-[420px] shrink-0"
+                >
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl shadow-2xl p-8 space-y-5">
+
+                        {/* header */}
+                        <div>
+                            <h2 className="text-2xl font-bold text-white">Create your account</h2>
+                            <p className="text-sm text-white/40 mt-1">Sign up to start your Civil Service exam review.</p>
                         </div>
-                        <div className="flex items-center space-x-3 text-white/90">
-                            <div className="bg-white/10 p-2 rounded-full flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <span className="text-sm sm:text-base">Performance tracking and analytics</span>
-                        </div>
-                    </div>
-                </div>
 
-
-                {/* Right side - Signup Form */}
-                <div className='w-full md:w-1/2 flex flex-col items-center'>
-                    <div className='w-full max-w-md bg-white/10 backdrop-blur-md rounded-xl p-5 sm:p-6 md:p-8 shadow-xl border border-white/20'>
-                        {/* Header section */}
-                        <div className='w-full flex flex-col mb-6'>
-                            <h3 className='text-2xl sm:text-3xl font-bold mb-1 sm:mb-2 text-white'>Create Account</h3>
-                            <p className='text-sm sm:text-base text-gray-300'>Sign up to start your Civil Service exam preparation</p>
-                        </div>
-
-
-                        {/* Input fields */}
-                        <div className='w-full flex flex-col space-y-3 sm:space-y-4 mb-4 sm:mb-6'>
-                            <div className="relative">
-                                <input
-                                    type='email'
-                                    placeholder='Email Address'
-                                    className={`w-full py-2 sm:py-3 px-3 sm:px-4 rounded-lg bg-white/5 border ${emailError ? 'border-red-400' : 'border-white/10'} text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm sm:text-base`}
-                                    value={email}
-                                    onChange={handleEmailChange}
+                        {/* fields */}
+                        <div className="space-y-3" onKeyDown={handleKeyDown}>
+                            <Field
+                                type="email" placeholder="Email address" value={email}
+                                onChange={handleEmailChange}
+                                icon={<Mail className="w-4 h-4" />}
+                                error={emailError}
+                            />
+                            <div className="space-y-2">
+                                <Field
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder="Password" value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    icon={<Lock className="w-4 h-4" />}
+                                    right={
+                                        <button type="button" onClick={() => setShowPassword(s => !s)} className="text-white/30 hover:text-white/60 transition-colors">
+                                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                        </button>
+                                    }
                                 />
-                                {emailError && (
-                                    <p className="text-red-300 text-xs mt-1">{emailError}</p> 
+                                {/* password strength bar */}
+                                {password && (
+                                    <div className="space-y-1">
+                                        <div className="flex gap-1">
+                                            {[1, 2, 3, 4].map(i => (
+                                                <motion.div
+                                                    key={i}
+                                                    className={`flex-1 h-1 rounded-full transition-colors duration-300 ${i <= strength.level ? strength.color : 'bg-white/10'}`}
+                                                    initial={{ scaleX: 0 }}
+                                                    animate={{ scaleX: 1 }}
+                                                    transition={{ duration: 0.3, delay: i * 0.05 }}
+                                                />
+                                            ))}
+                                        </div>
+                                        <p className={`text-[10px] font-semibold ${strength.level <= 2 ? 'text-rose-400' : strength.level === 3 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                            {strength.label}
+                                        </p>
+                                    </div>
                                 )}
                             </div>
-                            <div className="relative">
-                                <input
-                                    type='password'
-                                    placeholder='Password'
-                                    className='w-full py-2 sm:py-3 px-3 sm:px-4 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm sm:text-base'
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
-                            </div>
-                            <div className="relative">
-                                <input
-                                    type='password'
-                                    placeholder='Confirm Password'
-                                    className='w-full py-2 sm:py-3 px-3 sm:px-4 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm sm:text-base'
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                />
-                            </div>
+
+                            <Field
+                                type={showConfirm ? 'text' : 'password'}
+                                placeholder="Confirm password" value={confirmPassword}
+                                onChange={e => setConfirmPassword(e.target.value)}
+                                icon={<Lock className="w-4 h-4" />}
+                                error={confirmPassword && confirmPassword !== password ? 'Passwords do not match.' : ''}
+                                right={
+                                    <button type="button" onClick={() => setShowConfirm(s => !s)} className="text-white/30 hover:text-white/60 transition-colors">
+                                        {showConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                    </button>
+                                }
+                            />
                         </div>
 
-                        {/* Error message */}
-                        {error && <div className='text-red-300 text-xs sm:text-sm mb-3 sm:mb-4 text-center'>{error}</div>}
+                        {/* error */}
+                        <AnimatePresence>
+                            {error && (
+                                <motion.p
+                                    initial={{ opacity: 0, y: -4 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -4 }}
+                                    className="text-xs text-rose-300 text-center"
+                                >
+                                    {error}
+                                </motion.p>
+                            )}
+                        </AnimatePresence>
 
-                        {/* Signup button */}
+                        {/* CTA */}
                         <button
-                            className='w-full bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-lg py-2.5 sm:py-3 transition-all duration-200 mb-3 sm:mb-4 shadow-lg shadow-green-900/30 text-sm sm:text-base'
                             onClick={signUpWithEmail}
-                            disabled={authing}>
-                            {authing ? 'Creating Account...' : 'Sign Up'}
+                            disabled={authing}
+                            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white transition-all duration-200 shadow-lg shadow-blue-900/30 disabled:opacity-60"
+                        >
+                            {authing ? 'Sending verification…' : 'Create Account'}
+                            {!authing && <ArrowRight className="w-4 h-4" />}
                         </button>
 
-                        {/* Login link */}
-                        <div className='w-full flex items-center justify-center mt-6 sm:mt-8'>
-                            <p className='text-xs sm:text-sm text-gray-400'>Already have an account?
-                                <a href='/login' className='font-medium text-blue-400 hover:text-white transition-colors ml-1'>
-                                    Log in
-                                </a>
-                            </p>
+                        {/* divider */}
+                        <div className="relative flex items-center gap-3">
+                            <div className="flex-1 h-px bg-white/8" />
+                            <p className="text-[10px] font-semibold uppercase tracking-widest text-white/20">Have an account?</p>
+                            <div className="flex-1 h-px bg-white/8" />
                         </div>
 
-                        {/* Terms of service */}
-                        <p className="text-xs text-gray-400/70 text-center mt-6 sm:mt-8">
-                            By continuing, you agree to our
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors mx-1">Terms of Service</a>
-                            and
-                            <a href="#" className="text-gray-400 hover:text-white transition-colors mx-1">Privacy Policy</a>
+                        {/* login link */}
+                        <Link
+                            to="/login"
+                            className="w-full flex items-center justify-center py-3 rounded-xl text-sm font-semibold border border-white/10 text-white/60 hover:text-white hover:bg-white/5 hover:border-white/20 transition-all duration-200"
+                        >
+                            Sign in instead
+                        </Link>
+
+                        {/* terms */}
+                        <p className="text-[10px] text-white/20 text-center leading-relaxed">
+                            By creating an account, you agree to our{' '}
+                            <Link to="/terms-of-service" className="text-white/40 hover:text-white transition-colors">Terms of Service</Link>
+                            {' '}and{' '}
+                            <Link to="/privacy-policy" className="text-white/40 hover:text-white transition-colors">Privacy Policy</Link>
                         </p>
                     </div>
-                </div>
-            </div> {/* This closes the 'Content container' div */}
+                </motion.div>
+            </div>
 
-            {/* OTP Verification Modal */}
+            {/* ── OTP verification modal ────────────────────────────────── */}
             {showVerification && (
                 <OTPVerification
                     email={verificationEmail}
@@ -241,8 +310,8 @@ const Signup = () => {
                     onCancel={handleVerificationCancel}
                 />
             )}
-        </div> // This is the closing tag for the main div
+        </div>
     );
-}
+};
 
 export default Signup;

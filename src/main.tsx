@@ -1,35 +1,49 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import emailjs from '@emailjs/browser';
-import App from './HomePage.tsx'
+import App from './pages/HomePage.tsx'
 import Login from './Login.tsx'
 import Signup from './Signup.tsx'
 import './index.css'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import AuthRoute from './AuthRoute.tsx'
 import Settings from './components/Settings.tsx'
-import LessonsPage from './LessonsPage.tsx'
-import QuizzesPage from './QuizzesPage.tsx'
+import LessonsPage from './pages/LessonsPage.tsx'
+import QuizzesPage from './pages/QuizzesPage.tsx'
 import TermsOfService from './components/footer/TermsOfService.tsx'
 import PrivacyPolicy from './components/footer/PrivacyPolicy.tsx'
 import Layout from './components/Layout.tsx'
+import AdminLayout from './components/AdminLayout.tsx'
 import ProgressPage from './pages/ProgressPage'
 import PretestPage from './pages/PretestPage'
+import LeaderboardPage from './pages/LeaderboardPage';
+import FriendsPage from './pages/FriendsPage';  
 import { TopicsListScreen } from './components/lessons/TopicsListScreen.tsx';
 import { LessonContentScreen } from './components/lessons/LessonContentScreen.tsx';
 import './supabase/supabaseClient'
+import AdminDashboard from './pages/admin/AdminDashboard.tsx';
+
 
 emailjs.init("akyGk9Q2Gdfwid34v");
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Router>
       <Routes>
+        {/* Admin routes — uses AdminSidebar, no Layout */}
+        <Route element={<AuthRoute><AdminLayout /></AuthRoute>}>
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Route>
+
+        {/* Regular user routes — uses Sidebar + Layout */}
         <Route element={<AuthRoute><Layout /></AuthRoute>}>
           <Route path="/" element={<App />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/quizzes" element={<QuizzesPage />} />
           <Route path="/lessons" element={<LessonsPage />} />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route path="/friends" element={<FriendsPage />} />  {/* ← ADDED */}
           <Route path="/settings" element={<Settings />} />
           <Route path="/lessons/:category" element={<TopicsListScreen />} />
           <Route path="/lessons/:category/:topic" element={<LessonContentScreen />} />

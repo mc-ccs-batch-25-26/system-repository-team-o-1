@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue } from 'framer-motion';
-import { FaPaperPlane, FaTimes, FaMoon, FaSun, FaTrash, FaCopy, FaHistory, FaPlus, FaChevronLeft } from 'react-icons/fa';
+import {
+  FaPaperPlane, FaTimes, FaMoon, FaSun,
+  FaTrash, FaCopy, FaHistory, FaPlus, FaChevronLeft,
+} from 'react-icons/fa';
 import { getProgressStats } from '../firebase/progressService';
-import { getCategoryPerformanceData } from '../firebase/analyticsService';
+import { getCategoryPerformanceData, categorizePerformance } from '../firebase/analyticsService';
 import { getUserData } from '../firebase/userService';
 import { supabase } from '../supabase/supabaseClient';
 import { useLocation } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { getTier, getXpToNextTier, getXpToNextLevel } from '../utils/rankService';
 
+/* ─── Types (unchanged) ───────────────────────────────────────── */
 interface FloatingChatbotProps {
   position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
 }
-
 interface Message {
   content: string;
   sender: 'user' | 'ai';
@@ -19,7 +23,6 @@ interface Message {
   id?: string;
   timestamp?: number;
 }
-
 interface ChatSession {
   id: string;
   label: string;
@@ -28,9 +31,9 @@ interface ChatSession {
   updatedAt: number;
 }
 
+/* ─── Constants (unchanged) ───────────────────────────────────── */
 const CHAT_HISTORY_KEY = 'civiquest-chat-history';
 const MAX_SESSIONS = 10;
-
 const DEFAULT_MESSAGE: Message = {
   content: 'Hello! Ask anything about the Civil Service Examination!',
   sender: 'ai',
@@ -44,25 +47,40 @@ const loadSessions = (): ChatSession[] => {
     return stored ? JSON.parse(stored) : [];
   } catch { return []; }
 };
-
 const saveSessions = (sessions: ChatSession[]) => {
-  try {
-    localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(sessions));
-  } catch (e) { console.error('Failed to save chat history:', e); }
+  try { localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(sessions)); }
+  catch (e) { console.error('Failed to save chat history:', e); }
 };
-
-const formatSessionLabel = (timestamp: number): string => {
-  return new Date(timestamp).toLocaleString('en-US', {
-    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true
+const formatSessionLabel = (timestamp: number) =>
+  new Date(timestamp).toLocaleString('en-US', {
+    month: 'short', day: 'numeric',
+    hour: 'numeric', minute: '2-digit', hour12: true,
   });
-};
-
-const formatMessageTime = (timestamp: number): string => {
-  return new Date(timestamp).toLocaleTimeString('en-US', {
-    hour: 'numeric', minute: '2-digit', hour12: true
+const formatMessageTime = (timestamp: number) =>
+  new Date(timestamp).toLocaleTimeString('en-US', {
+    hour: 'numeric', minute: '2-digit', hour12: true,
   });
-};
 
+/* ─── Shared markdown component map ──────────────────────────── */
+const markdownComponents = (darkMode: boolean) => ({
+  p: ({ children }: any) => <p style={{ margin: '0 0 4px', lineHeight: 1.55 }}>{children}</p>,
+  h1: ({ children }: any) => <h1 style={{ fontSize: 14, fontWeight: 700, margin: '0 0 4px' }}>{children}</h1>,
+  h2: ({ children }: any) => <h2 style={{ fontSize: 13, fontWeight: 700, margin: '0 0 4px' }}>{children}</h2>,
+  ul: ({ children }: any) => <ul style={{ paddingLeft: 16, margin: '0 0 4px' }}>{children}</ul>,
+  ol: ({ children }: any) => <ol style={{ paddingLeft: 16, margin: '0 0 4px' }}>{children}</ol>,
+  li: ({ children }: any) => <li style={{ marginBottom: 2 }}>{children}</li>,
+  a: ({ href, children }: any) => <a href={href} style={{ color: '#60a5fa', textDecoration: 'underline' }}>{children}</a>,
+  strong: ({ children }: any) => <strong style={{ fontWeight: 700 }}>{children}</strong>,
+  code: ({ children }: any) => (
+    <code style={{
+      padding: '1px 5px', borderRadius: 4, fontSize: 11,
+      background: darkMode ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.07)',
+      color: darkMode ? '#e2e8f0' : '#374151',
+    }}>{children}</code>
+  ),
+});
+
+/* ─── Typing effect (unchanged logic, restyled) ───────────────── */
 const TypingEffect: React.FC<{ text: string; darkMode: boolean; onComplete: () => void }> = ({ text, darkMode, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -74,33 +92,51 @@ const TypingEffect: React.FC<{ text: string; darkMode: boolean; onComplete: () =
         setCurrentIndex(currentIndex + 1);
       }, 8);
       return () => clearTimeout(timer);
-    } else {
-      onComplete();
-    }
+    } else { onComplete(); }
   }, [currentIndex, text, onComplete]);
 
   return (
-    <div className={darkMode ? 'markdown-dark' : 'markdown'}>
-      <ReactMarkdown
-        components={{
-          p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
-          h1: ({ children }) => <h1 className="text-base font-bold mb-1">{children}</h1>,
-          h2: ({ children }) => <h2 className="text-sm font-bold mb-1">{children}</h2>,
-          ul: ({ children }) => <ul className="list-disc pl-4 mb-1">{children}</ul>,
-          ol: ({ children }) => <ol className="list-decimal pl-4 mb-1">{children}</ol>,
-          li: ({ children }) => <li className="mb-0.5">{children}</li>,
-          a: ({ href, children }) => <a href={href} className="text-blue-400 underline">{children}</a>,
-          strong: ({ children }) => <strong className="font-bold">{children}</strong>,
-          code: ({ children }) => <code className={`px-1 rounded text-xs ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-800'}`}>{children}</code>,
-        }}
-      >
-        {displayedText}
-      </ReactMarkdown>
-      <span className="inline-block w-1.5 h-3.5 ml-0.5 bg-gray-500 animate-pulse" />
+    <div style={{ fontSize: 13, lineHeight: 1.55 }}>
+      <ReactMarkdown components={markdownComponents(darkMode)}>{displayedText}</ReactMarkdown>
+      <span style={{
+        display: 'inline-block', width: 6, height: 13, marginLeft: 2,
+        borderRadius: 1,
+        background: darkMode ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.3)',
+        animation: 'cq-blink 1s steps(1) infinite',
+      }} />
     </div>
   );
 };
 
+/* ─── Theme tokens ─────────────────────────────────────────────── */
+const getTheme = (dark: boolean) => ({
+  panelBg:      dark ? '#0c0e14'                    : '#ffffff',
+  headerBg:     dark ? '#13161f'                    : '#0f172a',
+  headerBorder: dark ? 'rgba(255,255,255,0.07)'     : 'rgba(255,255,255,0.08)',
+  msgBg:        dark ? '#13161f'                    : '#f7f8fc',
+  msgBorder:    dark ? 'rgba(255,255,255,0.06)'     : 'rgba(0,0,0,0.06)',
+  aiBubbleBg:   dark ? '#1e2230'                    : '#f0f2f9',
+  aiBubbleText: dark ? '#e2e8f0'                    : '#1e293b',
+  userBubbleBg: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+  userBubbleText: '#ffffff',
+  inputBg:      dark ? '#1e2230'                    : '#f7f8fc',
+  inputBorder:  dark ? 'rgba(255,255,255,0.08)'     : 'rgba(0,0,0,0.08)',
+  inputText:    dark ? '#f0f1f5'                    : '#111318',
+  inputPlaceholder: dark ? '#4b5563'                : '#9ca3af',
+  panelBorder:  dark ? 'rgba(255,255,255,0.08)'     : 'rgba(0,0,0,0.08)',
+  textPri:      dark ? '#f0f1f5'                    : '#111318',
+  textSec:      dark ? '#6b7280'                    : '#6b7280',
+  textTer:      dark ? '#374151'                    : '#d1d5db',
+  divider:      dark ? 'rgba(255,255,255,0.06)'     : 'rgba(0,0,0,0.06)',
+  hoverBg:      dark ? 'rgba(255,255,255,0.04)'     : 'rgba(0,0,0,0.03)',
+  deleteBtnHov: dark ? 'rgba(239,68,68,0.15)'       : 'rgba(239,68,68,0.10)',
+  timeText:     dark ? 'rgba(255,255,255,0.25)'     : 'rgba(0,0,0,0.25)',
+  shadow:       dark
+    ? '0 24px 64px rgba(0,0,0,0.7), 0 4px 16px rgba(0,0,0,0.5)'
+    : '0 24px 64px rgba(0,0,0,0.14), 0 4px 16px rgba(0,0,0,0.08)',
+});
+
+/* ─── Main Component ───────────────────────────────────────────── */
 const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-right' }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -109,38 +145,35 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
   const [darkMode, setDarkMode] = useState(false);
   const [userStats, setUserStats] = useState<any>(null);
   const [userProgressData, setUserProgressData] = useState<any[]>([]);
-
   const [sessions, setSessions] = useState<ChatSession[]>(loadSessions);
   const [activeSessionId, setActiveSessionId] = useState<string>('current');
   const [showHistory, setShowHistory] = useState(false);
+  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
+  const [fabHovered, setFabHovered] = useState(false);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const chatRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
-
   const location = useLocation();
 
-  // Close on route change
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location.pathname]);
+  const t = getTheme(darkMode);
 
-  // Close on outside click
-  useEffect(() => {
+  /* ── All logic hooks (unchanged) ── */
+  useEffect(() => { setIsOpen(false); }, [location.pathname]);
+
+ useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (chatRef.current && !chatRef.current.contains(event.target as Node)) {
+      const target = event.target as HTMLElement;
+      // Ignore clicks on the FAB button itself
+      if (target.closest('[aria-label="Open AI Chat"]')) return;
+      if (chatRef.current && !chatRef.current.contains(target)) {
         setIsOpen(false);
       }
     };
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
   useEffect(() => {
@@ -163,18 +196,9 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
     return () => window.removeEventListener('civiquest-ai-review', handleAIReview);
   }, []);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  useEffect(() => {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setDarkMode(prefersDark);
-  }, []);
-
-  useEffect(() => {
-    if (isOpen) fetchUserData();
-  }, [isOpen]);
+  useEffect(() => { messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+  useEffect(() => { setDarkMode(window.matchMedia('(prefers-color-scheme: dark)').matches); }, []);
+  useEffect(() => { if (isOpen) fetchUserData(); }, [isOpen]);
 
   useEffect(() => {
     if (messages.length > 1) {
@@ -186,7 +210,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
         label: formatSessionLabel(now),
         messages,
         createdAt: existingIdx >= 0 ? sessions[existingIdx].createdAt : now,
-        updatedAt: now
+        updatedAt: now,
       };
       if (existingIdx >= 0) sessions[existingIdx] = session;
       else sessions.unshift(session);
@@ -196,6 +220,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
     }
   }, [messages, activeSessionId]);
 
+  /* ── All handlers (unchanged logic) ── */
   const fetchUserData = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -205,9 +230,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
       const categoryData = await getCategoryPerformanceData();
       setUserStats({ userData, progressStats });
       setUserProgressData(categoryData);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
+    } catch (error) { console.error('Error fetching user data:', error); }
   };
 
   const startNewChat = () => {
@@ -215,11 +238,9 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
     const now = Date.now();
     const newId = now.toString();
     const newSession: ChatSession = {
-      id: newId,
-      label: formatSessionLabel(now),
+      id: newId, label: formatSessionLabel(now),
       messages: [{ ...DEFAULT_MESSAGE, id: 'welcome-' + now, timestamp: now }],
-      createdAt: now,
-      updatedAt: now
+      createdAt: now, updatedAt: now,
     };
     sessions.unshift(newSession);
     if (sessions.length > MAX_SESSIONS) sessions.length = MAX_SESSIONS;
@@ -233,11 +254,7 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
   const loadSession = (sessionId: string) => {
     const sessions = loadSessions();
     const session = sessions.find(s => s.id === sessionId);
-    if (session) {
-      setActiveSessionId(sessionId);
-      setMessages(session.messages);
-      setShowHistory(false);
-    }
+    if (session) { setActiveSessionId(sessionId); setMessages(session.messages); setShowHistory(false); }
   };
 
   const deleteSession = (e: React.MouseEvent, sessionId: string) => {
@@ -249,11 +266,9 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
       const now = Date.now();
       const newId = now.toString();
       const newSession: ChatSession = {
-        id: newId,
-        label: formatSessionLabel(now),
+        id: newId, label: formatSessionLabel(now),
         messages: [{ ...DEFAULT_MESSAGE, id: 'welcome-' + now, timestamp: now }],
-        createdAt: now,
-        updatedAt: now
+        createdAt: now, updatedAt: now,
       };
       sessions.unshift(newSession);
       saveSessions(sessions);
@@ -263,30 +278,42 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
     }
   };
 
-  const toggleDarkMode = () => setDarkMode(!darkMode);
-  const toggleChat = () => setIsOpen(!isOpen);
-
   const analyzeUserProgress = () => {
     if (!userStats || !userProgressData || userProgressData.length === 0) {
-      return "I don't have enough data about your progress yet. Please complete some quizzes first.";
+      return "I don't have enough data about your progress yet. Please complete some quizzes first so I can analyze your performance.";
     }
+    
     const { progressStats } = userStats;
-    const { accuracy, readiness, quizzesTaken } = progressStats;
-    const sortedCategories = [...userProgressData].sort((a, b) => a.accuracy - b.accuracy);
+    const accuracy = progressStats?.accuracy || 0;
+    const quizzesTaken = progressStats?.quizzesTaken || 0;
+    const readiness = progressStats?.readiness || 0;
+    
+    const sortedCategories = [...userProgressData]
+      .filter((c: any) => (c.regularAnswered || 0) > 0)
+      .sort((a: any, b: any) => (a.regularAccuracy || 0) - (b.regularAccuracy || 0));
+    
     const weakestCategories = sortedCategories.slice(0, 2);
-    let analysis = `📊 **Your Progress**:\n- Accuracy: ${accuracy}%\n- Quizzes: ${quizzesTaken}\n- Readiness: ${readiness}%\n\n`;
+    
+    let analysis = `**Your Progress**\n`;
+    analysis += `- Accuracy: ${accuracy}%\n`;
+    analysis += `- Quizzes taken: ${quizzesTaken}\n`;
+    analysis += `- Readiness: ${readiness}%\n\n`;
+    
     if (weakestCategories.length > 0) {
-      analysis += `🔍 **Weak Areas**:\n`;
-      weakestCategories.forEach(cat => { analysis += `- ${cat.categoryName}: ${cat.accuracy}%\n`; });
-      analysis += '\n';
+      analysis += `**Weak Areas**:\n`;
+      weakestCategories.forEach((cat: any) => {
+        analysis += `- ${cat.categoryName}: ${cat.regularAccuracy}% (${cat.regularCorrect}/${cat.regularAnswered} correct)\n`;
+      });
+      analysis += `\n**Tip**: Focus on **${weakestCategories[0]?.categoryName || 'your weakest area'}** to improve your score. Practice with targeted quizzes in that subject.`;
+    } else {
+      analysis += `**Tip**: Take more quizzes so I can identify your weak areas and give personalized recommendations.`;
     }
-    analysis += `💡 **Tip**: Focus on ${weakestCategories[0]?.categoryName || 'your weakest area'} to improve your readiness score.`;
+    
     return analysis;
   };
 
-  const completeTyping = (index: number) => {
+  const completeTyping = (index: number) =>
     setMessages(prev => prev.map((msg, i) => i === index ? { ...msg, isTyping: false } : msg));
-  };
 
   const deleteMessage = (id: string) => {
     if (!id) return;
@@ -306,18 +333,57 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
-
+    
     try {
-      const progressKeywords = ['progress', 'performance', 'score', 'how am i doing', 'my results', 'stats', 'improve', 'tips', 'weak areas'];
-      const isAskingAboutProgress = progressKeywords.some(k => text.toLowerCase().includes(k));
+      await fetchUserData();
 
-      if (isAskingAboutProgress) {
-        await fetchUserData();
-        const analysis = analyzeUserProgress();
-        setMessages(prev => [...prev, { content: analysis, sender: 'ai', id: (Date.now() + 1).toString(), timestamp: Date.now() }]);
-        setIsLoading(false);
-        return;
-      }
+      // Deterministic Service Fallbacks (Data Safe Handling)
+      const xp = userStats?.userData?.xp || 0;
+      const level = userStats?.userData?.level || 1;
+      const streak = userStats?.userData?.streakCount || 0;
+      const quizzesTaken = userStats?.progressStats?.quizzesTaken || 0;
+      const readiness = userStats?.progressStats?.readiness || 0;
+
+      // Deterministic Calculations (Removed from Prompt Layer)
+      const xpToNextLevel = getXpToNextLevel(level, xp);
+      const userTier = getTier(xp).name;
+      const xpToNextTier = getXpToNextTier(xp);
+      const rankStatusStr = xpToNextTier > 0
+        ? `XP needed to rank up to next tier: ${xpToNextTier}` 
+        : `Maximum Rank Achieved!`;
+
+      // Deterministic Categorization (Removed Boolean Math from LLM)
+      const { weakAreas, averageAreas, strongAreas, hasData } = categorizePerformance(userProgressData || []);
+
+      const categoryContext = hasData
+        ? `Explicit Subject Categorization:
+- WEAK AREAS: ${weakAreas.length > 0 ? weakAreas.join(', ') : 'None! Great job!'}
+- STRONG AREAS: ${strongAreas.length > 0 ? strongAreas.join(', ') : 'None yet.'}
+- AVERAGE AREAS: ${averageAreas.length > 0 ? averageAreas.join(', ') : 'None.'}`
+        : "No subject data available. User hasn't completed quizzes yet.";
+
+     
+      const systemPrompt = `You are a "Personal Learning Coach" for the CiviQuest Civil Service Exam app. Answer politely, directly, and concisely. Use the strictly calculated, deterministic stats below to provide recommendations. Do not invent data and DO NOT perform arithmetic calculations yourself. Rely exclusively on the provided 'needed' values.
+
+**User's Live Stats:**
+- Current Level: ${level} 
+- XP To Next Level: ${xpToNextLevel} XP
+- Current Total XP: ${xp} 
+- Leaderboard Rank: ${userTier}
+- Promove to Next Rank: ${rankStatusStr}
+- Current Streak: ${streak} days
+- Quizzes Completed: ${quizzesTaken}
+- App Readiness Score: ${readiness}%
+
+${categoryContext}
+
+Your Capabilities & Explanations:
+1. Explain Rank/Progression: Read the exact "XP To Next Level" and "Promove to Next Rank" stats provided. DO NOT calculate distances yourself.
+2. Explain Weak Areas: Advise exactly the subjects listed under WEAK AREAS. Provide general tips to improve them.
+3. Explain Strong Areas: Praise them for specific subjects listed under STRONG AREAS.
+4. Motivate Streaks: Praise their active ${streak} day streak.
+5. Why Daily Quiz: If asked why they got certain questions, explain that Daily Quizzes target their WEAK AREAS to help them master missing concepts.
+6. Refuse completely off-topic logic outside the app or exams. DO NOT dump raw system data lists unless asked.`;
 
       const openRouterApiKey = import.meta.env.VITE_OPENROUTER_API_KEY;
       const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -326,190 +392,272 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${openRouterApiKey}`,
           'HTTP-Referer': window.location.origin,
-          'X-Title': 'CiviQuest'
+          'X-Title': 'CiviQuest',
         },
         body: JSON.stringify({
-          model: 'google/gemini-2.0-flash-001',
+          model: "nvidia/nemotron-3-super-120b-a12b:free",
           messages: [
-            { role: 'system', content: 'You are CiviQuest Buddy. Only answer Civil Service Exam topics. Keep responses direct, concise and helpful. Refuse off-topic questions politely.' },
+            { role: 'system', content: systemPrompt },
             ...messages.slice(-6).map(msg => ({ role: msg.sender === 'user' ? 'user' : 'assistant', content: msg.content })),
-            { role: 'user', content: text }
-          ]
-        })
+            { role: 'user', content: text },
+          ],
+        }),
       });
-
       const data = await response.json();
       if (data.choices?.[0]?.message?.content) {
         setMessages(prev => [...prev, { content: data.choices[0].message.content, sender: 'ai', id: (Date.now() + 1).toString(), timestamp: Date.now() }]);
-      } else {
-        throw new Error('Invalid API response');
-      }
+      } else { throw new Error('Invalid API response'); }
     } catch (error) {
       console.error('AI API error:', error);
       setMessages(prev => [...prev, { content: 'Sorry, I encountered an error. Please try again.', sender: 'ai', id: Date.now().toString(), timestamp: Date.now() }]);
-    } finally {
-      setIsLoading(false);
-    }
+    } finally { setIsLoading(false); }
   };
 
   const sendMessage = () => sendMessageWithText(input);
 
-  const positionClasses: Record<string, string> = {
-    'bottom-right': 'bottom-7 right-7',
-    'bottom-left': 'bottom-6 left-6',
-    'top-right': 'top-6 right-6',
-    'top-left': 'top-6 left-6',
+  const positionStyle: Record<string, React.CSSProperties> = {
+    'bottom-right': { bottom: 28, right: 28 },
+    'bottom-left':  { bottom: 24, left: 24 },
+    'top-right':    { top: 24, right: 24 },
+    'top-left':     { top: 24, left: 24 },
+  };
+
+  const panelOffsetStyle: React.CSSProperties = {
+    position: 'absolute',
+    ...(position.includes('bottom') ? { bottom: 68 } : { top: 68 }),
+    ...(position.includes('right')  ? { right: 0 }   : { left: 0 }),
   };
 
   const allSessions = loadSessions();
 
+  /* ── Inline styles for blink animation ── */
+  const blinkKeyframes = `@keyframes cq-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }`;
+
   return (
-    <div className={`fixed ${positionClasses[position]} z-50`}>
+    <div style={{ position: 'fixed', zIndex: 50, ...positionStyle[position] }}>
+      <style>{blinkKeyframes}</style>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
             ref={chatRef}
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            initial={{ opacity: 0, scale: 0.88, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            drag dragMomentum={false}
-            style={{ x, y }}
-            className={`absolute ${position.includes('bottom') ? 'bottom-16' : 'top-16'} ${position.includes('right') ? 'right-0' : 'left-0'} w-96 sm:w-[440px] h-[540px] rounded-xl shadow-xl flex flex-col overflow-hidden border ${darkMode ? 'border-gray-700' : 'border-zinc-300'} cursor-move`}
+            exit={{ opacity: 0, scale: 0.88, y: 16 }}
+            transition={{ type: 'spring', stiffness: 340, damping: 28 }}
+            drag
+            dragMomentum={false}
+            style={{
+              x, y,
+              ...panelOffsetStyle,
+              width: 400,
+              height: 560,
+              display: 'flex',
+              flexDirection: 'column',
+              borderRadius: 20,
+              overflow: 'hidden',
+              background: t.panelBg,
+              border: `1px solid ${t.panelBorder}`,
+              boxShadow: t.shadow,
+              cursor: 'move',
+            }}
           >
-            <div className={`p-3 flex justify-between items-center ${darkMode ? 'bg-gray-900' : 'bg-blue-900'} text-white border-b ${darkMode ? 'border-gray-700' : 'border-blue-800'}`}>
+            {/* ── Header ── */}
+            <div style={{
+              padding: '12px 14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              background: t.headerBg,
+              borderBottom: `1px solid ${t.headerBorder}`,
+              flexShrink: 0,
+            }}>
               {showHistory ? (
-                <div className="flex items-center gap-2">
-                  <button onClick={() => setShowHistory(false)} className="text-white hover:text-gray-300">
-                    <FaChevronLeft size={14} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <button
+                    onClick={() => setShowHistory(false)}
+                    style={{
+                      background: 'rgba(255,255,255,0.10)', border: 'none',
+                      borderRadius: 7, width: 26, height: 26,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      cursor: 'pointer', color: 'rgba(255,255,255,0.8)',
+                    }}
+                  >
+                    <FaChevronLeft size={11} />
                   </button>
-                  <h3 className="font-medium text-sm">Chat History</h3>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#fff' }}>Chat History</span>
                 </div>
               ) : (
                 <>
-                  <div className="flex items-center space-x-2">
-                    <img src="/robot.png" alt="CiviQuest" className="w-7 h-7 object-contain brightness-100 invert rounded" />
-                    <h3 className="font-medium text-sm">CiviQuest Buddy</h3>
+                  {/* Brand */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+                    <div style={{
+                      width: 32, height: 32, borderRadius: 9,
+                      background: 'linear-gradient(135deg,#3b82f6,#6366f1)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: '0 2px 8px rgba(99,102,241,0.45)',
+                      flexShrink: 0,
+                    }}>
+                     <img src="/robot.png" alt="CiviQuest Buddy" style={{ width: 25, height: 40, objectFit: 'contain' }} />
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#fff', lineHeight: 1.2, letterSpacing: '-0.2px' }}>
+                        CiviQuest Buddy
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 2 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#34d399', display: 'inline-block' }} />
+                        <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', lineHeight: 1 }}>Online</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex space-x-1">
-                    <button onClick={() => setShowHistory(!showHistory)} className="text-white p-1.5 rounded hover:bg-white/20 transition-colors" title="Chat History">
-                      <FaHistory size={14} />
-                    </button>
-                    <button onClick={startNewChat} className="text-white p-1.5 rounded hover:bg-white/20 transition-colors" title="New Chat">
-                      <FaPlus size={14} />
-                    </button>
-                    <button onClick={toggleDarkMode} className="text-white p-1.5 rounded hover:bg-white/20 transition-colors" title="Toggle theme">
-                      {darkMode ? <FaSun size={14} /> : <FaMoon size={14} />}
-                    </button>
-                    <button onClick={toggleChat} className="text-white p-1.5 rounded hover:bg-white/20 transition-colors" title="Close">
-                      <FaTimes size={14} />
-                    </button>
+
+                  {/* Action buttons */}
+                  <div style={{ display: 'flex', gap: 3 }}>
+                    {[
+                      { icon: FaHistory,  title: 'Chat History',   onClick: () => setShowHistory(true) },
+                      { icon: FaPlus,     title: 'New Chat',        onClick: startNewChat },
+                      { icon: darkMode ? FaSun : FaMoon, title: 'Toggle theme', onClick: () => setDarkMode(!darkMode) },
+                      { icon: FaTimes,    title: 'Close',           onClick: () => setIsOpen(false) },
+                    ].map(({ icon: Icon, title, onClick }, i) => (
+                      <HeaderButton key={i} title={title} onClick={onClick}>
+                        <Icon size={12} />
+                      </HeaderButton>
+                    ))}
                   </div>
                 </>
               )}
             </div>
 
+            {/* ── History panel ── */}
             {showHistory ? (
-              <div className={`flex-1 overflow-y-auto ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+              <div style={{ flex: 1, overflowY: 'auto', background: t.panelBg }}>
                 {allSessions.length === 0 ? (
-                  <div className="text-center py-10 text-gray-500 text-sm">No chat history yet.</div>
+                  <div style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center',
+                    justifyContent: 'center', height: '100%', gap: 10,
+                  }}>
+                    <div style={{ fontSize: 28, opacity: 0.2 }}>🕐</div>
+                    <p style={{ fontSize: 12, color: t.textSec, margin: 0 }}>No chat history yet</p>
+                  </div>
                 ) : (
-                  allSessions.map(session => (
-                    <div
+                  allSessions.map((session, i) => (
+                    <SessionRow
                       key={session.id}
-                      onClick={() => loadSession(session.id)}
-                      className={`flex items-center justify-between px-4 py-3 cursor-pointer border-b ${darkMode ? 'border-gray-700 hover:bg-gray-700/50' : 'border-zinc-300 hover:bg-gray-50'}`}
-                    >
-                      <div>
-                        <div className={`text-sm font-medium ${darkMode ? 'text-white' : 'text-gray-900'}`}>{session.label}</div>
-                        <div className={`text-xs ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>{session.messages.length} messages</div>
-                      </div>
-                      <button onClick={(e) => deleteSession(e, session.id)} className={`p-1 rounded hover:bg-red-500/20 ${darkMode ? 'text-gray-400 hover:text-red-400' : 'text-gray-400 hover:text-red-500'}`}>
-                        <FaTrash size={12} />
-                      </button>
-                    </div>
+                      session={session}
+                      isActive={session.id === activeSessionId}
+                      darkMode={darkMode}
+                      t={t}
+                      onLoad={() => loadSession(session.id)}
+                      onDelete={(e) => deleteSession(e, session.id)}
+                      isLast={i === allSessions.length - 1}
+                    />
                   ))
                 )}
               </div>
             ) : (
               <>
-                <div className={`flex-1 p-4 overflow-y-auto ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'} cursor-default`} onMouseDown={e => e.stopPropagation()}>
+                {/* ── Messages ── */}
+                <div
+                  style={{
+                    flex: 1, overflowY: 'auto', padding: '14px 14px 8px',
+                    background: t.msgBg,
+                    cursor: 'default',
+                    display: 'flex', flexDirection: 'column', gap: 2,
+                  }}
+                  onMouseDown={e => e.stopPropagation()}
+                >
                   {messages.map((message, index) => (
-                    <div key={message.id || index} className={`mb-3 ${message.sender === 'user' ? 'flex justify-end' : 'flex justify-start'}`}>
-                      <div className="relative group max-w-[85%]">
-                        <div
-                          className={`px-3.5 py-2.5 rounded-2xl text-sm inline-block ${
-                            message.sender === 'user'
-                              ? 'bg-blue-600 text-white rounded-br-md'
-                              : darkMode ? 'bg-gray-700 text-gray-100 rounded-bl-md' : 'bg-zinc-300 text-gray-800 rounded-bl-md'
-                          }`}
-                          style={{ wordBreak: 'break-word' }}
-                        >
-                          {message.sender === 'ai' ? (
-                            message.isTyping ? (
-                              <TypingEffect text={message.content} darkMode={darkMode} onComplete={() => completeTyping(index)} />
-                            ) : (
-                              <div className={darkMode ? 'markdown-dark' : 'markdown'}>
-                                <ReactMarkdown
-                                  components={{
-                                    p: ({ children }) => <p className="mb-1 last:mb-0">{children}</p>,
-                                    h1: ({ children }) => <h1 className="text-base font-bold mb-1">{children}</h1>,
-                                    h2: ({ children }) => <h2 className="text-sm font-bold mb-1">{children}</h2>,
-                                    ul: ({ children }) => <ul className="list-disc pl-4 mb-1">{children}</ul>,
-                                    ol: ({ children }) => <ol className="list-decimal pl-4 mb-1">{children}</ol>,
-                                    li: ({ children }) => <li className="mb-0.5">{children}</li>,
-                                    a: ({ href, children }) => <a href={href} className="text-blue-400 underline">{children}</a>,
-                                    strong: ({ children }) => <strong className="font-bold">{children}</strong>,
-                                    code: ({ children }) => <code className={`px-1 rounded text-xs ${darkMode ? 'bg-gray-800 text-gray-200' : 'bg-gray-100 text-gray-800'}`}>{children}</code>,
-                                  }}
-                                >
-                                  {message.content}
-                                </ReactMarkdown>
-                              </div>
-                            )
-                          ) : (message.content)}
-                          {message.timestamp && (
-                            <div className={`text-[10px] mt-1 ${message.sender === 'user' ? 'text-blue-200' : darkMode ? 'text-gray-500' : 'text-gray-400'}`}>
-                              {formatMessageTime(message.timestamp)}
-                            </div>
-                          )}
-                        </div>
-                        <div className={`hidden group-hover:flex space-x-1 mt-0.5 ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                          <motion.button onClick={() => message.id && copyToClipboard(message.content, message.id)} className={`p-1 rounded-full ${message.sender === 'user' ? 'bg-blue-700 hover:bg-blue-800' : darkMode ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-300 hover:bg-gray-400'} transition-colors relative`} whileTap={{ scale: 0.9 }}>
-                            <FaCopy size={9} className="text-white" />
-                            <AnimatePresence>
-                              {copiedMessageId === message.id && (
-                                <motion.div initial={{ opacity: 0, y: 0 }} animate={{ opacity: 1, y: -25 }} exit={{ opacity: 0 }} className="absolute -top-1 left-1/2 transform -translate-x-1/2 bg-green-500 text-white text-xs px-2 py-0.5 rounded whitespace-nowrap">Copied!</motion.div>
-                              )}
-                            </AnimatePresence>
-                          </motion.button>
-                          <button onClick={() => message.id && deleteMessage(message.id)} className={`p-1 rounded-full ${message.sender === 'user' ? 'bg-blue-700 hover:bg-blue-800' : darkMode ? 'bg-gray-600 hover:bg-gray-500' : 'bg-gray-300 hover:bg-gray-400'} transition-colors`}>
-                            <FaTrash size={9} className="text-white" />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    <MessageBubble
+                      key={message.id || index}
+                      message={message}
+                      index={index}
+                      darkMode={darkMode}
+                      t={t}
+                      copiedMessageId={copiedMessageId}
+                      onCopy={copyToClipboard}
+                      onDelete={deleteMessage}
+                      onTypingComplete={completeTyping}
+                    />
                   ))}
+
                   {isLoading && (
-                    <div className="flex justify-start mb-3">
-                      <div className={`px-4 py-3 rounded-2xl rounded-bl-md ${darkMode ? 'bg-gray-700' : 'bg-zinc-300'}`}>
-                        <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
-                        </div>
+                    <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: 4 }}>
+                      <div style={{
+                        padding: '10px 14px', borderRadius: '16px 16px 16px 4px',
+                        background: t.aiBubbleBg,
+                        border: `1px solid ${t.msgBorder}`,
+                        display: 'flex', alignItems: 'center', gap: 5,
+                      }}>
+                        {[0, 0.18, 0.36].map((delay, i) => (
+                          <span key={i} style={{
+                            width: 6, height: 6, borderRadius: '50%',
+                            background: '#6b7280',
+                            display: 'inline-block',
+                            animation: `cq-blink 1.1s ${delay}s infinite`,
+                          }} />
+                        ))}
                       </div>
                     </div>
                   )}
                   <div ref={messagesEndRef} />
                 </div>
 
-                <div className={`border-t ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-zinc-300 bg-white'} p-2 cursor-default`} onMouseDown={e => e.stopPropagation()}>
-                  <div className={`flex items-center rounded-xl overflow-hidden border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-gray-50 border-gray-300'}`}>
-                    <input ref={inputRef} type="text" value={input} onChange={e => setInput(e.target.value)} onKeyPress={e => e.key === 'Enter' && sendMessage()} placeholder="Type a message..." className={`flex-1 p-3 bg-transparent focus:outline-none text-sm ${darkMode ? 'text-white placeholder-gray-400' : 'text-gray-800'}`} />
-                    <button onClick={sendMessage} disabled={isLoading || !input.trim()} className="text-blue-500 hover:text-blue-600 p-3 transition-colors disabled:opacity-50">
-                      <FaPaperPlane size={16} />
-                    </button>
+                {/* ── Input bar ── */}
+                <div
+                  style={{
+                    padding: '10px 12px 12px',
+                    borderTop: `1px solid ${t.divider}`,
+                    background: t.panelBg,
+                    flexShrink: 0,
+                    cursor: 'default',
+                  }}
+                  onMouseDown={e => e.stopPropagation()}
+                >
+                  <div style={{
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    background: t.inputBg,
+                    border: `1px solid ${t.inputBorder}`,
+                    borderRadius: 14,
+                    padding: '4px 6px 4px 14px',
+                    transition: 'border-color 0.15s',
+                  }}>
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={input}
+                      onChange={e => setInput(e.target.value)}
+                      onKeyPress={e => e.key === 'Enter' && sendMessage()}
+                      placeholder="Ask about Civil Service Exam…"
+                      style={{
+                        flex: 1, background: 'none', border: 'none', outline: 'none',
+                        fontSize: 13, color: t.inputText, padding: '7px 0',
+                      }}
+                    />
+                    <motion.button
+                      onClick={sendMessage}
+                      disabled={isLoading || !input.trim()}
+                      whileTap={{ scale: 0.88 }}
+                      style={{
+                        width: 34, height: 34, borderRadius: 10, border: 'none',
+                        background: input.trim() && !isLoading
+                          ? 'linear-gradient(135deg,#3b82f6,#6366f1)'
+                          : 'transparent',
+                        cursor: input.trim() && !isLoading ? 'pointer' : 'default',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'background 0.2s',
+                        flexShrink: 0,
+                        boxShadow: input.trim() && !isLoading ? '0 2px 8px rgba(99,102,241,0.35)' : 'none',
+                      }}
+                      aria-label="Send message"
+                    >
+                      <FaPaperPlane
+                        size={13}
+                        color={input.trim() && !isLoading ? '#fff' : '#4b5563'}
+                        style={{ transform: 'translateX(-1px)' }}
+                      />
+                    </motion.button>
                   </div>
+                  
                 </div>
               </>
             )}
@@ -517,17 +665,235 @@ const FloatingChatbot: React.FC<FloatingChatbotProps> = ({ position = 'bottom-ri
         )}
       </AnimatePresence>
 
+      {/* ── FAB ── */}
       <motion.button
-        whileHover={{ scale: 1.1}}
-        whileTap={{ scale: 0.9 }}
-        onClick={toggleChat}
-        className="bg-green-600 hover:bg-green-500 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-xl transition-colors"
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
+        onClick={() => setIsOpen(!isOpen)}
+        onHoverStart={() => setFabHovered(true)}
+        onHoverEnd={() => setFabHovered(false)}
+        style={{
+          width: 54, height: 54, borderRadius: '50%',
+          background: isOpen
+            ? 'linear-gradient(135deg,#374151,#1f2937)'
+            : 'linear-gradient(135deg,#3b82f6,#6366f1)',
+          border: 'none', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: isOpen
+            ? '0 4px 20px rgba(0,0,0,0.35)'
+            : '0 4px 20px rgba(99,102,241,0.5), 0 0 0 4px rgba(99,102,241,0.12)',
+          transition: 'background 0.2s, box-shadow 0.2s',
+          position: 'relative',
+        }}
         aria-label="Open AI Chat"
       >
-        <img src="/robot.png" alt="Chat" className="w-18 h-12 object-contain brightness-100 invert" />
+        <AnimatePresence mode="wait">
+          {isOpen ? (
+            <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
+              <FaTimes size={18} color="#fff" />
+            </motion.div>
+          ) : (
+            <motion.div key="open" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }}>
+             <img src="/robot.png" alt="Chat" style={{ width: 40, height: 50, objectFit: 'contain' }} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Pulse ring (idle) */}
+        {!isOpen && (
+          <span style={{
+            position: 'absolute', inset: -4, borderRadius: '50%',
+            border: '2px solid rgba(99,102,241,0.3)',
+            animation: 'cq-blink 2s ease-in-out infinite',
+            pointerEvents: 'none',
+          }} />
+        )}
       </motion.button>
     </div>
   );
 };
+
+/* ─── Sub-components ──────────────────────────────────────────── */
+function HeaderButton({ children, title, onClick }: { children: React.ReactNode; title: string; onClick: () => void }) {
+  const [hov, setHov] = useState(false);
+  return (
+    <button
+      title={title}
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        width: 28, height: 28, borderRadius: 7, border: 'none', cursor: 'pointer',
+        background: hov ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.07)',
+        color: hov ? '#fff' : 'rgba(255,255,255,0.65)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'all 0.15s',
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+function SessionRow({ session, isActive, darkMode, t, onLoad, onDelete, isLast }: {
+  session: ChatSession; isActive: boolean; darkMode: boolean; t: any;
+  onLoad: () => void; onDelete: (e: React.MouseEvent) => void; isLast: boolean;
+}) {
+  const [hov, setHov] = useState(false);
+  const [delHov, setDelHov] = useState(false);
+  return (
+    <div
+      onClick={onLoad}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '11px 14px', cursor: 'pointer',
+        background: isActive
+          ? darkMode ? 'rgba(99,102,241,0.12)' : 'rgba(59,130,246,0.07)'
+          : hov ? t.hoverBg : 'transparent',
+        borderBottom: isLast ? 'none' : `1px solid ${t.divider}`,
+        borderLeft: isActive ? '2px solid #6366f1' : '2px solid transparent',
+        transition: 'all 0.15s',
+      }}
+    >
+      <div style={{ minWidth: 0, flex: 1 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: t.textPri, marginBottom: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {session.label}
+        </div>
+        <div style={{ fontSize: 10, color: t.textSec }}>
+          {session.messages.length} messages
+        </div>
+      </div>
+      <button
+        onClick={onDelete}
+        onMouseEnter={() => setDelHov(true)}
+        onMouseLeave={() => setDelHov(false)}
+        style={{
+          width: 26, height: 26, borderRadius: 6, border: 'none', cursor: 'pointer',
+          background: delHov ? t.deleteBtnHov : 'transparent',
+          color: delHov ? '#f87171' : t.textSec,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0, marginLeft: 8, transition: 'all 0.15s',
+        }}
+      >
+        <FaTrash size={10} />
+      </button>
+    </div>
+  );
+}
+
+function MessageBubble({ message, index, darkMode, t, copiedMessageId, onCopy, onDelete, onTypingComplete }: {
+  message: Message; index: number; darkMode: boolean; t: any;
+  copiedMessageId: string | null;
+  onCopy: (content: string, id: string) => void;
+  onDelete: (id: string) => void;
+  onTypingComplete: (index: number) => void;
+}) {
+  const isUser = message.sender === 'user';
+  const [hov, setHov] = useState(false);
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: isUser ? 'flex-end' : 'flex-start',
+        marginBottom: 8,
+      }}
+    >
+      <div
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+        style={{ maxWidth: '82%', position: 'relative' }}
+      >
+        {/* Bubble */}
+        <div style={{
+          padding: '10px 13px',
+          borderRadius: isUser ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
+          background: isUser ? t.userBubbleBg : t.aiBubbleBg,
+          border: isUser ? 'none' : `1px solid ${t.msgBorder}`,
+          boxShadow: isUser ? '0 2px 8px rgba(99,102,241,0.25)' : 'none',
+          wordBreak: 'break-word',
+          fontSize: 13,
+          color: isUser ? t.userBubbleText : t.aiBubbleText,
+          lineHeight: 1.55,
+        }}>
+          {message.sender === 'ai' ? (
+            message.isTyping ? (
+              <TypingEffect text={message.content} darkMode={darkMode} onComplete={() => onTypingComplete(index)} />
+            ) : (
+              <ReactMarkdown components={markdownComponents(darkMode)}>{message.content}</ReactMarkdown>
+            )
+          ) : message.content}
+
+          {message.timestamp && (
+            <div style={{ fontSize: 10, marginTop: 5, color: isUser ? 'rgba(255,255,255,0.45)' : t.timeText, textAlign: isUser ? 'right' : 'left' }}>
+              {formatMessageTime(message.timestamp)}
+            </div>
+          )}
+        </div>
+
+        {/* Action row on hover */}
+        <AnimatePresence>
+          {hov && (
+            <motion.div
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 4 }}
+              transition={{ duration: 0.12 }}
+              style={{
+                display: 'flex', gap: 4, marginTop: 4,
+                justifyContent: isUser ? 'flex-end' : 'flex-start',
+              }}
+            >
+              {/* Copy */}
+              <ActionChip
+                onClick={() => message.id && onCopy(message.content, message.id)}
+                darkMode={darkMode}
+                t={t}
+              >
+                <FaCopy size={9} />
+                {copiedMessageId === message.id ? (
+                  <span style={{ fontSize: 9, color: '#34d399' }}>Copied!</span>
+                ) : (
+                  <span style={{ fontSize: 9 }}>Copy</span>
+                )}
+              </ActionChip>
+              {/* Delete */}
+              <ActionChip onClick={() => message.id && onDelete(message.id)} darkMode={darkMode} t={t} danger>
+                <FaTrash size={9} />
+              </ActionChip>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+function ActionChip({ children, onClick, darkMode, t, danger }: {
+  children: React.ReactNode; onClick: () => void;
+  darkMode: boolean; t: any; danger?: boolean;
+}) {
+  const [hov, setHov] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: 4,
+        padding: '3px 8px', borderRadius: 6, border: `1px solid ${t.divider}`,
+        background: hov
+          ? danger ? t.deleteBtnHov : t.hoverBg
+          : darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+        color: hov && danger ? '#f87171' : t.textSec,
+        cursor: 'pointer', fontSize: 10, transition: 'all 0.12s',
+      }}
+    >
+      {children}
+    </button>
+  );
+}
 
 export default FloatingChatbot;

@@ -1,244 +1,307 @@
-import { useState } from 'react'
+import { useState } from 'react';
 import { supabase } from './supabase/supabaseClient';
 import { useNavigate, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Lock, ArrowRight, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 
+/* ─── design tokens ──────────────────────────────────────────────────────── */
+const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show:   { opacity: 1, y: 0, transition: { duration: 0.42, ease: [0.22, 1, 0.36, 1] } },
+};
+const stagger = {
+    hidden: {},
+    show:   { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+};
+
+/* ─── feature list ───────────────────────────────────────────────────────── */
+const FEATURES = [
+    'Adaptive quizzes tailored to your weak areas',
+    'AI-powered explanations for every question',
+    'Real-time progress tracking and analytics',
+];
+
+/* ─── input component ────────────────────────────────────────────────────── */
+const Field = ({
+    type, placeholder, value, onChange, icon, error, right,
+}: {
+    type: string; placeholder: string; value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    icon: React.ReactNode; error?: string; right?: React.ReactNode;
+}) => (
+    <div className="space-y-1.5">
+        <div className={`relative flex items-center rounded-xl border bg-white/5 transition-all duration-200 ${error ? 'border-rose-400/60' : 'border-white/10 focus-within:border-blue-400/60 focus-within:bg-white/8'}`}>
+            <span className="pl-4 text-white/30">{icon}</span>
+            <input
+                type={type}
+                placeholder={placeholder}
+                value={value}
+                onChange={onChange}
+                className="flex-1 py-3 px-3 bg-transparent text-white placeholder-white/30 text-sm focus:outline-none"
+            />
+            {right && <span className="pr-3">{right}</span>}
+        </div>
+        {error && <p className="text-xs text-rose-300 pl-1">{error}</p>}
+    </div>
+);
+
+/* ══════════════════════════════════════════════════════════════════════════ */
 const Login = () => {
     const navigate = useNavigate();
-
-    // State variables for managing authentication state, email, password, and error messages
-    const [authing, setAuthing] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [resetEmailSent, setResetEmailSent] = useState(false);
+    const [authing,            setAuthing]            = useState(false);
+    const [email,              setEmail]              = useState('');
+    const [password,           setPassword]           = useState('');
+    const [showPassword,       setShowPassword]       = useState(false);
+    const [error,              setError]              = useState('');
+    const [resetEmailSent,     setResetEmailSent]     = useState(false);
     const [forgotPasswordMode, setForgotPasswordMode] = useState(false);
 
-    // Function to handle sign-in with email and password
-   const signInWithEmail = async () => {
+    const signInWithEmail = async () => {
+    if (!email || !password) {
+        setError('Please enter your email and password.');
+        return;
+    }
     setAuthing(true);
     setError('');
-
     try {
-        const { data, error: signInError } = await supabase.auth.signInWithPassword({
-            email,
-            password
-        });
-
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
         if (signInError) throw signInError;
-
-        if (data.user) {
-            navigate('/');
-        }
-    } catch (error: any) {
-        console.log(error);
-        setError(error.message || "Invalid Email or Password");
+        if (data.user) navigate('/');
+    } catch (err: any) {
+        setError(err.message || 'Invalid email or password.');
     } finally {
         setAuthing(false);
     }
 };
-
-    // Function to handle password reset
     const handleForgotPassword = async () => {
-        if (!email) {
-            setError('Please enter your email address');
-            return;
-        }
-
+        if (!email) { setError('Please enter your email address.'); return; }
         setAuthing(true);
         setError('');
-
         try {
             const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: window.location.origin + '/reset-password', // Ensure you have this route or similar
+                redirectTo: window.location.origin + '/reset-password',
             });
-
             if (error) throw error;
-
             setResetEmailSent(true);
             setForgotPasswordMode(false);
-        } catch (error: any) {
-            console.error('Error sending password reset email:', error);
-            setError(error.message || 'Failed to send password reset email. Please try again later.');
+        } catch (err: any) {
+            setError(err.message || 'Failed to send reset email. Try again.');
         } finally {
             setAuthing(false);
         }
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+        if (forgotPasswordMode) {
+            handleForgotPassword();
+        } else if (email && password) {
+            signInWithEmail();
+        }
+    }
+    };
+
     return (
-        <div className='w-full min-h-screen flex overflow-hidden bg-gradient-to-br from-gray-900 to-black'>
-            {/* Decorative elements - adjusted for better mobile display */}
-            <div className="absolute top-0 left-0 w-full h-full opacity-10">
-                <div className="absolute top-10 left-10 sm:top-20 sm:left-20 w-24 h-24 sm:w-40 sm:h-40 rounded-full bg-green-300 blur-xl"></div>
-                <div className="absolute bottom-20 right-10 sm:bottom-40 sm:right-20 w-32 h-32 sm:w-60 sm:h-60 rounded-full bg-green-500 blur-xl"></div>
-                <div className="absolute bottom-10 left-20 sm:bottom-20 sm:left-40 w-20 h-20 sm:w-32 sm:h-32 rounded-full bg-green-200 blur-xl"></div>
-                <div className="absolute top-1/3 right-1/4 w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-green-400 blur-xl"></div>
+        <div className="min-h-screen w-full flex overflow-hidden bg-[#0a0a0f] relative">
+
+            {/* ── ambient glow ──────────────────────────────────────────── */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-blue-600/20 blur-[120px]" />
+                <div className="absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-violet-600/15 blur-[120px]" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-500/5 blur-[100px]" />
             </div>
 
-            {/* Content container - improved padding for mobile */}
-            <div className='w-full max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center p-4 sm:p-6 py-8 sm:py-12 z-10'>
-                {/* Left side - Brand Panel - adjusted for mobile */}
-                <div className='w-full md:w-1/2 mb-8 md:mb-0 flex flex-col items-center justify-center text-center md:text-left md:pr-4 lg:pr-10'>
-                    {/* Logo and tagline - responsive sizing */}
-                    <div className="flex flex-col items-center md:items-start">
-                        <img src="/CiviQuest.png" alt="CiviQuest Logo" className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 object-contain" />
-                        <h1 className="text-3xl sm:text-4xl font-bold text-white mt-4 sm:mt-6 mb-2 sm:mb-3">CiviQuest</h1>
-                        <p className="text-gray-300 text-base sm:text-lg max-w-md px-4 md:px-0">Your ultimate companion for Civil Service Examinations preparation</p>
-                    </div>
+            {/* ── subtle grid ───────────────────────────────────────────── */}
+            <div
+                className="pointer-events-none absolute inset-0 opacity-[0.03]"
+                style={{ backgroundImage: 'linear-gradient(white 1px,transparent 1px),linear-gradient(90deg,white 1px,transparent 1px)', backgroundSize: '60px 60px' }}
+            />
 
-                    {/* Feature highlights - better padding for mobile */}
-                    <div className="mt-6 sm:mt-10 grid grid-cols-1 gap-3 sm:gap-4 w-full max-w-md px-4 md:px-0">
-                        <div className="flex items-center space-x-3 text-white/90">
-                            <div className="bg-white/10 p-2 rounded-full flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <span className="text-sm sm:text-base">Comprehensive study materials</span>
-                        </div>
-                        <div className="flex items-center space-x-3 text-white/90">
-                            <div className="bg-white/10 p-2 rounded-full flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <span className="text-sm sm:text-base">Practice exams with detailed solutions</span>
-                        </div>
-                        <div className="flex items-center space-x-3 text-white/90">
-                            <div className="bg-white/10 p-2 rounded-full flex-shrink-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <span className="text-sm sm:text-base">Performance tracking and analytics</span>
-                        </div>
-                    </div>
-                </div>
+            <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-16 px-6 py-12">
 
-                {/* Right side - Login Form - better sizing and spacing for mobile */}
-                <div className='w-full md:w-1/2 flex flex-col items-center px-4 sm:px-6 md:px-4'>
-                    <div className='w-full max-w-md bg-white/10 backdrop-blur-md rounded-xl p-5 sm:p-6 md:p-8 shadow-xl border border-white/20'>
-                        {/* Header section - adjusted text sizes */}
-                        <div className='w-full flex flex-col mb-6 sm:mb-8'>
-                            <h3 className='text-2xl sm:text-3xl font-bold mb-1 sm:mb-2 text-white'>
-                                {forgotPasswordMode ? 'Reset Password' : 'Welcome Back'}
-                            </h3>
-                            <p className='text-sm sm:text-base text-gray-300'>
+                {/* ── Left: Brand ───────────────────────────────────────── */}
+                <motion.div
+                    initial="hidden" animate="show" variants={stagger}
+                    className="w-full lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left"
+                >
+                    {/* logo */}
+                    <motion.div variants={fadeUp} className="flex items-center gap-3 mb-8">
+                        <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                            <img src="/System Logo.png" alt="CiviQuest" className="w-13 h-13 object-contain" />
+                        </div>
+                        <span className="text-4xl font-bold text-white tracking-tight">CiviQuest</span>
+                    </motion.div>
+
+                    <motion.h1 variants={fadeUp} className="text-4xl sm:text-5xl font-bold text-white tracking-tight leading-tight mb-4">
+                        Pass the Civil<br />Service Exam.
+                    </motion.h1>
+
+                    <motion.p variants={fadeUp} className="text-base text-white/50 max-w-sm mb-10">
+                        Your personalised AI-powered review companion — built for Filipino civil servants.
+                    </motion.p>
+
+                    <motion.ul variants={stagger} className="space-y-3.5">
+                        {FEATURES.map((f, i) => (
+                            <motion.li key={i} variants={fadeUp} className="flex items-center gap-3">
+                                <div className="w-5 h-5 rounded-full bg-blue-500/15 border border-blue-500/30 flex items-center justify-center shrink-0">
+                                    <CheckCircle2 className="w-3 h-3 text-blue-400" />
+                                </div>
+                                <span className="text-sm text-white/60">{f}</span>
+                            </motion.li>
+                        ))}
+                    </motion.ul>
+                </motion.div>
+
+                {/* ── Right: Form ───────────────────────────────────────── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+                    className="w-full lg:w-[420px] shrink-0"
+                >
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl shadow-2xl p-8 space-y-6">
+
+                        {/* header */}
+                        <div>
+                            <h2 className="text-2xl font-bold text-white">
+                                {forgotPasswordMode ? 'Reset Password' : 'Welcome back'}
+                            </h2>
+                            <p className="text-sm text-white/40 mt-1">
                                 {forgotPasswordMode
-                                    ? 'Enter your email to receive a password reset link'
-                                    : 'Login to continue your Civil Service exam preparation'}
+                                    ? 'Enter your email to receive a reset link.'
+                                    : 'Sign in to continue your review session.'}
                             </p>
                         </div>
-                        
-                        {resetEmailSent && (
-                            <div className="mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
-                                <p className="text-green-200 text-sm">
-                                    Password reset email sent! Check your inbox and follow the instructions.
-                                </p>
-                            </div>
-                        )}
 
-                        {/* Input fields - better spacing for mobile */}
-                        <div className='w-full flex flex-col space-y-3 sm:space-y-4 mb-4 sm:mb-6'>
-                            <div className="relative">
-                                <input
-                                    type='email'
-                                    placeholder='Email Address'
-                                    className='w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm sm:text-base'
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                            </div>
+                        {/* reset success banner */}
+                        <AnimatePresence>
+                            {resetEmailSent && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 flex items-start gap-2.5"
+                                >
+                                    <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                                    <p className="text-sm text-emerald-300">Reset link sent! Check your inbox.</p>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* fields */}
+                        <div className="space-y-3" onKeyDown={handleKeyDown}>
+                            <Field
+                                type="email" placeholder="Email address" value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                icon={<Mail className="w-4 h-4" />}
+                            />
                             {!forgotPasswordMode && (
-                                <div className="relative">
-                                    <input
-                                        type='password'
-                                        placeholder='Password'
-                                        className='w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm sm:text-base'
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                </div>
+                                <Field
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder="Password" value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    icon={<Lock className="w-4 h-4" />}
+                                    right={
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(s => !s)}
+                                            className="text-white/30 hover:text-white/60 transition-colors"
+                                        >
+                                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                        </button>
+                                    }
+                                />
                             )}
                         </div>
 
-                        {/* Remember me and forgot password - adjusted for mobile */}
+                        {/* remember / forgot */}
                         {!forgotPasswordMode && (
-                            <div className="flex flex-wrap justify-between items-center mb-4 sm:mb-6 text-xs sm:text-sm">
-                                <div className="flex items-center space-x-4">
-                                    <label className="flex items-center text-gray-300 mb-2 sm:mb-0">
-                                        <input type="checkbox" className="mr-1.5 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4 bg-white/5 border-white/10 text-blue-500 rounded focus:ring-blue-400" />
-                                        Remember me
-                                    </label>
-                                </div>
+                            <div className="flex items-center justify-between text-xs">
+                                <label className="flex items-center gap-2 text-white/40 cursor-pointer select-none">
+                                    <input type="checkbox" className="w-3.5 h-3.5 rounded border-white/20 bg-white/5 accent-blue-500" />
+                                    Remember me
+                                </label>
                                 <button
-                                    onClick={() => setForgotPasswordMode(true)}
-                                    className="text-gray-400 hover:text-white transition-colors"
+                                    onClick={() => { setForgotPasswordMode(true); setError(''); }}
+                                    className="text-white/40 hover:text-white transition-colors"
                                 >
                                     Forgot password?
                                 </button>
                             </div>
                         )}
 
-                        {/* Login or Reset Password button */}
+                        {/* error */}
+                        <AnimatePresence>
+                            {error && (
+                                <motion.p
+                                    initial={{ opacity: 0, y: -4 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -4 }}
+                                    className="text-xs text-rose-300 text-center"
+                                >
+                                    {error}
+                                </motion.p>
+                            )}
+                        </AnimatePresence>
+
+                        {/* primary CTA */}
                         {forgotPasswordMode ? (
                             <button
-                                className='w-full bg-gradient-to-r from-green-600 to-green-800 hover:from-green-500 hover:to-green-700 text-white font-medium rounded-lg py-2.5 sm:py-3 transition-all duration-200 mb-3 sm:mb-4 shadow-lg shadow-green-900/30 text-sm sm:text-base'
                                 onClick={handleForgotPassword}
-                                disabled={authing}>
-                                {authing ? 'Sending...' : 'Send Reset Link'}
+                                disabled={authing}
+                                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white transition-all duration-200 shadow-lg shadow-blue-900/30 disabled:opacity-60"
+                            >
+                                {authing ? 'Sending…' : 'Send Reset Link'}
+                                {!authing && <ArrowRight className="w-4 h-4" />}
                             </button>
                         ) : (
                             <button
-                                className='w-full bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-500 hover:to-blue-600 text-white font-medium rounded-lg py-2.5 sm:py-3 transition-all duration-200 mb-3 sm:mb-4 shadow-lg shadow-green-900/30 text-sm sm:text-base'
                                 onClick={signInWithEmail}
-                                disabled={authing}>
-                                {authing ? 'Logging in...' : 'Log In'}
+                                disabled={authing}
+                                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold bg-blue-600 hover:bg-blue-500 active:scale-[0.98] text-white transition-all duration-200 shadow-lg shadow-blue-900/30 disabled:opacity-60"
+                            >
+                                {authing ? 'Signing in…' : 'Sign In'}
+                                {!authing && <ArrowRight className="w-4 h-4" />}
                             </button>
                         )}
 
-                        {/* Back to login button when in forgot password mode */}
+                        {/* back to login */}
                         {forgotPasswordMode && (
                             <button
-                                className='w-full bg-white/10 border border-white/10 text-white font-medium rounded-lg py-2.5 sm:py-3 transition-all duration-200 hover:bg-white/20 mb-3 sm:mb-4 text-sm sm:text-base'
-                                onClick={() => {
-                                    setForgotPasswordMode(false);
-                                    setError('');
-                                }}>
-                                Back to Login
+                                onClick={() => { setForgotPasswordMode(false); setError(''); }}
+                                className="w-full py-3 rounded-xl text-sm font-medium border border-white/10 text-white/50 hover:text-white hover:bg-white/5 transition-all duration-200"
+                            >
+                                Back to Sign In
                             </button>
                         )}
 
-                        {/* Error message */}
-                        {error && <div className='text-red-300 text-xs sm:text-sm mb-3 sm:mb-4 text-center'>{error}</div>}
-
-                        {/* Divider and social login buttons only in regular login mode */}
-                        {!forgotPasswordMode && (
-                            <>
-                              
-                            </>
-                        )}
-
-                        {/* Sign up link - adjusted spacing and text size */}
-                        <div className='w-full flex items-center justify-center mt-6 sm:mt-8'>
-                            <p className='text-xs sm:text-sm text-blue-100'>Don't have an account?
-                                <a href='/signup' className='font-medium text-blue-300 hover:text-white transition-colors ml-1'>
-                                    Create an account
-                                </a>
-                            </p>
+                        {/* divider */}
+                        <div className="relative flex items-center gap-3">
+                            <div className="flex-1 h-px bg-white/8" />
+                            <p className="text-[10px] font-semibold uppercase tracking-widest text-white/20">New here?</p>
+                            <div className="flex-1 h-px bg-white/8" />
                         </div>
 
-                        {/* Terms of service - adjusted text size */}
-                        <p className="text-xs xs:text-xs text-gray-400/70 text-center mt-6 sm:mt-8">
-                            By continuing, you agree to our
-                            <Link to="/terms-of-service" className="text-gray-400 hover:text-white transition-colors mx-1">Terms of Service</Link>
-                            and
-                            <Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors mx-1">Privacy Policy</Link>
+                        {/* sign up link */}
+                        <Link
+                            to="/signup"
+                            className="w-full flex items-center justify-center py-3 rounded-xl text-sm font-semibold border border-white/10 text-white/60 hover:text-white hover:bg-white/5 hover:border-white/20 transition-all duration-200"
+                        >
+                            Create an account
+                        </Link>
+
+                        {/* terms */}
+                        <p className="text-[10px] text-white/20 text-center leading-relaxed">
+                            By continuing, you agree to our{' '}
+                            <Link to="/terms-of-service" className="text-white/40 hover:text-white transition-colors">Terms of Service</Link>
+                            {' '}and{' '}
+                            <Link to="/privacy-policy" className="text-white/40 hover:text-white transition-colors">Privacy Policy</Link>
                         </p>
                     </div>
-                </div>
+                </motion.div>
             </div>
         </div>
     );
-}
+};
 
-export default Login;
+export default Login;   

@@ -10,9 +10,9 @@ interface QuizHubProps {
 }
 
 const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
-  const bg         = isDarkMode ? 'bg-[#0f1117]'   : 'bg-[#f7f8fc]';
-  const cardBg     = isDarkMode ? 'bg-[#181c27]'   : 'bg-white';
-  const borderCol  = isDarkMode ? 'border-white/[0.06]' : 'border-zinc-200/80';
+  const bg         = isDarkMode ? 'bg-zinc-950'     : 'bg-[#f7f8fc]';
+  const cardBg     = isDarkMode ? 'bg-zinc-900'     : 'bg-white';
+  const borderCol  = isDarkMode ? 'border-zinc-800' : 'border-zinc-200/80';
   const textPri    = isDarkMode ? 'text-white'      : 'text-zinc-900';
   const textSec    = isDarkMode ? 'text-zinc-400'   : 'text-zinc-500';
   const pillBg     = isDarkMode ? 'bg-white/[0.06] text-zinc-400' : 'bg-zinc-100 text-zinc-500';
@@ -25,11 +25,8 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
     title: 'Daily Adaptive Quiz',
     description: 'Personalized training that targets your weak areas with AI-powered explanations.',
     icon: Zap,
-    accentFrom: '#241097ff  ',
-    accentTo:   '#241097ff',
-    features: ['Weak-area prioritization', 'AI explanations', 'XP + streak rewards'],
+    features: ['20 XP / correct', 'AI explanations', 'Streak rewards'],
   };
-
   // ── Secondary modes (2×2 grid) ────────────────────────────────────────────
   const secondaryModes = [
     {
@@ -40,7 +37,7 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
       accent:      { light: '#3b82f6', dark: '#60a5fa' },
       iconBg:      isDarkMode ? 'bg-blue-500/15' : 'bg-blue-50',
       iconColor:   isDarkMode ? 'text-blue-400'  : 'text-blue-600',
-      badge:       null,
+      badge:       '10 XP / correct',
       features:    ['Instant feedback', 'Category filter'],
     },
     {
@@ -51,7 +48,7 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
       accent:      { light: '#8b5cf6', dark: '#a78bfa' },
       iconBg:      isDarkMode ? 'bg-violet-500/15' : 'bg-violet-50',
       iconColor:   isDarkMode ? 'text-violet-400'  : 'text-violet-600',
-      badge:       '50 Qs · 90 min',
+      badge:       '10 XP / correct',
       features:    ['Exam pacing', 'Full report'],
     },
     {
@@ -62,7 +59,7 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
       accent:      { light: '#ef4444', dark: '#f87171' },
       iconBg:      isDarkMode ? 'bg-red-500/15' : 'bg-red-50',
       iconColor:   isDarkMode ? 'text-red-400'  : 'text-red-600',
-      badge:       null,
+      badge:       '10 XP / correct',
       features:    ['Speed bonus', 'Combo multiplier'],
     },
     {
@@ -73,7 +70,6 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
       accent:      { light: '#10b981', dark: '#34d399' },
       iconBg:      isDarkMode ? 'bg-emerald-500/15' : 'bg-emerald-50',
       iconColor:   isDarkMode ? 'text-emerald-400'  : 'text-emerald-600',
-      badge:       null,
       features:    ['AI explanations', 'Retry wrongs'],
     },
   ];
@@ -92,6 +88,7 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
           <div className="flex items-center gap-3">
           
             <div>
+               <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-2">Practice</p>
               <h1 className={`text-2xl font-bold tracking-tight ${textPri}`}>Quiz Hub</h1>
               <p className={`text-xs ${textSec}`}>Sharpen your Civil Service Exam skills</p>
             </div>
@@ -221,7 +218,7 @@ const QuizHub = ({ onSelectMode, isDarkMode, streakCount }: QuizHubProps) => {
 
               {/* Arrow */}
               <div className="flex justify-end mt-3">
-                <ArrowRight className={`w-3.5 h-3.5 ${textSec} group-hover:translate-x-0.5 transition-transform`} />
+                <ArrowRight className={`w-9 h-6 ${textSec} group-hover:translate-x-0.5 transition-transform`} />
               </div>
             </motion.button>
           ))}
